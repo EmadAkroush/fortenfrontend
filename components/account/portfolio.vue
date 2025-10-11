@@ -1,284 +1,301 @@
 <template>
-  <div class="portfolio px-6 py-10 space-y-12">
+  <div class="forten-portfolio p-3 sm:p-8">
     <!-- ===== Header ===== -->
-    <div class="text-center">
-      <h1 class="text-3xl font-bold text-green-700">My Investment Portfolio</h1>
-      <p class="text-gray-600 mt-2">
-        Track your bundles, monitor profits, and manage your investments efficiently.
-      </p>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-300">My Portfolio</h1>
+        <p class="text-sm text-gray-300 mt-1">
+          Track your investments, profit growth, and package progress in real time.
+        </p>
+      </div>
+      <Button
+        class="p-button-success compact-btn"
+        icon="mdi mdi-wallet-plus-outline"
+        label="New Investment"
+        @click="openNewInvestment"
+      />
     </div>
 
-    <!-- ===== Summary Cards ===== -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="stat-card">
-        <i class="mdi mdi-cash-multiple text-green-600 text-3xl"></i>
+    <!-- ===== Overview Cards ===== -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+      <div class="summary-card">
+        <i class="mdi mdi-chart-line summary-icon text-emerald-400"></i>
         <div>
-          <p class="text-gray-500 text-sm">Total Invested</p>
-          <h3 class="text-2xl font-bold text-green-700">${{ totalInvested }}</h3>
+          <p class="summary-label">Expected Returns</p>
+          <h3 class="summary-value">${{ formatNumber(expectedReturns) }}</h3>
         </div>
       </div>
 
-      <div class="stat-card">
-        <i class="mdi mdi-trending-up text-blue-600 text-3xl"></i>
+      <div class="summary-card">
+        <i class="mdi mdi-cash-multiple summary-icon text-cyan-400"></i>
         <div>
-          <p class="text-gray-500 text-sm">Expected Returns</p>
-          <h3 class="text-2xl font-bold text-blue-700">${{ totalReturns }}</h3>
+          <p class="summary-label">Current Profit</p>
+          <h3 class="summary-value">${{ formatNumber(currentProfit) }}</h3>
         </div>
       </div>
 
-      <div class="stat-card">
-        <i class="mdi mdi-wallet-outline text-purple-600 text-3xl"></i>
+      <div class="summary-card">
+        <i class="mdi mdi-package-variant-closed summary-icon text-amber-400"></i>
         <div>
-          <p class="text-gray-500 text-sm">Current Profit</p>
-          <h3 class="text-2xl font-bold text-purple-700">${{ totalProfit }}</h3>
+          <p class="summary-label">Active Bundles</p>
+          <h3 class="summary-value">{{ activeBundles }}</h3>
         </div>
-      </div>
-
-      <div class="stat-card">
-        <i class="mdi mdi-chart-line text-yellow-600 text-3xl"></i>
-        <div>
-          <p class="text-gray-500 text-sm">Active Bundles</p>
-          <h3 class="text-2xl font-bold text-yellow-700">{{ portfolio.length }}</h3>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== Performance Chart ===== -->
-    <div class="bg-white shadow-lg rounded-2xl p-6">
-      <h2 class="text-lg font-semibold text-green-700 mb-4 flex items-center gap-2">
-        <i class="mdi mdi-finance text-green-600 text-2xl"></i> Portfolio Performance
-      </h2>
-      <Chart type="line" :data="chartData" :options="chartOptions" class="h-64" />
-    </div>
-
-    <!-- ===== Active Investments ===== -->
-    <div>
-      <h2 class="text-xl font-bold text-green-700 mb-4">Active Investments</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <Card
-          v-for="(item, index) in portfolio"
-          :key="index"
-          class="shadow-lg relative border border-gray-100 rounded-2xl hover:shadow-xl transition-all"
-        >
-          <template #title>
-            <div class="flex justify-between items-center">
-              <h3 class="font-semibold text-green-700">Bundle #{{ index + 1 }}</h3>
-              <span class="text-xs text-gray-400">{{ item.type }}</span>
-            </div>
-          </template>
-
-          <template #content>
-            <div class="text-sm text-gray-700 space-y-2">
-              <p>Invested: <span class="font-semibold text-green-700">${{ item.amount }}</span></p>
-              <p>Profit Rate: <span class="font-semibold">{{ item.profit }}% / month</span></p>
-              <p>Duration: <span class="font-semibold">{{ item.start }} → {{ item.end }}</span></p>
-              <div class="mt-3">
-                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                  <span>Progress</span>
-                  <span>{{ item.progress }}%</span>
-                </div>
-                <ProgressBar :value="item.progress" />
-              </div>
-            </div>
-          </template>
-
-          <template #footer>
-            <div class="flex flex-wrap gap-2">
-              <Button
-                label="Details"
-                icon="mdi mdi-eye-outline"
-                class="p-button-sm p-button-outlined"
-                @click="openPlanModal(item)"
-              />
-              <Button
-                label="Renew"
-                icon="mdi mdi-refresh"
-                class="p-button-sm p-button-success"
-              />
-              <Button
-                label="Upgrade"
-                icon="mdi mdi-arrow-up-bold"
-                class="p-button-sm p-button-warning"
-              />
-            </div>
-          </template>
-        </Card>
       </div>
     </div>
 
-    <!-- ===== Interactive Analytics ===== -->
-    <div class="bg-white shadow-lg rounded-2xl p-6">
-      <h2 class="text-lg font-semibold text-green-700 mb-4 flex items-center gap-2">
-        <i class="mdi mdi-chart-pie text-green-600 text-2xl"></i> Portfolio Analytics
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        <Chart
-          type="pie"
-          :data="pieData"
-          :options="pieOptions"
-          class="max-h-80"
-          @select="onPieSelect"
-        />
-        <div>
-          <ul class="space-y-3">
-            <li
-              v-for="(item, i) in portfolio"
-              :key="i"
-              class="flex justify-between border-b pb-2 cursor-pointer transition hover:bg-green-50 p-2 rounded-md"
-              :class="{ 'bg-green-100': selectedPlan === item.type }"
-              @click="selectedPlan = item.type"
-            >
-              <span class="font-medium text-gray-700">{{ item.type }}</span>
-              <span class="font-bold text-green-600">${{ item.amount }}</span>
-            </li>
-          </ul>
-        </div>
+    <!-- ===== Earnings Chart ===== -->
+    <div class="glass-card mb-8">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="text-lg font-semibold text-gray-100">Earnings Overview (Last 30 Days)</h3>
+        <span class="text-xs text-gray-400">Auto-compounding enabled</span>
       </div>
+      <Chart type="line" :data="earningsChart" :options="earningsOptions" />
+    </div>
 
-      <!-- Dynamic Plan Details -->
-      <transition name="expand">
-        <div
-          v-if="selectedDetails"
-          class="mt-6 border-t pt-4 bg-gray-50 p-4 rounded-xl shadow-inner"
-        >
-          <h3 class="font-semibold text-green-700 mb-2 flex items-center gap-2">
-            <i class="mdi mdi-information-outline text-green-600"></i>
-            {{ selectedPlan }} Details
-          </h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            <div
-              v-for="(item, i) in selectedDetails"
-              :key="i"
-              class="p-3 rounded-lg bg-white shadow-sm border cursor-pointer hover:border-green-500 transition"
-              @click="openPlanModal(item)"
-            >
-              <p class="text-sm text-gray-700">Invested: <span class="font-semibold text-green-700">${{ item.amount }}</span></p>
-              <p class="text-sm text-gray-700">Profit Rate: <span class="font-semibold">{{ item.profit }}%</span></p>
-              <p class="text-sm text-gray-700">Duration: <span class="font-semibold">{{ item.start }} → {{ item.end }}</span></p>
-              <p class="text-sm text-gray-700">Progress: <span class="font-semibold">{{ item.progress }}%</span></p>
-            </div>
+    <!-- ===== Investment Packages ===== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div v-for="(pack, i) in packages" :key="i" class="pack-card">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-bold text-emerald-300">{{ pack.name }}</h3>
+          <span
+            class="px-2 py-0.5 text-xs rounded border border-emerald-400/20 bg-emerald-500/10 text-emerald-300"
+          >
+            {{ pack.status }}
+          </span>
+        </div>
+
+        <div class="text-sm text-gray-300 space-y-1 mb-3">
+          <div>Investment: <span class="font-semibold text-gray-100">${{ formatNumber(pack.amount) }}</span></div>
+          <div>Base Rate: <span class="text-emerald-300">{{ pack.baseRate }}%</span></div>
+          <div v-if="pack.upgradedRate">
+            Upgraded Rate: <span class="text-emerald-300">{{ pack.upgradedRate }}%</span>
+          </div>
+          <div>Active Referrals: <span class="text-amber-300">{{ pack.activeReferrals }}/{{ pack.requiredReferrals }}</span></div>
+        </div>
+
+        <!-- Progress -->
+        <div class="space-y-1 mb-4">
+          <ProgressBar
+            :value="Math.min((pack.activeReferrals / pack.requiredReferrals) * 100, 100)"
+            class="h-2"
+          />
+          <div class="text-xs text-gray-400">
+            <span v-if="pack.activeReferrals >= pack.requiredReferrals">✅ Upgraded to {{ pack.upgradedRate }}%</span>
+            <span v-else>{{ pack.requiredReferrals - pack.activeReferrals }} more referrals to upgrade</span>
           </div>
         </div>
-      </transition>
-    </div>
 
-    <!-- ===== Modal: Plan Details ===== -->
-    <Dialog v-model:visible="showModal" modal header="Plan Details" class="max-w-lg w-full">
-      <div class="space-y-3">
-        <h3 class="text-xl font-bold text-green-700">{{ modalData.type }}</h3>
-        <p class="text-sm text-gray-600">
-          Duration: <span class="font-semibold">{{ modalData.start }} → {{ modalData.end }}</span>
-        </p>
-        <p>Invested Amount: <span class="font-semibold text-green-700">${{ modalData.amount }}</span></p>
-        <p>Profit Rate: <span class="font-semibold">{{ modalData.profit }}% / month</span></p>
-        <p>Progress: <span class="font-semibold">{{ modalData.progress }}%</span></p>
-
-        <ProgressBar :value="modalData.progress" class="mt-3" />
-      </div>
-
-      <template #footer>
-        <div class="flex justify-between w-full">
-          <Button label="Withdraw" icon="mdi mdi-cash-minus" class="p-button-danger" />
-          <Button label="Reinvest" icon="mdi mdi-repeat" class="p-button-success" />
+        <!-- Profit Info -->
+        <div class="glass-subcard mb-3">
+          <div class="flex justify-between text-sm">
+            <span>Total Profit</span>
+            <span class="text-emerald-300 font-semibold">${{ formatNumber(pack.totalProfit) }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span>Withdrawn</span>
+            <span class="text-gray-400">${{ formatNumber(pack.withdrawn) }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span>Available</span>
+            <span class="text-emerald-200 font-semibold">${{ formatNumber(pack.totalProfit - pack.withdrawn) }}</span>
+          </div>
         </div>
-      </template>
-    </Dialog>
+
+        <div class="flex justify-end">
+          <Button
+            class="p-button-success compact-btn"
+            icon="mdi mdi-swap-horizontal-bold"
+            label="Transfer Profit"
+            @click="transferProfit(pack)"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
-import Card from "primevue/card"
-import Chart from "primevue/chart"
-import ProgressBar from "primevue/progressbar"
-import Dialog from "primevue/dialog"
-import Button from "primevue/button"
+import { ref } from "vue";
+import Button from "primevue/button";
+import ProgressBar from "primevue/progressbar";
+import Chart from "primevue/chart";
 
-const portfolio = [
-  { type: "Bronze Plan", amount: 500, profit: 6, progress: 40, start: "2025-01-01", end: "2025-06-01" },
-  { type: "Silver Plan", amount: 1000, profit: 5, progress: 25, start: "2025-02-15", end: "2025-08-15" },
-  { type: "Gold Plan", amount: 1500, profit: 7, progress: 60, start: "2025-03-05", end: "2026-03-05" },
-]
+const expectedReturns = ref(3185);
+const currentProfit = ref(185);
+const activeBundles = ref(3);
 
-const totalInvested = computed(() => portfolio.reduce((a, b) => a + b.amount, 0))
-const totalProfit = computed(() => portfolio.reduce((a, b) => a + (b.amount * b.profit) / 100, 0))
-const totalReturns = computed(() => totalInvested.value + totalProfit.value)
+const packages = ref([
+  {
+    name: "Start Pack",
+    amount: 150,
+    baseRate: 1.5,
+    upgradedRate: null,
+    activeReferrals: 0,
+    requiredReferrals: 0,
+    totalProfit: 48.75,
+    withdrawn: 20,
+    status: "Active",
+  },
+  {
+    name: "Active Pack",
+    amount: 300,
+    baseRate: 1.5,
+    upgradedRate: 2.0,
+    activeReferrals: 2,
+    requiredReferrals: 3,
+    totalProfit: 120,
+    withdrawn: 50,
+    status: "Active",
+  },
+  {
+    name: "Growth Pack",
+    amount: 800,
+    baseRate: 2.0,
+    upgradedRate: 2.5,
+    activeReferrals: 4,
+    requiredReferrals: 5,
+    totalProfit: 260,
+    withdrawn: 130,
+    status: "Active",
+  },
+  {
+    name: "Pro Leader Pack",
+    amount: 2000,
+    baseRate: 2.5,
+    upgradedRate: 3.0,
+    activeReferrals: 8,
+    requiredReferrals: 10,
+    totalProfit: 700,
+    withdrawn: 200,
+    status: "Active",
+  },
+  {
+    name: "VIP Master Pack",
+    amount: 6500,
+    baseRate: 3.0,
+    upgradedRate: 3.5,
+    activeReferrals: 12,
+    requiredReferrals: 15,
+    totalProfit: 1800,
+    withdrawn: 500,
+    status: "Active",
+  },
+]);
 
-// === Charts ===
-const chartData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+const earningsChart = {
+  labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
   datasets: [
     {
-      label: "Earnings",
-      data: [200, 450, 700, 950, 1200, 1600],
+      label: "Profit ($)",
+      data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 100 + 50)),
       borderColor: "#10b981",
       backgroundColor: "rgba(16,185,129,0.15)",
       fill: true,
-      tension: 0.4,
+      tension: 0.35,
     },
   ],
-}
-const chartOptions = {
+};
+
+const earningsOptions = {
   plugins: { legend: { display: false } },
   scales: {
-    y: { grid: { color: "#f3f4f6" }, ticks: { color: "#4b5563" } },
-    x: { grid: { display: false }, ticks: { color: "#4b5563" } },
+    y: { ticks: { color: "#a1a1aa" }, grid: { color: "rgba(255,255,255,0.05)" } },
+    x: { ticks: { color: "#a1a1aa" }, grid: { display: false } },
   },
-}
+};
 
-// === Pie Chart ===
-const pieData = {
-  labels: ["Bronze Plan", "Silver Plan", "Gold Plan"],
-  datasets: [{ data: [500, 1000, 1500], backgroundColor: ["#f59e0b", "#3b82f6", "#10b981"] }],
+function formatNumber(v) {
+  return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
-const pieOptions = {
-  plugins: {
-    legend: { position: "bottom" },
-    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: $${ctx.formattedValue}` } },
-  },
+function openNewInvestment() {
+  window.location.href = "/account?tab=new";
 }
-
-// === Interactive Section ===
-const selectedPlan = ref(null)
-const selectedDetails = computed(() =>
-  selectedPlan.value ? portfolio.filter((p) => p.type === selectedPlan.value) : null
-)
-const onPieSelect = (e) => {
-  const label = pieData.labels[e.element.index]
-  selectedPlan.value = label
-}
-
-// === Modal ===
-const showModal = ref(false)
-const modalData = ref({})
-const openPlanModal = (item) => {
-  modalData.value = item
-  showModal.value = true
+function transferProfit(pack) {
+  const available = pack.totalProfit - pack.withdrawn;
+  if (available <= 0) return alert("No profit available for transfer.");
+  pack.withdrawn += available;
+  alert(`$${available.toFixed(2)} transferred to main balance.`);
 }
 </script>
 
-<style lang="scss" scoped>
-.portfolio {
-  background-color: #f9fbfc;
+<style scoped lang="scss">
+.forten-portfolio {
+  color: #e6eef0;
+  font-family: "Inter", sans-serif;
 
-  .stat-card {
-    @apply flex items-center gap-4 bg-white p-5 rounded-xl shadow-sm transition-all hover:shadow-md;
+  /* Overview Cards */
+  .summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+  }
+  .summary-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .summary-icon {
+    font-size: 2rem;
+  }
+  .summary-label {
+    font-size: 0.9rem;
+    color: #9ca3af;
+  }
+  .summary-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e5fbea;
   }
 
-  .expand-enter-active,
-  .expand-leave-active {
-    transition: all 0.3s ease-in-out;
+  /* Packages */
+  .pack-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
   }
-  .expand-enter-from,
-  .expand-leave-to {
-    max-height: 0;
-    opacity: 0;
+  .pack-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.03);
   }
-  .expand-enter-to,
-  .expand-leave-from {
-    max-height: 300px;
-    opacity: 1;
+  .glass-card {
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+  }
+  .glass-subcard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .compact-btn {
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  @media (max-width: 640px) {
+    padding: 0.75rem !important;
+    .summary-card {
+      padding: 0.8rem;
+    }
+    .pack-card {
+      padding: 10px;
+    }
+    .compact-btn {
+      padding: 0.25rem 0.6rem !important;
+      font-size: 0.75rem !important;
+    }
   }
 }
 </style>
