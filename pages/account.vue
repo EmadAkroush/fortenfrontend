@@ -1,72 +1,76 @@
 <template>
-  <div class="account-container min-h-screen bg-gray-50 flex flex-col">
-    <!-- Breadcrumb -->
-    <div class="px-6 sm:px-20 pt-6 text-sm text-gray-600">
-      <nuxt-link to="/" class="text-green-700 font-semibold hover:underline">Home /</nuxt-link>
-      <span> Account </span>
+  <div class="forten-account min-h-screen flex flex-col bg-gradient-to-br from-[#040b0f] via-[#07191f] to-[#020608] text-gray-200">
+
+
+    <!-- ===== Dashboard Topbar ===== -->
+    <div class="dashboard-topbar mt-20 sm:mt-24 px-6 sm:px-16 py-4 flex justify-between items-center bg-white/5 backdrop-blur-md border-b border-white/10">
+      <div>
+        <h1 class="text-2xl font-bold text-emerald-400">Dashboard</h1>
+        <p class="text-sm text-gray-400">Welcome back, <span class="text-emerald-300">Investor</span></p>
+      </div>
+      <button
+        class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-emerald-400 to-cyan-400 text-black px-4 py-2 rounded-xl font-semibold hover:scale-105 transition"
+        @click="goToAddFunds"
+      >
+        <i class="mdi mdi-wallet-plus-outline"></i> Add Funds
+      </button>
     </div>
 
-    <div class="flex-1 grid grid-cols-1 sm:grid-cols-12 gap-6 px-6 sm:px-20 py-6">
-      <!-- ===== Sidebar (Desktop) ===== -->
+    <!-- ===== Dashboard Layout ===== -->
+    <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 px-6 sm:px-16 py-10">
+      <!-- Sidebar -->
       <aside
-        class="hidden sm:flex sm:flex-col sm:col-span-3 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sticky top-8 h-fit"
+        class="hidden lg:flex flex-col col-span-3 bg-white/5 border border-white/10 backdrop-blur-lg rounded-2xl shadow-xl p-5 sticky top-32 h-fit"
       >
-        <div class="text-center mb-6">
-          <div
-            class="w-20 h-20 mx-auto rounded-full bg-green-100 flex items-center justify-center text-green-700 text-3xl font-bold"
-          >
-            VX
+        <div class="text-center mb-8">
+          <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-400 to-cyan-400 text-black flex items-center justify-center text-2xl font-bold shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+            FT
           </div>
-          <h2 class="mt-3 font-semibold text-gray-800">My Account</h2>
-          <p class="text-xs text-gray-500">Smart Investment Member</p>
+          <h3 class="mt-3 font-semibold text-white">John Miller</h3>
+          <p class="text-xs text-gray-400">Investor ID: <span class="text-emerald-300">#FR1084</span></p>
         </div>
 
-        <div class="divide-y divide-gray-100">
+        <nav class="space-y-2">
           <div
             v-for="item in menuItems"
             :key="item.key"
             @click="setActive(item.key)"
-            class="flex items-center px-4 py-3 rounded-lg cursor-pointer transition-all"
-            :class="{
-              'bg-green-50 text-green-700 font-semibold border-l-4 border-green-500 shadow-sm': activeItem === item.key,
-              'text-gray-600 hover:bg-gray-100': activeItem !== item.key
-            }"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all group"
+            :class="activeItem === item.key ? 'bg-gradient-to-r from-emerald-400/30 to-cyan-300/10 border-l-4 border-emerald-400 text-emerald-300' : 'hover:bg-white/5 text-gray-300'"
           >
-            <i :class="item.icon + ' text-xl mr-3'"></i>
-            <span>{{ item.label }}</span>
+            <i :class="[item.icon, 'text-lg transition-transform group-hover:scale-110']"></i>
+            <span class="font-medium">{{ item.label }}</span>
           </div>
+        </nav>
 
-          <div
-            class="flex items-center px-4 py-3 text-red-500 cursor-pointer hover:bg-red-50 mt-2 rounded-lg"
-            @click="logout"
-          >
-            <i class="mdi mdi-logout text-xl mr-3"></i>
-            <span>Logout</span>
-          </div>
+        <div class="mt-10 border-t border-white/10 pt-4">
+          <button @click="logout" class="w-full flex items-center justify-center gap-2 text-red-400 hover:bg-red-500/10 py-2 rounded-lg transition">
+            <i class="mdi mdi-logout"></i> Logout
+          </button>
         </div>
       </aside>
 
-      <!-- ===== Main Content ===== -->
-      <main class="sm:col-span-9 bg-white rounded-2xl shadow-sm p-4 sm:p-6 relative overflow-hidden">
+      <!-- Main Content -->
+      <main class="col-span-9 bg-white/5 border border-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-6 relative overflow-hidden">
         <transition name="fade-slide" mode="out-in">
           <component :is="currentComponent" :key="activeItem" />
         </transition>
       </main>
     </div>
 
-    <!-- ===== Mobile Navigation ===== -->
+    <!-- ===== Mobile Bottom Menu ===== -->
     <nav
-      class="sm:hidden fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200 flex justify-around items-center py-2 shadow-[0_-2px_10px_rgba(0,0,0,0.08)] z-50"
+      class="lg:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[94%] bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl px-4 py-2 flex justify-around items-center text-sm shadow-[0_8px_25px_rgba(0,0,0,0.4)]"
     >
       <div
         v-for="item in menuItems"
         :key="item.key"
-        class="flex flex-col items-center cursor-pointer text-gray-500 transition-all"
-        :class="{ 'text-green-700 font-semibold': activeItem === item.key }"
         @click="setActive(item.key)"
+        class="flex flex-col items-center cursor-pointer transition"
+        :class="{ 'text-emerald-300': activeItem === item.key, 'text-gray-400': activeItem !== item.key }"
       >
-        <i :class="item.icon" class="text-2xl mb-1"></i>
-        <span class="text-xs">{{ item.label }}</span>
+        <i :class="[item.icon, 'text-xl mb-1']"></i>
+        <span class="text-[11px]">{{ item.label }}</span>
       </div>
     </nav>
   </div>
@@ -74,8 +78,6 @@
 
 <script setup>
 import { ref, computed } from "vue"
-
-// ==== Import Components ====
 import AccountPerformance from "@/components/account/performance.vue"
 import AccountPortfolio from "@/components/account/portfolio.vue"
 import AccountCashout from "@/components/account/cashout.vue"
@@ -83,17 +85,25 @@ import AccountHistory from "@/components/account/history.vue"
 import AccountSetting from "@/components/account/setting.vue"
 import AccountVxPlan from "@/components/account/vxplan.vue"
 
-// ==== Menu Items ====
+const showMobileMenu = ref(false)
+const activeItem = ref("performance")
+
 const menuItems = ref([
-  { key: "performance", label: "Performance", icon: "mdi mdi-chart-bar" },
+  { key: "performance", label: "Performance", icon: "mdi mdi-finance" },
   { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
-  { key: "cashout", label: "Cashout", icon: "mdi mdi-cash-minus" },
+  { key: "cashout", label: "Cashout", icon: "mdi mdi-bank-transfer-out" },
   { key: "history", label: "History", icon: "mdi mdi-history" },
   { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
-  { key: "setting", label: "Setting", icon: "mdi mdi-account-cog-outline" },
+  { key: "setting", label: "Settings", icon: "mdi mdi-cog-outline" },
 ])
 
-const activeItem = ref("performance")
+const navItems = [
+  { label: "Home", route: "/" },
+  { label: "Bundles", route: "/bundles" },
+  { label: "Add Funds", route: "/addfunds" },
+  { label: "About", route: "/abouteus" },
+  { label: "Support", route: "/support" },
+]
 
 const setActive = (key) => {
   activeItem.value = key
@@ -114,33 +124,46 @@ const currentComponent = computed(() => {
       return AccountVxPlan
     case "setting":
       return AccountSetting
-    default:
-      return {
-        template: `<div class="text-center text-gray-400 py-20">Select an item from the menu.</div>`,
-      }
   }
 })
 
-const logout = () => {
-  if (confirm("Are you sure you want to log out?")) {
-    alert("You have been logged out successfully.")
-  }
-}
+const logout = () => alert("You have been logged out.")
+const goToAddFunds = () => (window.location.href = "/addfunds")
 </script>
 
-<style lang="scss" scoped>
-.account-container {
-  .fade-slide-enter-active,
-  .fade-slide-leave-active {
-    transition: all 0.4s ease;
-  }
-  .fade-slide-enter-from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  .fade-slide-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+<style scoped lang="scss">
+.menu-link {
+  color: #d1d5db;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+.menu-link:hover {
+  color: #5ff0c7;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.4s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(15px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-15px);
 }
 </style>
