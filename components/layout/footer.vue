@@ -1,112 +1,149 @@
 <template>
-  <footer class="footer-container">
-    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-4 gap-10 text-gray-300">
-      <!-- Brand / Description -->
+  <footer class="forten-footer relative overflow-hidden text-gray-300">
+    <!-- Background Layer -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[#0f172a]/95 via-[#0b2a1b]/90 to-[#03140c]/95 backdrop-blur-2xl"></div>
+    <div class="absolute -top-20 left-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-2xl"></div>
+
+    <!-- Content -->
+    <div class="relative max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 z-10">
+      <!-- Brand -->
       <div>
-        <h2 class="text-2xl font-bold text-green-500 mb-3">Vestavex</h2>
-        <p class="text-sm leading-relaxed text-gray-400">
-          A smart investment platform where technology meets network growth.
-          Invest securely, earn passively, and grow your team through the VX Plan.
+        <div class="flex items-center gap-3 mb-3">
+          <img src="/public/Photo_1747641514372-3.png" alt="Logo" class="w-10 h-10 rounded-lg shadow-sm" />
+          <h2 class="text-2xl font-bold bg-gradient-to-r from-emerald-300 to-lime-400 bg-clip-text text-transparent">
+            Forten
+          </h2>
+        </div>
+        <p class="text-sm text-gray-400 leading-relaxed max-w-xs">
+          Empowering investors worldwide through transparent, intelligent, and secure financial growth systems.
         </p>
 
-        <div class="flex items-center gap-3 mt-4">
-          <a href="#" aria-label="Telegram" class="hover:text-green-400 transition">
-            <i class="mdi mdi-telegram text-2xl"></i>
-          </a>
-          <a href="#" aria-label="Twitter" class="hover:text-green-400 transition">
-            <i class="mdi mdi-twitter text-2xl"></i>
-          </a>
-          <a href="#" aria-label="LinkedIn" class="hover:text-green-400 transition">
-            <i class="mdi mdi-linkedin text-2xl"></i>
-          </a>
-          <a href="#" aria-label="YouTube" class="hover:text-green-400 transition">
-            <i class="mdi mdi-youtube text-2xl"></i>
-          </a>
+        <div class="flex gap-4 mt-5">
+          <a href="#" aria-label="Telegram" class="social"><i class="mdi mdi-telegram"></i></a>
+          <a href="#" aria-label="Twitter" class="social"><i class="mdi mdi-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn" class="social"><i class="mdi mdi-linkedin"></i></a>
+          <a href="#" aria-label="YouTube" class="social"><i class="mdi mdi-youtube"></i></a>
         </div>
       </div>
 
-      <!-- Navigation -->
+      <!-- Quick Links -->
       <div>
-        <h3 class="text-lg font-semibold text-white mb-4">Quick Links</h3>
+        <h3 class="footer-heading">Quick Links</h3>
         <ul class="space-y-2">
-          <li><nuxt-link to="/" class="footer-link">Home</nuxt-link></li>
-          <li><nuxt-link to="/bundles" class="footer-link">Bundles</nuxt-link></li>
-          <li><nuxt-link to="/addfunds" class="footer-link">Add Funds</nuxt-link></li>
-          <li><nuxt-link to="/vxplan" class="footer-link">VX Plan</nuxt-link></li>
-          <li><nuxt-link to="/support" class="footer-link">Support</nuxt-link></li>
+          <li><nuxt-link to="/" class="footer-link"><i class="mdi mdi-home-outline mr-2 text-emerald-400"></i>Home</nuxt-link></li>
+          <li><nuxt-link to="/bundles" class="footer-link"><i class="mdi mdi-package-variant-closed mr-2 text-emerald-400"></i>Bundles</nuxt-link></li>
+          <li><nuxt-link to="/addfunds" class="footer-link"><i class="mdi mdi-wallet-plus-outline mr-2 text-emerald-400"></i>Add Funds</nuxt-link></li>
+          <li><nuxt-link to="/abouteus" class="footer-link"><i class="mdi mdi-information-outline mr-2 text-emerald-400"></i>About Us</nuxt-link></li>
+          <li><nuxt-link to="/support" class="footer-link"><i class="mdi mdi-lifebuoy mr-2 text-emerald-400"></i>Support</nuxt-link></li>
         </ul>
       </div>
 
       <!-- Legal -->
       <div>
-        <h3 class="text-lg font-semibold text-white mb-4">Legal</h3>
+        <h3 class="footer-heading">Legal</h3>
         <ul class="space-y-2">
-          <li><a href="#" class="footer-link">Privacy Policy</a></li>
-          <li><a href="#" class="footer-link">Terms of Service</a></li>
-          <li><a href="#" class="footer-link">AML & KYC Policy</a></li>
-          <li><a href="#" class="footer-link">Risk Disclosure</a></li>
+          <li><a href="#" class="footer-link"><i class="mdi mdi-lock-outline mr-2 text-emerald-400"></i>Privacy Policy</a></li>
+          <li><a href="#" class="footer-link"><i class="mdi mdi-file-document-outline mr-2 text-emerald-400"></i>Terms of Service</a></li>
+          <li><a href="#" class="footer-link"><i class="mdi mdi-shield-check-outline mr-2 text-emerald-400"></i>AML & KYC Policy</a></li>
+          <li><a href="#" class="footer-link"><i class="mdi mdi-alert-circle-outline mr-2 text-emerald-400"></i>Risk Disclosure</a></li>
         </ul>
       </div>
 
       <!-- Contact -->
       <div>
-        <h3 class="text-lg font-semibold text-white mb-4">Contact Us</h3>
-        <ul class="space-y-3">
+        <h3 class="footer-heading">Contact</h3>
+        <ul class="space-y-3 text-sm">
           <li class="flex items-center gap-3">
-            <i class="mdi mdi-email-outline text-green-500 text-xl"></i>
-            <a href="mailto:support@vestavex.com" class="footer-link">support@vestavex.com</a>
+            <i class="mdi mdi-email-outline text-emerald-400 text-xl"></i>
+            <a href="mailto:support@forten.io" class="footer-link">support@forten.io</a>
           </li>
           <li class="flex items-center gap-3">
-            <i class="mdi mdi-map-marker text-green-500 text-xl"></i>
-            <span>London, UK</span>
+            <i class="mdi mdi-map-marker text-emerald-400 text-xl"></i>
+            <span>London, United Kingdom</span>
           </li>
           <li class="flex items-center gap-3">
-            <i class="mdi mdi-phone text-green-500 text-xl"></i>
+            <i class="mdi mdi-phone text-emerald-400 text-xl"></i>
             <a href="tel:+447712345678" class="footer-link">+44 7712 345678</a>
           </li>
         </ul>
       </div>
     </div>
 
-    <!-- Bottom bar -->
-    <div class="border-t border-gray-700 mt-6 py-4 text-center text-gray-500 text-sm flex flex-col sm:flex-row justify-between items-center px-6">
-      <p>© {{ new Date().getFullYear() }} Vestavex. All Rights Reserved.</p>
-      <div class="flex gap-4 mt-2 sm:mt-0">
-        <a href="#" class="hover:text-green-400 transition">Privacy Policy</a>
-        <a href="#" class="hover:text-green-400 transition">Terms</a>
+    <!-- Bottom Bar -->
+    <div class="relative border-t border-white/10 py-4 text-center text-sm text-gray-400 flex flex-col sm:flex-row justify-between items-center max-w-7xl mx-auto px-6 z-10">
+      <p>© {{ currentYear }} Forten. All Rights Reserved.</p>
+      <div class="flex gap-5 mt-2 sm:mt-0">
+        <a href="#" class="hover:text-emerald-300 transition">Privacy Policy</a>
+        <a href="#" class="hover:text-emerald-300 transition">Terms</a>
       </div>
     </div>
+
+    <!-- Bottom Animated Line -->
+    <div class="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-lime-400 via-emerald-400 to-green-600 animate-neon"></div>
   </footer>
 </template>
 
 <script setup>
-// No script needed here yet — static footer.
+import { ref } from 'vue'
+const currentYear = new Date().getFullYear()
 </script>
 
-<style lang="scss" scoped>
-.footer-container {
-  background-color: #0a0a0a;
-  color: white;
+<style scoped lang="scss">
+.forten-footer {
   position: relative;
-  bottom: 0;
+  color: #e5e7eb;
   font-family: "Inter", sans-serif;
-}
 
-.footer-link {
-  color: #bdbdbd;
-  font-size: 14px;
-  transition: color 0.2s ease;
-  &:hover {
-    color: #10b981;
+  .footer-heading {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
   }
-}
 
-@media only screen and (max-width: 650px) {
-  .footer-container {
+  .footer-link {
+    display: flex;
+    align-items: center;
+    color: #bdbdbd;
+    font-size: 14px;
+    transition: color 0.2s ease;
+    &:hover {
+      color: #a7f3d0;
+    }
+  }
+
+  .social {
+    color: #a7f3d0;
+    font-size: 20px;
+    transition: all 0.2s ease;
+    &:hover {
+      transform: scale(1.15);
+      color: #6ee7b7;
+    }
+  }
+
+  @keyframes neon-move {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-neon {
+    background-size: 200% 200%;
+    animation: neon-move 5s linear infinite;
+  }
+
+  @media (max-width: 650px) {
     text-align: center;
     .footer-link {
-      display: inline-block;
-      margin: 4px 0;
+      justify-content: center;
+    }
+    .social {
+      justify-content: center;
     }
   }
 }
