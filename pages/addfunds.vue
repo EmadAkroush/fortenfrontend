@@ -1,64 +1,57 @@
 <template>
-  <section class="addfunds min-h-screen bg-gray-50 py-16 px-4 sm:px-12">
+  <section class="forten-addfunds min-h-screen py-16 px-4 sm:px-10 bg-[#0a1325] text-gray-100">
     <div class="max-w-2xl mx-auto">
-      <!-- Breadcrumb -->
-      <!-- <div class="text-sm text-gray-500 mb-6">
-        <nuxt-link to="/" class="text-green-700 hover:underline">Home</nuxt-link> /
-        <span class="text-gray-600">Add Funds</span>
-      </div> -->
-
       <!-- Header -->
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold text-green-700 mb-3">Add Funds</h2>
-        <p class="text-gray-600 max-w-md mx-auto">
-          Deposit funds securely using blockchain payment methods.  
-          Minimum deposit is <span class="font-semibold">$50</span>.
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-[#00c6ae] mb-3">Add Funds</h2>
+        <p class="text-gray-300 max-w-md mx-auto">
+          Deposit funds securely using <span class="text-[#f4b000] font-semibold">USDT (BEP20)</span>.
+          Minimum deposit: <strong>$50</strong>.
         </p>
       </div>
 
       <!-- Custom Stepper -->
-      <div class="flex justify-between items-center mb-10 relative">
+      <div class="flex justify-between items-center mb-10 relative forten-stepper">
         <div
           v-for="(step, index) in steps"
           :key="index"
-          class="flex-1 text-center"
+          class="flex-1 text-center relative"
         >
-          <div class="flex flex-col items-center relative">
-            <!-- Circle -->
-            <div
-              class="w-10 h-10 rounded-full flex items-center justify-center z-10 transition-all duration-300"
-              :class="{
-                'bg-green-600 text-white': currentStep >= index + 1,
-                'bg-gray-200 text-gray-500': currentStep < index + 1,
-              }"
-            >
-              <i :class="step.icon" class="text-lg"></i>
-            </div>
-            <p
-              class="mt-2 text-sm font-medium"
-              :class="{
-                'text-green-700': currentStep >= index + 1,
-                'text-gray-500': currentStep < index + 1,
-              }"
-            >
-              {{ step.label }}
-            </p>
-
-            <!-- Connector line -->
-            <div
-              v-if="index < steps.length - 1"
-              class="absolute top-5 left-[calc(50%+20px)] w-full h-0.5"
-              :class="currentStep > index + 1 ? 'bg-green-500' : 'bg-gray-300'"
-            ></div>
+          <!-- Circle -->
+          <div
+            class="w-10 h-10 rounded-full flex items-center justify-center mx-auto z-10 transition-all duration-300 font-semibold"
+            :class="{
+              'bg-gradient-to-r from-[#00c6ae] to-[#f4b000] text-[#0a1325]': currentStep >= index + 1,
+              'bg-gray-700 text-gray-400': currentStep < index + 1,
+            }"
+          >
+            <i :class="step.icon" class="text-lg"></i>
           </div>
+          <!-- Label -->
+          <p
+            class="mt-2 text-sm"
+            :class="currentStep >= index + 1 ? 'text-[#00c6ae]' : 'text-gray-400'"
+          >
+            {{ step.label }}
+          </p>
+
+          <!-- Connector -->
+          <div
+            v-if="index < steps.length - 1"
+            class="absolute top-5 left-1/2 w-full h-0.5 z-0"
+            :class="currentStep > index + 1 ? 'bg-gradient-to-r from-[#00c6ae] to-[#f4b000]' : 'bg-gray-700'"
+          ></div>
         </div>
       </div>
 
       <!-- Step 1: Select Network -->
-      <div v-if="currentStep === 1" class="bg-white rounded-2xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <i class="mdi mdi-wallet-outline text-green-600 text-2xl"></i>
-          Select Network & Amount
+      <div
+        v-if="currentStep === 1"
+        class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700"
+      >
+        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2 text-[#f4b000]">
+          <i class="mdi mdi-wallet-outline text-[#00c6ae] text-2xl"></i>
+          Select Payment Network
         </h3>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
@@ -67,10 +60,13 @@
             :key="network.name"
             @click="selected = network"
             class="cursor-pointer flex flex-col items-center p-4 border rounded-xl transition-all hover:shadow-md"
-            :class="selected?.name === network.name ? 'border-green-500 bg-green-50' : 'border-gray-200'"
+            :class="selected?.name === network.name
+              ? 'border-[#00c6ae] bg-[#14294b]'
+              : 'border-gray-700 bg-[#0d1835]'
+            "
           >
             <img :src="network.icon" alt="logo" class="w-10 h-10 mb-2" />
-            <p class="text-sm font-semibold text-gray-700">{{ network.name }}</p>
+            <p class="text-sm font-semibold">{{ network.name }}</p>
           </div>
         </div>
 
@@ -80,7 +76,7 @@
             v-model="amount"
             type="number"
             min="50"
-            class="w-full border rounded-lg p-2 mb-6"
+            class="w-full border border-gray-700 rounded-lg p-2 bg-[#0d1835] text-gray-200 focus:border-[#00c6ae] focus:ring-0"
             placeholder="Enter amount (min $50)"
           />
         </div>
@@ -88,69 +84,75 @@
         <Button
           label="Continue"
           icon="mdi mdi-arrow-right-bold"
-          class="w-full p-button-success"
+          class="w-full mt-6 forten-btn"
           :disabled="!selected || amount < 50"
           @click="nextStep"
         />
       </div>
 
-      <!-- Step 2: Payment Confirmation -->
-      <div v-else-if="currentStep === 2" class="bg-white rounded-2xl shadow-lg p-6 text-center">
-        <div class="flex flex-col items-center">
-          <img :src="selected.icon" alt="crypto logo" class="w-14 h-14 mb-4" />
-          <h3 class="text-xl font-semibold mb-2">{{ selected.name }} Payment</h3>
-          <p class="text-gray-600 mb-4">
-            Send exactly <span class="font-bold text-green-700">${{ amount }}</span> to this wallet:
-          </p>
+      <!-- Step 2: Payment Info -->
+      <div
+        v-else-if="currentStep === 2"
+        class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700 text-center"
+      >
+        <img :src="selected.icon" alt="crypto logo" class="w-14 h-14 mx-auto mb-4" />
+        <h3 class="text-xl font-bold text-[#f4b000] mb-3">{{ selected.name }} Payment</h3>
+        <p class="text-gray-300 mb-4">
+          Send exactly <span class="text-[#00c6ae] font-semibold">${{ amount }}</span> to:
+        </p>
 
-          <div class="bg-gray-100 border border-gray-200 rounded-xl p-3 mb-4 select-all">
-            <p class="text-sm font-mono break-all text-gray-800">{{ generatedAddress }}</p>
-          </div>
+        <div class="bg-[#0d1835] border border-gray-700 rounded-xl p-3 mb-4 select-all text-left">
+          <p class="text-sm font-mono break-all text-gray-100">{{ generatedAddress }}</p>
+        </div>
 
+        <div class="flex flex-col gap-3">
           <Button
             label="Copy Address"
             icon="mdi mdi-content-copy"
-            class="w-full p-button-outlined mb-3"
+            class="w-full p-button-outlined border-[#00c6ae] text-[#00c6ae]"
             @click="copyAddress"
           />
           <Button
             label="I’ve Paid"
             icon="mdi mdi-check-circle"
-            class="w-full p-button-success"
+            class="w-full forten-btn"
             @click="nextStep"
           />
-
-          <p class="text-xs text-gray-500 mt-4">
-            Payment confirmation may take up to 5 minutes depending on network load.
-          </p>
         </div>
+
+        <p class="text-xs text-gray-400 mt-4">
+          Confirmation takes 3–5 minutes on blockchain.
+        </p>
       </div>
 
-      <!-- Step 3: Payment Verification -->
-      <div v-else-if="currentStep === 3" class="bg-white rounded-2xl shadow-lg p-6 text-center">
-        <div class="flex flex-col items-center">
-          <i class="mdi mdi-timer-sand text-green-600 text-5xl mb-4"></i>
-          <h3 class="text-2xl font-semibold mb-3">Payment Verification</h3>
-          <p class="text-gray-600 mb-4">
-            Your payment of <span class="text-green-700 font-bold">${{ amount }}</span> via
-            <span class="font-semibold">{{ selected.name }}</span> is being verified.
-          </p>
-          <ProgressBar :value="progress" class="w-full mb-4"></ProgressBar>
-          <Button
-            v-if="progress >= 100"
-            label="Go to Dashboard"
-            icon="mdi mdi-arrow-right"
-            class="w-full p-button-success"
-            @click="goToDashboard"
-          />
-        </div>
+      <!-- Step 3: Verification -->
+      <div
+        v-else-if="currentStep === 3"
+        class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700 text-center"
+      >
+        <i class="mdi mdi-shield-check-outline text-[#00c6ae] text-6xl mb-3"></i>
+        <h3 class="text-2xl font-bold text-[#f4b000] mb-2">Payment Verification</h3>
+        <p class="text-gray-300 mb-4">
+          Your payment of <span class="text-[#00c6ae] font-semibold">${{ amount }}</span> is being verified.
+        </p>
+
+        <ProgressBar :value="progress" class="w-full forten-progress mb-4"></ProgressBar>
+
+        <p v-if="progress < 100" class="text-xs text-gray-400">Processing blockchain confirmation...</p>
+        <Button
+          v-else
+          label="Go to Dashboard"
+          icon="mdi mdi-arrow-right"
+          class="w-full forten-btn"
+          @click="goToDashboard"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
@@ -160,26 +162,23 @@ const currentStep = ref(1);
 const selected = ref(null);
 const amount = ref(null);
 const progress = ref(0);
-
-const generatedAddress = ref("0xA1B2C3D4E5F678901234567890ABCDEF12345678");
+const generatedAddress = ref("0xA12F3B456C789D0E12BFA123456789AB98765432");
 
 const steps = [
   { label: "Select Network", icon: "mdi mdi-wallet-outline" },
   { label: "Payment", icon: "mdi mdi-currency-usd" },
-  { label: "Verification", icon: "mdi mdi-shield-check-outline" },
+  { label: "Verification", icon: "mdi mdi-shield-check" },
 ];
 
 const networks = [
-  { name: "TRON (TRC20)", icon: "https://cryptologos.cc/logos/tron-trx-logo.png" },
-  { name: "USDT", icon: "https://cryptologos.cc/logos/tether-usdt-logo.png" },
-  { name: "ETH (ERC20)", icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
+  { name: "USDT (BEP20)", icon: "https://cryptologos.cc/logos/tether-usdt-logo.png" },
   { name: "BTC", icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png" },
+  { name: "ETH (ERC20)", icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
+  { name: "TRON (TRC20)", icon: "https://cryptologos.cc/logos/tron-trx-logo.png" },
 ];
 
 function nextStep() {
-  if (currentStep.value < 3) {
-    currentStep.value++;
-  }
+  if (currentStep.value < 3) currentStep.value++;
   if (currentStep.value === 3) startProgress();
 }
 
@@ -196,7 +195,7 @@ function startProgress() {
 
 function copyAddress() {
   navigator.clipboard.writeText(generatedAddress.value);
-  alert("✅ Wallet address copied to clipboard.");
+  alert("✅ Wallet address copied to clipboard!");
 }
 
 function goToDashboard() {
@@ -204,25 +203,29 @@ function goToDashboard() {
 }
 </script>
 
-<style lang="scss" scoped>
-.addfunds {
-  background: linear-gradient(180deg, #f9fafb 0%, #eef1fb 100%);
-  h2 {
-    color: #0b6d20;
-  }
-
-  /* custom stepper line fix */
-  .relative::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    right: 5%;
-    height: 2px;
-    background: #d1d5db;
-    z-index: 0;
-  }
+<style scoped>
+.forten-btn {
+  background: linear-gradient(90deg, #00c6ae, #f4b000);
+  border: none !important;
+  color: #0a1325 !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.forten-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+.forten-progress .p-progressbar-value {
+  background: linear-gradient(90deg, #00c6ae, #f4b000);
+}
+.forten-stepper::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: #1f2b48;
+  z-index: 0;
 }
 </style>
-
-
