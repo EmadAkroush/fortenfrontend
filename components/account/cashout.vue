@@ -1,67 +1,51 @@
 <template>
-  <div class="cashout px-4 sm:px-16 py-10 max-w-3xl mx-auto space-y-8">
-    <!-- ===== Step Progress Bar ===== -->
-    <div class="relative flex items-center justify-between mb-8">
-      <div
-        v-for="(stepItem, index) in steps"
-        :key="index"
-        class="flex flex-col items-center relative"
-      >
+  <div class="forten-cashout min-h-screen p-4 sm:p-10 max-w-3xl mx-auto space-y-8">
+    <!-- ===== Step Progress ===== -->
+    <div class="steps relative flex items-center justify-between mb-10">
+      <div v-for="(stepItem, i) in steps" :key="i" class="flex flex-col items-center relative">
         <div
-          class="w-10 h-10 flex items-center justify-center rounded-full border-2 font-bold z-10 transition-all"
-          :class="
-            currentStep > index
-              ? 'bg-green-600 text-white border-green-600'
-              : currentStep === index
-              ? 'border-green-600 text-green-600 bg-white'
-              : 'border-gray-300 text-gray-400'
-          "
+          class="step-circle"
+          :class="{
+            done: currentStep > i,
+            active: currentStep === i
+          }"
         >
-          {{ index + 1 }}
+          {{ i + 1 }}
         </div>
         <span
-          class="mt-2 text-xs sm:text-sm font-medium"
-          :class="currentStep >= index ? 'text-green-700' : 'text-gray-400'"
+          class="step-label mt-2 text-xs sm:text-sm font-medium"
+          :class="{ active: currentStep >= i }"
         >
           {{ stepItem.label }}
         </span>
-
-        <!-- Connector Line -->
         <div
-          v-if="index < steps.length - 1"
-          class="absolute top-5 left-[50%] w-full h-[2px] bg-gray-300 z-0"
-          :class="{ 'bg-green-500': currentStep > index }"
+          v-if="i < steps.length - 1"
+          class="connector absolute top-5 left-[50%] w-full h-[2px]"
+          :class="{ done: currentStep > i }"
         ></div>
       </div>
     </div>
 
-    <!-- ===== Step 1: Select Wallet ===== -->
+    <!-- ===== Step 1 ===== -->
     <transition name="fade">
-      <div v-if="currentStep === 0">
-        <Card class="shadow-md">
-          <template #title>Select Wallet</template>
-          <template #content>
-            <Dropdown
-              v-model="selectedWallet"
-              :options="wallets"
-              optionLabel="label"
-              placeholder="Choose your wallet"
-              class="w-full"
-            />
-            <p v-if="selectedWallet" class="mt-3 text-sm text-gray-600">
-              Balance:
-              <span class="font-bold text-green-600">
-                ${{ selectedWallet.balance }}
-              </span>
-            </p>
-          </template>
-        </Card>
-
+      <div v-if="currentStep === 0" class="glass-card">
+        <h2 class="section-title">Select Wallet</h2>
+        <Dropdown
+          v-model="selectedWallet"
+          :options="wallets"
+          optionLabel="label"
+          placeholder="Choose your wallet"
+          class="w-full mb-4"
+        />
+        <p v-if="selectedWallet" class="text-sm text-gray-300">
+          Balance:
+          <span class="text-emerald-300 font-semibold">${{ selectedWallet.balance }}</span>
+        </p>
         <div class="text-center mt-6">
           <Button
             label="Next"
             icon="mdi mdi-arrow-right"
-            class="p-button-success px-6 py-2"
+            class="p-button-success glass-btn"
             :disabled="!selectedWallet"
             @click="nextStep"
           />
@@ -69,36 +53,29 @@
       </div>
     </transition>
 
-    <!-- ===== Step 2: Enter Amount ===== -->
+    <!-- ===== Step 2 ===== -->
     <transition name="fade">
-      <div v-if="currentStep === 1">
-        <Card class="shadow-md">
-          <template #title>Enter Amount</template>
-          <template #content>
-            <InputNumber
-              v-model="amount"
-              mode="currency"
-              currency="USD"
-              locale="en-US"
-              class="w-full"
-            />
-            <p class="text-xs text-gray-500 mt-2">
-              Min withdrawal: $50 | Fee: 2%
-            </p>
-          </template>
-        </Card>
-
-        <div class="flex justify-between mt-6">
+      <div v-if="currentStep === 1" class="glass-card">
+        <h2 class="section-title">Enter Amount</h2>
+        <InputNumber
+          v-model="amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          class="w-full"
+        />
+        <p class="text-xs text-gray-400 mt-2">Min withdrawal: $50 | Fee: 2%</p>
+        <div class="flex justify-between mt-8">
           <Button
             label="Back"
             icon="mdi mdi-arrow-left"
-            class="p-button-outlined"
+            class="p-button-outlined glass-btn"
             @click="prevStep"
           />
           <Button
             label="Next"
             icon="mdi mdi-arrow-right"
-            class="p-button-success px-6 py-2"
+            class="p-button-success glass-btn"
             :disabled="!amount || amount < 50"
             @click="nextStep"
           />
@@ -106,78 +83,60 @@
       </div>
     </transition>
 
-    <!-- ===== Step 3: Withdrawal Method ===== -->
+    <!-- ===== Step 3 ===== -->
     <transition name="fade">
-      <div v-if="currentStep === 2">
-        <Card class="shadow-md">
-          <template #title>Choose Withdrawal Method</template>
-          <template #content>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div
-                class="border p-4 rounded-md cursor-pointer flex items-center gap-2 transition-all"
-                :class="
-                  method === 'crypto'
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200'
-                "
-                @click="method = 'crypto'"
-              >
-                <i class="mdi mdi-bitcoin text-yellow-500 text-2xl"></i>
-                <span class="font-medium">Crypto (USDT / BTC)</span>
-              </div>
+      <div v-if="currentStep === 2" class="glass-card">
+        <h2 class="section-title">Withdrawal Method</h2>
 
-              <div
-                class="border p-4 rounded-md cursor-pointer flex items-center gap-2 transition-all"
-                :class="
-                  method === 'bank'
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200'
-                "
-                @click="method = 'bank'"
-              >
-                <i class="mdi mdi-bank-outline text-blue-500 text-2xl"></i>
-                <span class="font-medium">Bank Transfer</span>
-              </div>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            class="method-card"
+            :class="{ active: method === 'crypto' }"
+            @click="method = 'crypto'"
+          >
+            <i class="mdi mdi-bitcoin text-yellow-400 text-2xl"></i>
+            <span>Crypto (USDT / BTC)</span>
+          </div>
 
-            <!-- اگر روش Crypto انتخاب شود -->
-            <div v-if="method === 'crypto'" class="mt-5">
-              <label class="block text-sm font-medium mb-2"
-                >Select Your Saved Wallet</label
-              >
-              <Dropdown
-                v-model="selectedCryptoWallet"
-                :options="userWallets"
-                optionLabel="name"
-                placeholder="Choose from your saved wallets"
-                class="w-full"
-              />
-              <p v-if="selectedCryptoWallet" class="text-xs text-gray-500 mt-2">
-                Network:
-                <span class="font-semibold">{{ selectedCryptoWallet.network }}</span>
-              </p>
-            </div>
+          <div
+            class="method-card"
+            :class="{ active: method === 'bank' }"
+            @click="method = 'bank'"
+          >
+            <i class="mdi mdi-bank-outline text-blue-400 text-2xl"></i>
+            <span>Bank Transfer</span>
+          </div>
+        </div>
 
-            <!-- اگر روش Bank انتخاب شود -->
-            <div v-if="method === 'bank'" class="mt-5">
-              <p class="text-sm text-gray-600">
-                Bank transfers are processed manually within 3-5 business days.
-              </p>
-            </div>
-          </template>
-        </Card>
+        <div v-if="method === 'crypto'" class="mt-5">
+          <label class="block text-sm mb-2 text-gray-300">Select Saved Wallet</label>
+          <Dropdown
+            v-model="selectedCryptoWallet"
+            :options="userWallets"
+            optionLabel="name"
+            placeholder="Choose from your saved wallets"
+            class="w-full"
+          />
+          <p v-if="selectedCryptoWallet" class="text-xs text-gray-400 mt-2">
+            Network: <span class="text-emerald-300 font-medium">{{ selectedCryptoWallet.network }}</span>
+          </p>
+        </div>
 
-        <div class="flex justify-between mt-6">
+        <div v-if="method === 'bank'" class="mt-5 text-sm text-gray-300">
+          Bank transfers are processed manually within 3–5 business days.
+        </div>
+
+        <div class="flex justify-between mt-8">
           <Button
             label="Back"
             icon="mdi mdi-arrow-left"
-            class="p-button-outlined"
+            class="p-button-outlined glass-btn"
             @click="prevStep"
           />
           <Button
             label="Confirm Cashout"
             icon="mdi mdi-check"
-            class="p-button-success px-6 py-2"
+            class="p-button-success glass-btn"
             :disabled="!method || (method === 'crypto' && !selectedCryptoWallet)"
             @click="completeCashout"
           />
@@ -185,28 +144,24 @@
       </div>
     </transition>
 
-    <!-- ===== Step 4: Confirmation ===== -->
+    <!-- ===== Step 4 ===== -->
     <transition name="fade">
-      <div v-if="currentStep === 3" class="text-center py-10">
-        <i class="mdi mdi-check-circle-outline text-green-600 text-6xl mb-4"></i>
-        <h2 class="text-2xl font-bold text-green-700">
-          Cashout Request Submitted
-        </h2>
-        <p class="text-gray-600 mt-2">
+      <div v-if="currentStep === 3" class="glass-card text-center py-10">
+        <i class="mdi mdi-check-decagram text-emerald-400 text-6xl mb-3"></i>
+        <h2 class="text-2xl font-bold text-gray-100">Cashout Request Submitted</h2>
+        <p class="text-gray-400 mt-2">
           Your withdrawal request is being processed. You’ll receive confirmation soon.
         </p>
 
-        <div class="mt-6 bg-white inline-block px-6 py-3 rounded-lg shadow-md border">
-          <p class="text-sm text-gray-500 mb-1">Transaction ID</p>
-          <p class="text-lg font-mono font-semibold text-green-700">
-            {{ transactionId }}
-          </p>
+        <div class="bg-emerald-950/30 border border-emerald-500/30 mt-6 inline-block px-6 py-3 rounded-lg shadow-md">
+          <p class="text-xs text-gray-400">Transaction ID</p>
+          <p class="text-lg font-mono font-semibold text-emerald-300">{{ transactionId }}</p>
         </div>
 
         <Button
           label="Back to Dashboard"
           icon="mdi mdi-view-dashboard"
-          class="mt-8 p-button-outlined"
+          class="mt-8 p-button-outlined glass-btn"
           @click="resetSteps"
         />
       </div>
@@ -215,70 +170,150 @@
 </template>
 
 <script setup>
-import Card from "primevue/card"
-import Button from "primevue/button"
-import Dropdown from "primevue/dropdown"
-import InputNumber from "primevue/inputnumber"
-import { ref } from "vue"
+import Card from "primevue/card";
+import Button from "primevue/button";
+import Dropdown from "primevue/dropdown";
+import InputNumber from "primevue/inputnumber";
+import { ref } from "vue";
 
 const wallets = [
   { label: "Profits Wallet", balance: 1200 },
   { label: "VX Wallet", balance: 780 },
-]
+];
 
 const userWallets = [
   { name: "USDT Wallet - TRC20", network: "TRON" },
   { name: "BTC Wallet", network: "Bitcoin" },
-]
+];
 
 const steps = [
   { label: "Select Wallet" },
   { label: "Enter Amount" },
   { label: "Withdrawal Method" },
   { label: "Confirmation" },
-]
+];
 
-const currentStep = ref(0)
-const selectedWallet = ref(null)
-const amount = ref(null)
-const method = ref(null)
-const selectedCryptoWallet = ref(null)
-const transactionId = ref("")
+const currentStep = ref(0);
+const selectedWallet = ref(null);
+const amount = ref(null);
+const method = ref(null);
+const selectedCryptoWallet = ref(null);
+const transactionId = ref("");
 
-const nextStep = () => (currentStep.value += 1)
-const prevStep = () => (currentStep.value -= 1)
+const nextStep = () => (currentStep.value += 1);
+const prevStep = () => (currentStep.value -= 1);
 
 const generateTransactionId = () => {
-  const random = Math.floor(100000 + Math.random() * 900000)
-  return `VX-CASHOUT-${random}`
-}
+  const random = Math.floor(100000 + Math.random() * 900000);
+  return `FTN-CASHOUT-${random}`;
+};
 
 const completeCashout = () => {
-  transactionId.value = generateTransactionId()
-  nextStep()
-}
+  transactionId.value = generateTransactionId();
+  nextStep();
+};
 
 const resetSteps = () => {
-  currentStep.value = 0
-  selectedWallet.value = null
-  amount.value = null
-  method.value = null
-  selectedCryptoWallet.value = null
-  transactionId.value = ""
-}
+  currentStep.value = 0;
+  selectedWallet.value = null;
+  amount.value = null;
+  method.value = null;
+  selectedCryptoWallet.value = null;
+  transactionId.value = "";
+};
 </script>
 
-<style lang="scss" scoped>
-.cashout {
-  background-color: #f9fbfc;
+<style scoped lang="scss">
+.forten-cashout {
+  background: radial-gradient(circle at top left, #0c1d17, #07130f);
+  color: #e6eef0;
+  font-family: "Inter", sans-serif;
 
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.3s ease-in-out;
+  .glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   }
-  .fade-enter-from,
-  .fade-leave-to {
-    opacity: 0;
+
+  .section-title {
+    font-weight: 700;
+    color: #b0f2c2;
+    margin-bottom: 1rem;
+  }
+
+  /* Step Progress */
+  .step-circle {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .step-circle.active {
+    border-color: #10b981;
+    color: #10b981;
+  }
+  .step-circle.done {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+  }
+
+  .step-label {
+    color: #64748b;
+  }
+  .step-label.active {
+    color: #b0f2c2;
+  }
+
+  .connector {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .connector.done {
+    background: #10b981;
+  }
+
+  /* Method Cards */
+  .method-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .method-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .method-card.active {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+  }
+
+  /* Buttons */
+  .glass-btn {
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    padding: 1rem !important;
+    .glass-card {
+      padding: 1rem;
+    }
   }
 }
 </style>
