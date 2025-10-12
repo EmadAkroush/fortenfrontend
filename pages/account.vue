@@ -122,7 +122,7 @@ const menuItems = ref([
   { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
   { key: "cashout", label: "Cashout", icon: "mdi mdi-bank-transfer-out" },
   { key: "history", label: "History", icon: "mdi mdi-history" },
-  { key: "vxplan", label: "VX Plan", icon: "mdi mdi-family-tree" },
+  { key: "vxplan", label: "network", icon: "mdi mdi-family-tree" },
   { key: "setting", label: "Settings", icon: "mdi mdi-cog-outline" },
 ])
 
