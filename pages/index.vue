@@ -26,7 +26,7 @@
       <img
         src="/public/ChatGPT Image Oct 12, 2025, 05_46_40 AM.png"
         alt="Investment illustration"
-        class="absolute bottom-0 w-72 sm:w-66 opacity-80 animate-float"
+        class="investmentimg absolute bottom-0 w-72 sm:w-66 opacity-80 animate-float pt-10 mt-10"
         style="border-radius: 10%;"
       />
     </section>
@@ -52,7 +52,7 @@
     </section>
 
     <!-- ===== INVESTMENT PACKAGES ===== -->
-    <section class="py-20 bg-[#0a1325] border-t border-gray-700">
+    <section class="sese py-20 bg-[#0a1325] border-t border-gray-700">
       <div class="max-w-6xl mx-auto px-6 text-center">
         <h2 class="text-3xl sm:text-4xl font-bold text-[#f4b000] mb-12">Investment Packages</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -145,6 +145,15 @@ const packages = [
 </script>
 
 <style scoped>
+.sese {
+  background-image: url(/public/bu.jpg) ;
+  background-size: cover;
+  /* background-position: center;
+  background-repeat: no-repeat;
+  */
+
+}
+
 .forten-btn {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
   border: none !important;
@@ -192,4 +201,13 @@ const packages = [
 .animate-fade-in {
   animation: fadeIn 1s ease forwards;
 }
+
+@media screen and (max-width: 480px) {
+.investmentimg {
+  width: 200px !important;
+}
+
+}
+
+
 </style>
