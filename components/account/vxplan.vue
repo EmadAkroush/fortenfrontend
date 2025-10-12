@@ -9,29 +9,32 @@
         </p>
       </div>
 
-      <div class="actions flex items-center gap-3">
-        <Button
-          icon="mdi mdi-magnify-minus"
-          class="p-button-rounded p-button-text"
-          @click="zoomOut"
-        />
-        <Button
-          icon="mdi mdi-magnify-plus"
-          class="p-button-rounded p-button-text"
-          @click="zoomIn"
-        />
-        <Button
-          icon="mdi mdi-restore"
-          class="p-button-rounded p-button-text"
-          @click="resetZoom"
-        />
+      <div class="actions flex flex-col sm:flex-row items-center gap-3">
+        <div class="flex-row">
+          <Button
+            icon="mdi mdi-magnify-minus"
+            class="p-button-rounded p-button-text"
+            @click="zoomOut"
+          />
+          <Button
+            icon="mdi mdi-magnify-plus"
+            class="p-button-rounded p-button-text"
+            @click="zoomIn"
+          />
+          <Button
+            icon="mdi mdi-restore"
+            class="p-button-rounded p-button-text"
+            @click="resetZoom"
+          />
+        </div>
+
         <Button
           label="Top-Up"
           icon="mdi mdi-wallet"
           class="p-button-success"
           @click="showTopUp = true"
         />
-   
+
         <Button
           label="Export CSV"
           icon="mdi mdi-file-export"
@@ -186,8 +189,6 @@
             <div class="stat-title">Active Cycles (VXC)</div>
             <div class="stat-value">{{ selectedNode.vxc || 0 }}</div>
           </div>
-
-        
         </div>
 
         <div class="dialog-actions">
@@ -779,7 +780,7 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
   .kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 </style>
