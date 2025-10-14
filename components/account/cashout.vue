@@ -177,8 +177,7 @@ import InputNumber from "primevue/inputnumber";
 import { ref } from "vue";
 
 const wallets = [
-  { label: "Profits Wallet", balance: 1200 },
-  { label: "VX Wallet", balance: 780 },
+  { label: "main Wallet", balance: 1200 },
 ];
 
 const userWallets = [
