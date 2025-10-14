@@ -74,14 +74,7 @@ a:hover {
   color: #fff;
 }
 
-/* ---------- PAGE CONTAINER ---------- */
-#__nuxt {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.02);
-}
+
 
 /* ---------- SMOOTH HOVER FX FOR LAYOUTS ---------- */
 .page-enter-active,
