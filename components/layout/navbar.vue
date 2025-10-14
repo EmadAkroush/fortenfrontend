@@ -8,7 +8,7 @@
       <!-- Logo -->
       <div class="flex items-center space-x-3">
         <img
-          src="/public/Photo_1747641514372-3.png"
+          src="/public/Photo_1760453095335.png"
           alt="Logo"
           class="w-10 h-10 rounded-lg shadow-sm"
         />

@@ -34,7 +34,7 @@ export default defineNuxtConfig({
         {
           rel: "icon",
           type: "image/x-icon",
-          href: "./Photo_1747641514372-3.png",
+          href: "./Photo_1760453095335.png",
         },
       ],
     },
