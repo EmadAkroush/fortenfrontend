@@ -3,7 +3,7 @@
     <!-- ===== Header ===== -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-300">My Portfolio</h1>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-300">My Invest</h1>
         <p class="text-sm text-gray-300 mt-1">
           Track your investments, profit growth, and package progress in real time.
         </p>

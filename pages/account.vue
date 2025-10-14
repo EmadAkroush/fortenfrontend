@@ -118,11 +118,11 @@ const showMobileMenu = ref(false)
 const activeItem = ref("performance")
 
 const menuItems = ref([
-  { key: "performance", label: "Performance", icon: "mdi mdi-finance" },
-  { key: "portfolio", label: "Portfolio", icon: "mdi mdi-currency-usd" },
+  { key: "performance", label: "Dashboard", icon: "mdi mdi-finance" },
+  { key: "portfolio", label: "My Invest", icon: "mdi mdi-currency-usd" },
   { key: "cashout", label: "Cashout", icon: "mdi mdi-bank-transfer-out" },
   { key: "history", label: "History", icon: "mdi mdi-history" },
-  { key: "vxplan", label: "network", icon: "mdi mdi-family-tree" },
+  { key: "vxplan", label: "Referral", icon: "mdi mdi-family-tree" },
   { key: "setting", label: "Settings", icon: "mdi mdi-cog-outline" },
 ])
 

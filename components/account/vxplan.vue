@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="header flex items-center justify-between mb-6">
       <div>
-        <h1 class="title">Team & Binary Overview</h1>
+        <h1 class="title">Team  Overview</h1>
         <p class="subtitle">
-          Monitor your 4-level VX Network and growth potential
+          Monitor your 4-level  Network and growth potential
         </p>
       </div>
 
@@ -50,7 +50,7 @@
         <i class="mdi mdi-chart-box kpi-icon"></i>
         <div>
           <div class="kpi-title">Account</div>
-          <div class="kpi-value">VX5029 (networkt)</div>
+          <div class="kpi-value">FO5029 (Referral)</div>
           <div class="kpi-sub">network Account</div>
         </div>
       </div>

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-300">Performance Overview</h1>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-300">Dashboard Overview</h1>
         <p class="text-sm text-gray-300 mt-1">
           Auto-compounding active — profits are automatically added to principal every 24 hours.
         </p>
