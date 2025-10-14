@@ -45,32 +45,35 @@
         </router-link>
       </nav>
 
-      <!-- Profile Dropdown -->
-      <div class="relative hidden md:block">
+      <!-- Profile (Desktop + Mobile) -->
+      <div class="relative flex items-center gap-2">
+        <!-- Profile Button -->
         <button
           @click="profileOpen = !profileOpen"
           class="flex items-center gap-2 p-2 rounded-full hover:bg-white/10 transition"
         >
           <i class="mdi mdi-account-circle text-3xl text-white"></i>
-          <span class="text-sm font-medium text-white">My Account</span>
-          <i class="mdi mdi-chevron-down text-gray-300"></i>
+          <span class="hidden md:inline text-sm font-medium text-white">My Account</span>
+          <i class="mdi mdi-chevron-down text-gray-300 hidden md:inline"></i>
         </button>
 
+        <!-- Profile Dropdown -->
         <transition name="fade">
           <div
             v-if="profileOpen"
-            class="absolute right-0 mt-3 w-48 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50"
+            class="absolute right-0 mt-12 w-48 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50"
           >
             <nuxt-link
               to="/account"
               class="block px-4 py-2 text-gray-700 hover:bg-green-50"
+              @click="profileOpen = false"
             >
               <i class="mdi mdi-view-dashboard-outline mr-2 text-green-600"></i>
               Dashboard
             </nuxt-link>
             <hr class="my-1 border-gray-200" />
             <button
-              @click="logout"
+              @click="logout(); profileOpen = false"
               class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
             >
               <i class="mdi mdi-logout mr-2"></i>
@@ -78,15 +81,15 @@
             </button>
           </div>
         </transition>
-      </div>
 
-      <!-- Mobile Button -->
-      <button
-        class="md:hidden p-2 rounded-md text-white hover:bg-white/10 transition"
-        @click="mobileMenu = !mobileMenu"
-      >
-        <i class="mdi mdi-menu text-2xl"></i>
-      </button>
+        <!-- Mobile Menu Button -->
+        <button
+          class="md:hidden p-2 rounded-md text-white hover:bg-white/10 transition"
+          @click="mobileMenu = !mobileMenu"
+        >
+          <i class="mdi mdi-menu text-2xl"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Mobile Dropdown -->
@@ -147,19 +150,13 @@ const items = ref([
 </script>
 
 <style scoped lang="scss">
-/* Navbar Base */
 .forten-navbar {
-  background: linear-gradient(
-    to right,
-    rgba(7, 12, 20, 0.85),
-    rgba(16, 30, 50, 0.85)
-  );
+  background: linear-gradient(to right, rgba(7, 12, 20, 0.85), rgba(16, 30, 50, 0.85));
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Desktop Menu Links */
 .nav-link {
   display: flex;
   align-items: center;
@@ -169,22 +166,18 @@ const items = ref([
   transition: all 0.2s ease;
   height: 40px;
 }
-
 .nav-link i {
   font-size: 18px;
   position: relative;
   top: 0.5px;
 }
-
 .nav-link.default:hover {
   color: #a7f3d0;
 }
-
 .nav-link.active {
   color: #6ee7b7;
   border-bottom: 2px solid #6ee7b7;
 }
-
 .nav-link.logout {
   color: #f87171;
 }
@@ -202,7 +195,6 @@ const items = ref([
   opacity: 0;
   transform: translateY(-5px);
 }
-
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.3s ease;
