@@ -100,7 +100,7 @@ const profile = ref({
   lastName: "Doe",
   phone: "+123456789",
   email: "john@example.com",
-  vxCode: "VX-123456",
+  vxCode: "FO-123456",
   wallet: "0x123456789abcdef123456789abcdef123456789",
 })
 
@@ -110,7 +110,7 @@ const fields = [
   { label: "Last Name", model: "lastName" },
   { label: "Phone", model: "phone" },
   { label: "Email", model: "email" },
-  { label: "VX Code", model: "vxCode", disabled: true },
+  { label: "FO Code", model: "vxCode", disabled: true },
 ]
 
 const security = ref({
