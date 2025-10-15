@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="header flex items-center justify-between mb-6">
       <div>
-        <h1 class="title">Team  Overview</h1>
+        <h1 class="title">Team Overview</h1>
         <p class="subtitle">
-          Monitor your 4-level  Network and growth potential
+          Monitor your 4-level Network and growth potential
         </p>
       </div>
 
@@ -81,9 +81,6 @@
         </div>
       </div>
     </div>
-    
-
-    
 
     <!-- Chart / Org container -->
     <div
@@ -147,11 +144,12 @@
       </div>
     </div>
 
-
-        <!-- ===== Referral & Activity Section ===== -->
+    <!-- ===== Referral & Activity Section ===== -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
       <div class="glass-card col-span-2">
-        <h3 class="text-lg font-semibold text-gray-100 mb-3">Referral & Network</h3>
+        <h3 class="text-lg font-semibold text-gray-100 mb-3">
+          Referral & Network
+        </h3>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
           <div class="ref-stat">
@@ -172,44 +170,104 @@
           <div>Referral commissions: L1 15% / L2 10% / L3 5%</div>
           <div class="mt-1">
             Referral link:
-            <code class="text-xs px-2 py-1 bg-gray-800 rounded">{{ referralLink }}</code>
+            <code class="text-xs px-2 py-1 bg-gray-800 rounded">{{
+              referralLink
+            }}</code>
           </div>
         </div>
 
         <ProgressBar :value="referralProgress" />
-        <div class="text-xs text-gray-400 mt-2">Progress toward next VIP level: {{ referralProgress }}%</div>
+        <div class="text-xs text-gray-400 mt-2">
+          Progress toward next VIP level: {{ referralProgress }}%
+        </div>
 
         <!-- ===== New Sub-Referrals Earnings Section ===== -->
-        <div class="mt-6 p-4 rounded-lg bg-white/5 border border-emerald-400/20">
-          <h4 class="text-emerald-300 font-semibold mb-3">Referral Investment Summary</h4>
+        <div
+          class="mt-6 p-4 rounded-lg bg-white/5 border border-emerald-400/20"
+        >
+          <h4 class="text-emerald-300 font-semibold mb-3">
+            Referral Investment Summary
+          </h4>
           <div class="text-sm text-gray-300 space-y-2">
-            <div>Level 1 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level1) }}</span></div>
-            <div>Level 1 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level1) }}</span></div>
-            <div>Level 2 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level2) }}</span></div>
-            <div>Level 2 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level2) }}</span></div>
-            <div>Level 3 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level3) }}</span></div>
-            <div>Level 3 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level3) }}</span></div>
+            <div>
+              Level 1 Total Investment:
+              <span class="font-semibold text-gray-100"
+                >${{ formatNumber(referralInvestments.level1) }}</span
+              >
+            </div>
+            <div>
+              Level 1 Bonus Received:
+              <span class="font-semibold text-emerald-300"
+                >${{ formatNumber(referralEarnings.level1) }}</span
+              >
+            </div>
+            <div>
+              Level 2 Total Investment:
+              <span class="font-semibold text-gray-100"
+                >${{ formatNumber(referralInvestments.level2) }}</span
+              >
+            </div>
+            <div>
+              Level 2 Bonus Received:
+              <span class="font-semibold text-emerald-300"
+                >${{ formatNumber(referralEarnings.level2) }}</span
+              >
+            </div>
+            <div>
+              Level 3 Total Investment:
+              <span class="font-semibold text-gray-100"
+                >${{ formatNumber(referralInvestments.level3) }}</span
+              >
+            </div>
+            <div>
+              Level 3 Bonus Received:
+              <span class="font-semibold text-emerald-300"
+                >${{ formatNumber(referralEarnings.level3) }}</span
+              >
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="glass-card">
-        <h3 class="text-lg font-semibold text-gray-100 mb-3">Recent Activity</h3>
-        <ul class="divide-y divide-white/5 text-sm text-gray-300">
-          <li v-for="(a, i) in activities" :key="i" class="py-3 flex justify-between">
-            <div class="flex items-center gap-3">
-              <i :class="[a.icon, 'text-emerald-300 text-xl']"></i>
-              <div>
-                <div class="font-medium">{{ a.title }}</div>
-                <div class="text-xs text-gray-400">{{ a.desc }}</div>
+      <div
+        class="w-full bg-white/5 border border-white/10 rounded-xl backdrop-blur-md p-4 sm:p-5 shadow-[0_0_20px_rgba(0,255,190,0.05)] hover:shadow-[0_0_25px_rgba(0,255,190,0.15)] transition-all duration-300"
+        style="width: 110%;"
+      >
+        <h3 class="text-lg font-semibold text-gray-100 mb-3 sm:mb-4">
+          Recent Activity
+        </h3>
+
+        <ul class="divide-y divide-white/10 text-sm text-gray-300">
+          <li
+            v-for="(a, i) in activities"
+            :key="i"
+            class="py-3 flex justify-between items-start sm:items-center flex-wrap w-full"
+          >
+            <!-- Left -->
+            <div class="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+              <i
+                :class="[a.icon, 'text-emerald-300 text-xl flex-shrink-0']"
+              ></i>
+              <div class="truncate">
+                <div class="font-medium leading-tight truncate">
+                  {{ a.title }}
+                </div>
+                <div class="text-xs text-gray-400 truncate">
+                  {{ a.desc }}
+                </div>
               </div>
             </div>
-            <div class="text-xs text-gray-400">{{ a.time }}</div>
+
+            <!-- Right -->
+            <div
+              class="text-xs text-gray-400 mt-1 sm:mt-0 ml-auto whitespace-nowrap"
+            >
+              {{ a.time }}
+            </div>
           </li>
         </ul>
       </div>
     </div>
-
 
     <!-- Node Details Dialog -->
     <Dialog
@@ -226,7 +284,7 @@
             <div class="name">{{ selectedNode.data.name }}</div>
             <div class="sub">{{ selectedNode.data.title }}</div>
             <div class="vxcode">
-              VX Code: <span class="code">{{ selectedNode.data.vxCode }}</span>
+              CO Code: <span class="code">{{ selectedNode.data.vxCode }}</span>
             </div>
           </div>
         </div>
@@ -253,7 +311,7 @@
           </div>
 
           <div class="stat">
-            <div class="stat-title">Active Cycles (VXC)</div>
+            <div class="stat-title">Active Cycles (FOC)</div>
             <div class="stat-value">{{ selectedNode.vxc || 0 }}</div>
           </div>
         </div>
@@ -266,7 +324,7 @@
             @click="openTopUpFromNode"
           />
           <Button
-            label="Copy VX Code"
+            label="Copy FO Code"
             icon="mdi mdi-content-copy"
             class="p-button-outlined"
             @click="copyCode(selectedNode.data.vxCode)"
@@ -328,7 +386,9 @@ import Toast from "primevue/toast";
 
 /* ----------- Referral & Earnings Data ----------- */
 const referrals = ref({ level1: 8, level2: 21, level3: 47 });
-const referralProgress = computed(() => Math.min(100, Math.round((referrals.value.level1 / 15) * 100)));
+const referralProgress = computed(() =>
+  Math.min(100, Math.round((referrals.value.level1 / 15) * 100))
+);
 const referralLink = "https://forten.example.com/register?ref=alexjohn";
 
 const referralInvestments = ref({
@@ -344,21 +404,29 @@ const referralEarnings = ref({
 });
 
 const activities = ref([
-  { icon: "mdi mdi-cash-plus", title: "Deposit received", desc: "$250 via USDT", time: "3h ago" },
-  { icon: "mdi mdi-wallet-outline", title: "Auto-compound applied", desc: "Profit added to principal", time: "1d ago" },
-  { icon: "mdi mdi-account-plus", title: "Referral joined", desc: "1 new Level 1 user", time: "2d ago" },
+  {
+    icon: "mdi mdi-cash-plus",
+    title: "Deposit received",
+    desc: "$250 via USDT",
+    time: "3h ago",
+  },
+  {
+    icon: "mdi mdi-wallet-outline",
+    title: "Auto-compound applied",
+    desc: "Profit added to principal",
+    time: "1d ago",
+  },
+  {
+    icon: "mdi mdi-account-plus",
+    title: "Referral joined",
+    desc: "1 new Level 1 user",
+    time: "2d ago",
+  },
 ]);
 
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
-
-
-
-
-
-
-
 
 /* ---------- demo data: 4 levels ---------- */
 
@@ -371,19 +439,19 @@ const makeNode = (code, name, title, image) => ({
 
 // build 4-level binary (1 + 2 + 4 + 8 = 15 nodes)
 const root = makeNode(
-  "VX5029",
+  "FO5029",
   "You",
-  "Your VX Account",
+  "Your FO Account",
   "https://i.pravatar.cc/100?img=12"
 );
 const L1 = makeNode(
-  "VX5020",
+  "FO5020",
   "Leader A",
   "L1",
   "https://i.pravatar.cc/100?img=3"
 );
 const R1 = makeNode(
-  "VX5919",
+  "FO5919",
   "Leader B",
   "R1",
   "https://i.pravatar.cc/100?img=5"
@@ -391,25 +459,25 @@ const R1 = makeNode(
 
 // level 2 (each leader has 2)
 const LA1 = makeNode(
-  "VX3001",
+  "FO3001",
   "User A1",
   "A1",
   "https://i.pravatar.cc/100?img=8"
 );
 const LA2 = makeNode(
-  "VX3002",
+  "FO3002",
   "User A2",
   "A2",
   "https://i.pravatar.cc/100?img=9"
 );
 const RB1 = makeNode(
-  "VX4001",
+  "FO4001",
   "User B1",
   "B1",
   "https://i.pravatar.cc/100?img=11"
 );
 const RB2 = makeNode(
-  "VX4002",
+  "FO4002",
   "User B2",
   "B2",
   "https://i.pravatar.cc/100?img=10"
@@ -612,23 +680,22 @@ onMounted(() => {
 
 <style scoped>
 /* Forten dark / neon theme */
-  .ref-stat {
-    text-align: center;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-  }
-  .ref-num {
-    font-size: 18px;
-    font-weight: 700;
-    color: #10b981;
-  }
-  .ref-label {
-    font-size: 12px;
-    color: #9ca3af;
-  }
-
+.ref-stat {
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+.ref-num {
+  font-size: 18px;
+  font-weight: 700;
+  color: #10b981;
+}
+.ref-label {
+  font-size: 12px;
+  color: #9ca3af;
+}
 
 .vxplan-page {
   padding: 18px;
@@ -668,14 +735,13 @@ onMounted(() => {
   }
 }
 
-
-  .glass-card {
-    padding: 16px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-  }
+.glass-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+}
 
 .kpi-card {
   display: flex;
