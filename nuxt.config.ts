@@ -21,12 +21,12 @@ export default defineNuxtConfig({
   },
   site: {
     url: "https://parsautoparts.ir",
-    name: "vestavex",
+    name: "forten",
   },
 
   app: {
     head: {
-      title: "vestavex", // default fallback title
+      title: "forten", // default fallback title
       htmlAttrs: {
         lang: "en",
       },

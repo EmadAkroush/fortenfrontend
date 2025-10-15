@@ -81,6 +81,9 @@
         </div>
       </div>
     </div>
+    
+
+    
 
     <!-- Chart / Org container -->
     <div
@@ -143,6 +146,70 @@
         </OrganizationChart>
       </div>
     </div>
+
+
+        <!-- ===== Referral & Activity Section ===== -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      <div class="glass-card col-span-2">
+        <h3 class="text-lg font-semibold text-gray-100 mb-3">Referral & Network</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div class="ref-stat">
+            <div class="ref-num">{{ referrals.level1 }}</div>
+            <div class="ref-label">Direct (L1)</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-num">{{ referrals.level2 }}</div>
+            <div class="ref-label">Level 2</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-num">{{ referrals.level3 }}</div>
+            <div class="ref-label">Level 3</div>
+          </div>
+        </div>
+
+        <div class="mb-3 text-sm text-gray-300">
+          <div>Referral commissions: L1 15% / L2 10% / L3 5%</div>
+          <div class="mt-1">
+            Referral link:
+            <code class="text-xs px-2 py-1 bg-gray-800 rounded">{{ referralLink }}</code>
+          </div>
+        </div>
+
+        <ProgressBar :value="referralProgress" />
+        <div class="text-xs text-gray-400 mt-2">Progress toward next VIP level: {{ referralProgress }}%</div>
+
+        <!-- ===== New Sub-Referrals Earnings Section ===== -->
+        <div class="mt-6 p-4 rounded-lg bg-white/5 border border-emerald-400/20">
+          <h4 class="text-emerald-300 font-semibold mb-3">Referral Investment Summary</h4>
+          <div class="text-sm text-gray-300 space-y-2">
+            <div>Level 1 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level1) }}</span></div>
+            <div>Level 1 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level1) }}</span></div>
+            <div>Level 2 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level2) }}</span></div>
+            <div>Level 2 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level2) }}</span></div>
+            <div>Level 3 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level3) }}</span></div>
+            <div>Level 3 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level3) }}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3 class="text-lg font-semibold text-gray-100 mb-3">Recent Activity</h3>
+        <ul class="divide-y divide-white/5 text-sm text-gray-300">
+          <li v-for="(a, i) in activities" :key="i" class="py-3 flex justify-between">
+            <div class="flex items-center gap-3">
+              <i :class="[a.icon, 'text-emerald-300 text-xl']"></i>
+              <div>
+                <div class="font-medium">{{ a.title }}</div>
+                <div class="text-xs text-gray-400">{{ a.desc }}</div>
+              </div>
+            </div>
+            <div class="text-xs text-gray-400">{{ a.time }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
 
     <!-- Node Details Dialog -->
     <Dialog
@@ -259,7 +326,42 @@ import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 import Toast from "primevue/toast";
 
+/* ----------- Referral & Earnings Data ----------- */
+const referrals = ref({ level1: 8, level2: 21, level3: 47 });
+const referralProgress = computed(() => Math.min(100, Math.round((referrals.value.level1 / 15) * 100)));
+const referralLink = "https://forten.example.com/register?ref=alexjohn";
+
+const referralInvestments = ref({
+  level1: 1800,
+  level2: 2500,
+  level3: 4000,
+});
+
+const referralEarnings = ref({
+  level1: 270,
+  level2: 250,
+  level3: 200,
+});
+
+const activities = ref([
+  { icon: "mdi mdi-cash-plus", title: "Deposit received", desc: "$250 via USDT", time: "3h ago" },
+  { icon: "mdi mdi-wallet-outline", title: "Auto-compound applied", desc: "Profit added to principal", time: "1d ago" },
+  { icon: "mdi mdi-account-plus", title: "Referral joined", desc: "1 new Level 1 user", time: "2d ago" },
+]);
+
+function formatNumber(v) {
+  return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
+}
+
+
+
+
+
+
+
+
 /* ---------- demo data: 4 levels ---------- */
+
 const makeNode = (code, name, title, image) => ({
   key: code,
   type: "person",
@@ -510,6 +612,24 @@ onMounted(() => {
 
 <style scoped>
 /* Forten dark / neon theme */
+  .ref-stat {
+    text-align: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  .ref-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: #10b981;
+  }
+  .ref-label {
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+
 .vxplan-page {
   padding: 18px;
   background: linear-gradient(180deg, #071218 0%, #071a1a 100%);
@@ -547,6 +667,15 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 }
+
+
+  .glass-card {
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+  }
 
 .kpi-card {
   display: flex;

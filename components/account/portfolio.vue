@@ -85,67 +85,7 @@
       </div>
     </div>
 
-    <!-- ===== Referral & Activity Section ===== -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="glass-card col-span-2">
-        <h3 class="text-lg font-semibold text-gray-100 mb-3">Referral & Network</h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-          <div class="ref-stat">
-            <div class="ref-num">{{ referrals.level1 }}</div>
-            <div class="ref-label">Direct (L1)</div>
-          </div>
-          <div class="ref-stat">
-            <div class="ref-num">{{ referrals.level2 }}</div>
-            <div class="ref-label">Level 2</div>
-          </div>
-          <div class="ref-stat">
-            <div class="ref-num">{{ referrals.level3 }}</div>
-            <div class="ref-label">Level 3</div>
-          </div>
-        </div>
-
-        <div class="mb-3 text-sm text-gray-300">
-          <div>Referral commissions: L1 15% / L2 10% / L3 5%</div>
-          <div class="mt-1">
-            Referral link:
-            <code class="text-xs px-2 py-1 bg-gray-800 rounded">{{ referralLink }}</code>
-          </div>
-        </div>
-
-        <ProgressBar :value="referralProgress" />
-        <div class="text-xs text-gray-400 mt-2">Progress toward next VIP level: {{ referralProgress }}%</div>
-
-        <!-- ===== New Sub-Referrals Earnings Section ===== -->
-        <div class="mt-6 p-4 rounded-lg bg-white/5 border border-emerald-400/20">
-          <h4 class="text-emerald-300 font-semibold mb-3">Referral Investment Summary</h4>
-          <div class="text-sm text-gray-300 space-y-2">
-            <div>Level 1 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level1) }}</span></div>
-            <div>Level 1 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level1) }}</span></div>
-            <div>Level 2 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level2) }}</span></div>
-            <div>Level 2 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level2) }}</span></div>
-            <div>Level 3 Total Investment: <span class="font-semibold text-gray-100">${{ formatNumber(referralInvestments.level3) }}</span></div>
-            <div>Level 3 Bonus Received: <span class="font-semibold text-emerald-300">${{ formatNumber(referralEarnings.level3) }}</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass-card">
-        <h3 class="text-lg font-semibold text-gray-100 mb-3">Recent Activity</h3>
-        <ul class="divide-y divide-white/5 text-sm text-gray-300">
-          <li v-for="(a, i) in activities" :key="i" class="py-3 flex justify-between">
-            <div class="flex items-center gap-3">
-              <i :class="[a.icon, 'text-emerald-300 text-xl']"></i>
-              <div>
-                <div class="font-medium">{{ a.title }}</div>
-                <div class="text-xs text-gray-400">{{ a.desc }}</div>
-              </div>
-            </div>
-            <div class="text-xs text-gray-400">{{ a.time }}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
+   
 
     <!-- ===== Cancel Dialog ===== -->
     <Dialog v-model:visible="showCancelDialog" modal header="Cancel Investment" :style="{ width: '90%', maxWidth: '420px' }">
