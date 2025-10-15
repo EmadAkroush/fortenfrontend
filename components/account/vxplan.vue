@@ -46,14 +46,31 @@
 
     <!-- KPI Cards -->
     <div class="kpi-grid grid gap-4 mb-6">
-      <div class="kpi-card">
-        <i class="mdi mdi-chart-box kpi-icon"></i>
-        <div>
-          <div class="kpi-title">Account</div>
-          <div class="kpi-value">FO5029 (Referral)</div>
-          <div class="kpi-sub">network Account</div>
+      <div
+        class="kpi-card flex flex-col bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-md shadow-[0_0_20px_rgba(0,255,190,0.05)] w-full max-w-sm"
+      >
+        <!-- آیکن و اطلاعات -->
+        <div class="flex items-center gap-3 mb-3">
+          <i class="mdi mdi-chart-box text-emerald-300 text-3xl"></i>
+          <div>
+            <div class="text-sm text-gray-400">Account</div>
+            <div class="text-lg font-semibold text-emerald-200">
+              FO5029 (Referral)
+            </div>
+            <div class="text-xs text-gray-500">Network Account</div>
+          </div>
         </div>
+
+        <!-- دکمه کپی زیر -->
+        <button
+          @click="copyReferral"
+          class="w-full flex items-center justify-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-medium px-3 py-2 rounded-lg text-sm transition active:scale-95"
+        >
+          <i class="mdi mdi-content-copy text-base"></i>
+          Copy Referral Code
+        </button>
       </div>
+
       <div class="kpi-card">
         <i class="mdi mdi-wallet-outline kpi-icon"></i>
         <div>
@@ -72,12 +89,17 @@
         </div>
       </div>
 
+      <!-- 🟢 New Bonus Card -->
       <div class="kpi-card">
-        <i class="mdi mdi-fire kpi-icon"></i>
+        <div class="kpi-left">
+          <i class="mdi mdi-gift-outline kpi-icon bg-gradient-pink"></i>
+        </div>
         <div>
-          <div class="kpi-title">Flush Out</div>
-          <div class="kpi-value text-red">${{ flushOut.toLocaleString() }}</div>
-          <div class="kpi-sub">Total burned volume</div>
+          <div class="kpi-label">Level 1 Bonus</div>
+          <div class="kpi-value text-emerald-300">+ $8.00</div>
+          <div class="kpi-sub text-xs text-gray-400">
+            Earned from direct referrals
+          </div>
         </div>
       </div>
     </div>
@@ -231,7 +253,7 @@
 
       <div
         class="w-full bg-white/5 border border-white/10 rounded-xl backdrop-blur-md p-4 sm:p-5 shadow-[0_0_20px_rgba(0,255,190,0.05)] hover:shadow-[0_0_25px_rgba(0,255,190,0.15)] transition-all duration-300"
-        style="width: 110%;"
+        style="width: 110%"
       >
         <h3 class="text-lg font-semibold text-gray-100 mb-3 sm:mb-4">
           Recent Activity
@@ -423,6 +445,14 @@ const activities = ref([
     time: "2d ago",
   },
 ]);
+
+function copyReferral() {
+  const code = "FO5029";
+  navigator.clipboard.writeText(code);
+  alert(`✅ Referral code "${code}" copied!`);
+}
+
+
 
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
