@@ -295,72 +295,79 @@
     <Dialog
       v-model:visible="showNodeDetails"
       modal
-      :header="selectedNode?.data?.name || 'Node Details'"
+      :header="selectedNode?.data?.name || 'Member Details'"
       :closable="true"
-      class="node-dialog"
+      :style="{ width: '95%', maxWidth: '500px' }"
+      class="rounded-2xl bg-[#0a1325]/80 backdrop-blur-xl border border-emerald-400/20 shadow-[0_0_30px_rgba(0,255,190,0.2)] text-gray-200"
     >
-      <div v-if="selectedNode" class="node-details-grid">
-        <div class="left">
-          <img :src="selectedNode.data.image" class="detail-avatar" />
-          <div class="detail-main">
-            <div class="name">{{ selectedNode.data.name }}</div>
-            <div class="sub">{{ selectedNode.data.title }}</div>
-            <div class="vxcode">
-              CO Code: <span class="code">{{ selectedNode.data.vxCode }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-title">Left Volume</div>
-            <div class="stat-value">
-              ${{ (selectedNode.left || 0).toLocaleString() }}
-            </div>
-            <div class="stat-sub">
-              Members: {{ selectedNode.leftCount || 0 }}
-            </div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-title">Right Volume</div>
-            <div class="stat-value">
-              ${{ (selectedNode.right || 0).toLocaleString() }}
-            </div>
-            <div class="stat-sub">
-              Members: {{ selectedNode.rightCount || 0 }}
-            </div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-title">Active Cycles (FOC)</div>
-            <div class="stat-value">{{ selectedNode.vxc || 0 }}</div>
-          </div>
-        </div>
-
-        <div class="dialog-actions">
-          <Button
-            label="Top-Up"
-            icon="mdi mdi-plus"
-            class="p-button-success"
-            @click="openTopUpFromNode"
+      <div v-if="selectedNode" class="space-y-6">
+        <!-- Header -->
+        <div class="flex flex-col items-center text-center">
+          <img
+            :src="selectedNode.data.image"
+            class="w-20 h-20 rounded-xl border border-emerald-400/40 shadow-[0_0_15px_rgba(0,255,190,0.2)] mb-3"
           />
+          <h2 class="text-xl font-semibold text-emerald-300">
+            {{ selectedNode.data.name }}
+          </h2>
+          <p class="text-sm text-gray-400">{{ selectedNode.data.title }}</p>
+          <p class="text-xs mt-1 text-gray-500">
+            CO Code:
+            <span class="text-emerald-400 font-semibold">{{
+              selectedNode.data.vxCode
+            }}</span>
+          </p>
+        </div>
+
+        <!-- Stats Section -->
+        <div
+          class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-md"
+        >
+          <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-400">Total Members</span>
+            <span class="text-lg font-semibold text-emerald-300">
+              {{ selectedNode.totalMembers || 0 }}
+            </span>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-400">Total Investment</span>
+            <span class="text-lg font-semibold text-cyan-300">
+              ${{ (selectedNode.totalInvestment || 0).toLocaleString() }}
+            </span>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-xs text-gray-400">Total Profit</span>
+            <span class="text-lg font-semibold text-amber-300">
+              ${{ (selectedNode.totalProfit || 0).toLocaleString() }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row justify-end gap-3 pt-3">
           <Button
             label="Copy FO Code"
             icon="mdi mdi-content-copy"
-            class="p-button-outlined"
+            class="p-button-outlined w-full sm:w-auto border-emerald-400 text-emerald-300 hover:bg-emerald-400/10"
             @click="copyCode(selectedNode.data.vxCode)"
+          />
+          <Button
+            label="Top-Up"
+            icon="mdi mdi-plus"
+            class="p-button-success w-full sm:w-auto"
+            @click="openTopUpFromNode"
           />
           <Button
             label="Close"
             icon="mdi mdi-close"
-            class="p-button-secondary"
+            class="p-button-secondary w-full sm:w-auto"
             @click="showNodeDetails = false"
           />
         </div>
       </div>
     </Dialog>
-
     <!-- TopUp Dialog -->
     <Dialog header="Top Up" v-model:visible="showTopUp" :modal="true">
       <div class="space-y-3">
@@ -405,6 +412,11 @@ import Dialog from "primevue/dialog";
 import Button from "primevue/button";
 import InputNumber from "primevue/inputnumber";
 import Toast from "primevue/toast";
+
+const copyCode = (code) => {
+  navigator.clipboard.writeText(code);
+  alert(`✅ FO Code "${code}" copied!`);
+};
 
 /* ----------- Referral & Earnings Data ----------- */
 const referrals = ref({ level1: 8, level2: 21, level3: 47 });
@@ -452,8 +464,6 @@ function copyReferral() {
   alert(`✅ Referral code "${code}" copied!`);
 }
 
-
-
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
@@ -477,13 +487,13 @@ const root = makeNode(
 const L1 = makeNode(
   "FO5020",
   "Leader A",
-  "L1",
+  "level 1",
   "https://i.pravatar.cc/100?img=3"
 );
 const R1 = makeNode(
   "FO5919",
   "Leader B",
-  "R1",
+  "level 1",
   "https://i.pravatar.cc/100?img=5"
 );
 
@@ -637,10 +647,10 @@ function openNodeDetails(node) {
   showNodeDetails.value = true;
 }
 
-function copyCode(code) {
-  if (!code) return;
-  navigator.clipboard?.writeText(code);
-}
+// function copyCode(code) {
+//   if (!code) return;
+//   navigator.clipboard?.writeText(code);
+// }
 
 /* ---------- TopUp logic ---------- */
 const showTopUp = ref(false);
