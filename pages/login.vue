@@ -1,8 +1,15 @@
 <template>
-  <div class="forten-auth font-sans text-gray-100 bg-[#0a1325] min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"></div>
+  <div
+    class="forten-auth font-sans text-gray-100 bg-[#0a1325] min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
+  >
+    <div
+      class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"
+    ></div>
 
-    <div class="relative z-10 glass-card p-10 w-full max-w-md text-center rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+    <!-- MAIN CARD -->
+    <div
+      class="relative z-10 glass-card p-10 w-full max-w-md text-center rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+    >
       <h1 class="text-3xl font-bold text-white mb-6 tracking-wide">
         <span class="text-[#00c6ae]">Forten</span> Account
       </h1>
@@ -50,7 +57,10 @@
           :loading="loading"
           @click="handleLogin"
         />
-        <nuxt-link to="/forgotpassword" class="text-[#00c6ae] text-sm hover:underline block mt-4">
+        <nuxt-link
+          to="/forgotpassword"
+          class="text-[#00c6ae] text-sm hover:underline block mt-4"
+        >
           Forgot your password?
         </nuxt-link>
       </div>
@@ -94,6 +104,39 @@
       </div>
     </div>
 
+    <!-- ✅ VERIFY EMAIL MODAL -->
+    <Dialog
+      v-model:visible="verifyModal"
+      modal
+      header="Verify Your Email"
+      class="forten-modal"
+      :draggable="false"
+      :closable="true"
+    >
+      <p class="text-gray-300 text-sm mb-3 text-center">
+        We’ve sent a verification link to your email.<br />
+        Please enter the code or token below to activate your account.
+      </p>
+      <InputText
+        v-model="verifyToken"
+        placeholder="Enter verification token"
+        class="auth-input mt-3"
+      />
+      <Button
+        label="Verify Email"
+        icon="pi pi-check"
+        class="forten-btn w-full mt-4"
+        :loading="loadingVerify"
+        @click="handleVerifyEmail"
+      />
+      <p class="text-gray-400 text-xs text-center mt-3">
+        Didn’t receive an email?
+        <a href="#" class="text-[#00c6ae] hover:underline" @click="resendEmail">
+          Resend Verification
+        </a>
+      </p>
+    </Dialog>
+
     <Toast class="z-50" />
   </div>
 </template>
@@ -102,14 +145,15 @@
 import { ref, reactive } from 'vue'
 import { useToast } from 'primevue/usetoast'
 
-definePageMeta({
-  middleware: 'guest',
-})
+definePageMeta({ middleware: 'guest' })
 
 const activeTab = ref('login')
 const loading = ref(false)
 const errors = ref([])
 const toast = useToast()
+const verifyModal = ref(false)
+const verifyToken = ref('')
+const loadingVerify = ref(false)
 const { authUser } = useAuth()
 
 // === Data ===
@@ -154,7 +198,6 @@ async function handleLogin() {
 // === REGISTER ===
 async function handleRegister() {
   errors.value = []
-
   if (!registerData.firstName || !registerData.lastName)
     errors.value.push('First and last name are required.')
   if (!isValidEmail(registerData.email))
@@ -171,20 +214,74 @@ async function handleRegister() {
     toast.add({
       severity: 'info',
       summary: 'Registration successful',
-      detail: 'Please verify your email to activate your account.',
-      life: 4000,
+      detail: 'Check your email for a verification link or code.',
+      life: 5000,
     })
-    activeTab.value = 'login'
+    verifyModal.value = true // 👈 باز کردن مودال تأیید ایمیل
   } catch (err) {
     errors.value = [err?.data?.message || 'Registration failed.']
   } finally {
     loading.value = false
   }
 }
+
+// === VERIFY EMAIL ===
+async function handleVerifyEmail() {
+  if (!verifyToken.value) {
+    toast.add({ severity: 'warn', summary: 'Enter Token', detail: 'Verification code is required.' })
+    return
+  }
+  try {
+    loadingVerify.value = true
+    const res = await $fetch('/api/auth/verify-email', {
+      method: 'POST',
+      body: { token: verifyToken.value },
+    })
+    toast.add({
+      severity: 'success',
+      summary: 'Email Verified',
+      detail: res.message || 'Your email has been verified.',
+      life: 4000,
+    })
+    verifyModal.value = false
+    activeTab.value = 'login'
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Verification Failed',
+      detail: err?.data?.message || 'Invalid token or expired link.',
+      life: 4000,
+    })
+  } finally {
+    loadingVerify.value = false
+  }
+}
+
+// === RESEND EMAIL ===
+async function resendEmail() {
+  try {
+    await $fetch('/api/auth/resend-verification', {
+      method: 'POST',
+      body: { email: registerData.email },
+    })
+    toast.add({
+      severity: 'info',
+      summary: 'Verification Resent',
+      detail: 'A new verification email has been sent.',
+      life: 4000,
+    })
+  } catch (err) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to resend verification email.',
+      life: 4000,
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">
-/* === Forten Auth Style === */
 .forten-auth {
   background: #0a1325;
   color: #fff;
@@ -250,6 +347,21 @@ async function handleRegister() {
   border-left: 3px solid #f87171;
   padding: 10px;
   border-radius: 8px;
+}
+
+/* Modal */
+:deep(.p-dialog) {
+  background: rgba(20, 30, 50, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 198, 174, 0.2);
+}
+:deep(.p-dialog-header) {
+  color: #00c6ae !important;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
 }
 
 @media (max-width: 480px) {

@@ -1,200 +1,262 @@
 <template>
-    <div class="login">
-      <div>
-        <nuxt-link to="/">
-          <span style="color: #405ff2"> صفحه اصلی / </span>
-        </nuxt-link>
-        <span>ورود</span>
-      </div>
-      <div>
-        <h1>حساب کاربری</h1>
-      </div>
-      <div class="mainlogin">
-        <div class="flex justify-center w-full my-16 pb-16">
-          <div class="bg-white sm-p-6 rounded w-full paper">
-          
-   
-        
-              
-                  <div class="alert alert-danger mt-2" role="alert" v-if="errorsfront" style="color: red;">
-                    {{ errorsfront }}
-                  </div>
-                  <div class="flex flex-col   mt-4">
-                    <!-- PrimeVue Input -->
-                    <InputText
-                      placeholder="ورود شماره تلفن"
-                      class="border-gray-300 rounded-full pt-4  w-full"
-                      v-model="formData.cellphone"
-                    />
-                    <ul class="mb-0" style="color: red" v-if="errors">
-                      <li v-for="(error, index) in errors" :key="index">
-                        {{ error?.cellphone }}
-                      </li>
-                    </ul>
-               
-                  </div>
-  
-                  <div class="flex mb-4 justify-center mt-8">
-                    <InputText
-                      placeholder=" رمز عبور جدید "
-                      class="border-gray-300 rounded-full px-4 py-2 w-full"
-                      v-model="formData.password"
-                    />
-                  </div>
-                  <div class="flex flex-col mb-4 justify-center mt-8">
-                    <InputText
-                      placeholder="تکرار رمز عبور جدید"
-                      class="border-gray-300 rounded-full px-4 py-2 w-full"
-                      v-model="formData.password_confirmation"
-                    />
-                    
-                    <ul class="mb-0" style="color: red" v-if="errors">
-                      <li v-for="(error, index) in errors" :key="index">
-                        {{ error?.password }}
-                      </li>
-                    </ul>
-    
-                  </div>
-            
-           
-  
-         
-  
-                  <Button
-                    label="تغییر رمز عبور"
-                    icon="pi pi-sign-in"
-                    class="w-full bg-blue-500 text-white rounded"
-                    :loading="loading"
-                    style="background-color: #405ff2; border: none"
-                    @click="register()"
-                  />
-  
-                  <div class="flex items-center justify-center my-4">
-                    <!-- Left Line -->
-                    <div class="flex-grow border-t border-gray-300"></div>
-  
-                    <!-- Text -->
-                    <span class="mx-2 text-gray-600">یا</span>
-  
-                    <!-- Right Line -->
-                    <div class="flex-grow border-t border-gray-300"></div>
-                  </div>
-                  <nuxt-link to="/loginuser">
-                    <Button
-                      label="بازگشت به صفحه ورود"
-                      icon="pi pi-user"
-                      class="w-full py-2 rounded"
-                      variant="outlined"
-                     
-                      style="
-                        background-color: white;
-                        color: rgb(64, 95, 242);
-                        border: 1px solid rgb(64, 95, 242);
-                      "
-                    />
-                  </nuxt-link>
+  <div
+    class="forten-forgot min-h-screen bg-[#0a1325] flex flex-col items-center justify-center relative overflow-hidden px-6"
+  >
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"></div>
 
-       
-      
-          </div>
-        </div>
-        <hr />
+    <div
+      class="relative z-10 glass-card p-10 rounded-2xl w-full max-w-md shadow-[0_0_30px_rgba(0,0,0,0.5)] text-center"
+    >
+      <h1 class="text-3xl font-bold text-white mb-6">
+        <span class="text-[#00c6ae]">Reset</span> Password
+      </h1>
+
+      <!-- Error Alert -->
+      <div v-if="errors.length" class="alert mb-4 text-left">
+        <ul>
+          <li v-for="(e, i) in errors" :key="i">• {{ e }}</li>
+        </ul>
       </div>
-      <Toast />
+
+      <!-- Step 1 — Request Reset -->
+      <div v-if="step === 1" class="space-y-4">
+        <InputText
+          v-model="email"
+          placeholder="Enter your registered email"
+          class="auth-input"
+        />
+        <Button
+          label="Send Reset Link"
+          icon="pi pi-envelope"
+          class="forten-btn w-full mt-4"
+          :loading="loading"
+          @click="requestReset"
+        />
+      </div>
+
+      <!-- Step 2 — Verify Token -->
+      <div v-if="step === 2" class="space-y-4">
+        <InputText
+          v-model="token"
+          placeholder="Enter verification token"
+          class="auth-input"
+        />
+        <Button
+          label="Verify Token"
+          icon="pi pi-check"
+          class="forten-btn w-full mt-4"
+          :loading="loading"
+          @click="verifyTokenHandler"
+        />
+        <p class="text-gray-400 text-xs mt-3">
+          Didn’t receive it?
+          <a href="#" class="text-[#00c6ae]" @click.prevent="resendResetLink">
+            Resend Email
+          </a>
+        </p>
+      </div>
+
+      <!-- Step 3 — Reset Password -->
+      <div v-if="step === 3" class="space-y-4">
+        <InputText
+          v-model="password"
+          type="password"
+          placeholder="New password"
+          class="auth-input"
+        />
+        <InputText
+          v-model="confirmPassword"
+          type="password"
+          placeholder="Confirm new password"
+          class="auth-input"
+        />
+        <Button
+          label="Reset Password"
+          icon="pi pi-refresh"
+          class="forten-btn w-full mt-4"
+          :loading="loading"
+          @click="resetPassword"
+        />
+      </div>
+
+      <!-- Back to login -->
+      <nuxt-link
+        to="/auth"
+        class="block text-sm mt-6 text-[#00c6ae] hover:underline"
+      >
+        ← Back to login
+      </nuxt-link>
     </div>
-  </template>
-  <style lang="scss">
-  .login {
-    width: 100%;
-    .cubtn {
-      padding: 10px 0;
-    }
-    .p-tab-active {
-      color: #405ff2;
-      border-color: #405ff2 !important;
-    }
-    .paper {
-      width: 450px;
-    }
-  
-    h1 {
-      font-size: 30px;
-      margin-top: 10px;
-    }
-    box-sizing: border-box;
-    padding: 10px 80px;
+
+    <Toast />
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useToast } from 'primevue/usetoast'
+
+definePageMeta({ middleware: 'guest' })
+
+const step = ref(1)
+const email = ref('')
+const token = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const loading = ref(false)
+const errors = ref([])
+const toast = useToast()
+
+// === Request password reset ===
+async function requestReset() {
+  errors.value = []
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    errors.value.push('Enter a valid email address.')
+    return
   }
-  @media only screen and (max-width: 650px) {
-    .login {
-      padding: 10px 10px;
-      .paper {
-        width: 100%;
-      }
-    }
+  try {
+    loading.value = true
+    await $fetch('/api/auth/request-reset', { method: 'POST', body: { email: email.value } })
+    toast.add({
+      severity: 'info',
+      summary: 'Email Sent',
+      detail: 'We’ve sent a verification link to your email.',
+      life: 4000,
+    })
+    step.value = 2
+  } catch (err) {
+    errors.value = [err?.data?.message || 'Email not found.']
+  } finally {
+    loading.value = false
   }
-  </style>
-  <script setup>
-  definePageMeta({
-    middleware: "guest",
-  });
-  
-  
-  
-  const loading = ref(false);
-  const errors = ref([]);
-  const errorsfront = ref(false);
-  const formData = reactive({
-    cellphone: "",
-    password: "",
-    password_confirmation: "",
-    
-  });
-  const toast = useToast();
-  const { authUser } = useAuth();
-  
-  function validateForm() {
-    // Reset errors
-    errorsfront.value = [];
-  
-    // Check if cellphone is valid
-    if (!/^09\d{9}$/.test(formData.cellphone)) {
-      errorsfront.value.push("شماره موبایل باید با 09 شروع شود و 11 رقم باشد.");
-    }
-  
-    // Check if password is valid
-    if (formData.password.length < 6) {
-      errorsfront.value.push("رمز عبور باید حداقل 6 کاراکتر باشد.");
-    }
-  
-    return errorsfront.value.length === 0; // Return true if there are no errors
+}
+
+// === Verify token ===
+async function verifyTokenHandler() {
+  errors.value = []
+  if (!token.value) {
+    errors.value.push('Verification token is required.')
+    return
   }
-  
-  
-  async function register() {
-    
-    if (!validateForm()) {
-      return; // Exit if validation fails
-    }
-    try {
-      loading.value = true;
-      const user = await $fetch("/api/auth/forgotpassword", {
-        method: "POST",
-        body: formData,
-      });
-      // this.errors.value = null;
-      console.log("user" , user );
-      
-    //   authUser.value = user;
-  
-      toast.add({ severity: 'success', summary: 'ثبت نام', detail: 'رمز عبور با موفقیت تغییر کرد', life: 3000 });
-      return navigateTo("/loginuser");
-    } catch (error) {
-      console.log("error" , error);
-      
-      errors.value = Object.values(error?.data?.data).flat();
-    } finally {
-      loading.value = false;
-    }
+  try {
+    loading.value = true
+    await $fetch('/api/auth/verify-reset', { method: 'POST', body: { token: token.value } })
+    toast.add({
+      severity: 'success',
+      summary: 'Token Verified',
+      detail: 'Now you can set a new password.',
+      life: 4000,
+    })
+    step.value = 3
+  } catch (err) {
+    errors.value = [err?.data?.message || 'Invalid or expired token.']
+  } finally {
+    loading.value = false
   }
-  </script>
-  
+}
+
+// === Reset password ===
+async function resetPassword() {
+  errors.value = []
+  if (password.value.length < 6)
+    errors.value.push('Password must be at least 6 characters.')
+  if (password.value !== confirmPassword.value)
+    errors.value.push('Passwords do not match.')
+  if (errors.value.length) return
+
+  try {
+    loading.value = true
+    await $fetch('/api/auth/reset-password', {
+      method: 'POST',
+      body: { token: token.value, password: password.value },
+    })
+    toast.add({
+      severity: 'success',
+      summary: 'Password Changed',
+      detail: 'Your password has been reset successfully.',
+      life: 4000,
+    })
+    return navigateTo('/auth')
+  } catch (err) {
+    errors.value = [err?.data?.message || 'Failed to reset password.']
+  } finally {
+    loading.value = false
+  }
+}
+
+// === Resend reset link ===
+async function resendResetLink() {
+  try {
+    await $fetch('/api/auth/resend-reset', { method: 'POST', body: { email: email.value } })
+    toast.add({
+      severity: 'info',
+      summary: 'Resent',
+      detail: 'A new reset email has been sent.',
+      life: 3000,
+    })
+  } catch {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Could not resend reset email.',
+      life: 3000,
+    })
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.forten-forgot {
+  color: #fff;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+}
+
+.auth-input {
+  width: 100%;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 10px 16px;
+  outline: none;
+  transition: 0.3s;
+}
+.auth-input:focus {
+  border-color: #00c6ae;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.forten-btn {
+  background: linear-gradient(90deg, #00c6ae, #f4b000);
+  border: none;
+  border-radius: 50px;
+  color: #0a1325;
+  font-weight: 600;
+  padding: 10px;
+  transition: all 0.3s;
+}
+.forten-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.alert {
+  background: rgba(255, 0, 0, 0.1);
+  border-left: 3px solid #f87171;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 24px;
+  }
+}
+</style>
