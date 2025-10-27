@@ -2,14 +2,17 @@ export default defineEventHandler(async (event) => {
   const {
     public: { apiBase },
   } = useRuntimeConfig();
-  const token = getCookie(event, "accessToken");
+
+  
+  const accessToken = getCookie(event, "accessToken");
+   
 
   try {
-    const data = await $fetch(`${apiBase}/api/logout`, {
+    const data = await $fetch(`${apiBase}/auth/logout`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
