@@ -68,6 +68,11 @@
       <!-- REGISTER FORM -->
       <div v-if="activeTab === 'register'" class="space-y-4">
         <InputText
+          v-model="registerData.username"
+          placeholder="Username"
+          class="auth-input"
+        />
+        <InputText
           v-model="registerData.firstName"
           placeholder="First name"
           class="auth-input"
@@ -121,6 +126,7 @@
         v-model="verifyToken"
         placeholder="Enter verification token"
         class="auth-input mt-3"
+        style="color: black;"
       />
       <Button
         label="Verify Email"
@@ -159,6 +165,7 @@ const { authUser } = useAuth()
 // === Data ===
 const loginData = reactive({ email: '', password: '' })
 const registerData = reactive({
+  username: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -190,6 +197,7 @@ async function handleLogin() {
     return navigateTo('/')
   } catch (err) {
     errors.value = [err?.data?.message || 'Login failed.']
+    console.log('err', err)
   } finally {
     loading.value = false
   }
@@ -198,6 +206,8 @@ async function handleLogin() {
 // === REGISTER ===
 async function handleRegister() {
   errors.value = []
+  if (!registerData.username)
+    errors.value.push('Username is required.')
   if (!registerData.firstName || !registerData.lastName)
     errors.value.push('First and last name are required.')
   if (!isValidEmail(registerData.email))
@@ -233,7 +243,7 @@ async function handleVerifyEmail() {
   }
   try {
     loadingVerify.value = true
-    const res = await $fetch('/api/auth/verify-email', {
+    const res = await $fetch('/api/auth/verifyemail', {
       method: 'POST',
       body: { token: verifyToken.value },
     })

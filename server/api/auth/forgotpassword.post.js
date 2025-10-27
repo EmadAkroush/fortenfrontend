@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const { public: { apiBase } } = useRuntimeConfig()
 
     try {
-        const data = await $fetch(`${apiBase}/api/updatepass`, {
+        const data = await $fetch(`${apiBase}/auth/forgot-password`, {
             method: 'POST',
             body: body,
             headers: {
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
         //     path: '/'
         // })
 
-        return data.data;
+        return data;
     } catch (error) {
         return error
     }

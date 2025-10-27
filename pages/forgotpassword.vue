@@ -116,7 +116,7 @@ async function requestReset() {
   }
   try {
     loading.value = true
-    await $fetch('/api/auth/request-reset', { method: 'POST', body: { email: email.value } })
+    await $fetch('/api/auth/forgotpassword', { method: 'POST', body: { email: email.value } })
     toast.add({
       severity: 'info',
       summary: 'Email Sent',
