@@ -5,7 +5,7 @@
     <div
       class="container mx-auto flex items-center justify-between px-4 sm:px-10 py-3"
     >
-      <!-- Logo -->
+   
       <div class="flex items-center space-x-3">
         <img
           src="/public/Photo_1760453095335.png"
@@ -18,7 +18,7 @@
         >
       </div>
 
-      <!-- Desktop Menu -->
+    
       <nav class="hidden md:flex items-center space-x-6">
         <router-link
           v-for="item in items"
@@ -31,13 +31,7 @@
             :href="href"
             @click="item.command ? item.command() : navigate()"
             class="nav-link"
-            :class="[
-              activeRoute === item.route
-                ? 'active'
-                : item.command
-                ? 'logout'
-                : 'default',
-            ]"
+            :class="[activeRoute === item.route ? 'active' : item.command ? 'logout' : 'default']"
           >
             <i :class="item.icon"></i>
             <span>{{ item.label }}</span>
@@ -45,44 +39,58 @@
         </router-link>
       </nav>
 
-      <!-- Profile (Desktop + Mobile) -->
+
       <div class="relative flex items-center gap-2">
-        <!-- Profile Button -->
-        <button
-          @click="profileOpen = !profileOpen"
-          class="flex items-center gap-2 p-2 rounded-full hover:bg-white/10 transition"
-        >
-          <i class="mdi mdi-account-circle text-3xl text-white"></i>
-          <span class="hidden md:inline text-sm font-medium text-white">My Account</span>
-          <i class="mdi mdi-chevron-down text-gray-300 hidden md:inline"></i>
-        </button>
-
-        <!-- Profile Dropdown -->
-        <transition name="fade">
-          <div
-            v-if="profileOpen"
-            class="absolute right-0 mt-12 w-48 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50"
+       
+        <template v-if="!authUser">
+          <nuxt-link
+            to="/auth"
+            class="flex items-center gap-2 p-2 rounded-full hover:bg-white/10 transition text-white"
           >
-            <nuxt-link
-              to="/account"
-              class="block px-4 py-2 text-gray-700 hover:bg-green-50"
-              @click="profileOpen = false"
-            >
-              <i class="mdi mdi-view-dashboard-outline mr-2 text-green-600"></i>
-              Dashboard
-            </nuxt-link>
-            <hr class="my-1 border-gray-200" />
-            <button
-              @click="logout(); profileOpen = false"
-              class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
-            >
-              <i class="mdi mdi-logout mr-2"></i>
-              Logout
-            </button>
-          </div>
-        </transition>
+            <i class="mdi mdi-login text-2xl"></i>
+            <span class="hidden md:inline text-sm font-medium">Login</span>
+          </nuxt-link>
+        </template>
 
-        <!-- Mobile Menu Button -->
+      
+        <template v-else>
+         
+          <button
+            @click="profileOpen = !profileOpen"
+            class="flex items-center gap-2 p-2 rounded-full hover:bg-white/10 transition"
+          >
+            <i class="mdi mdi-account-circle text-3xl text-white"></i>
+            <span class="hidden md:inline text-sm font-medium text-white">My Account</span>
+            <i class="mdi mdi-chevron-down text-gray-300 hidden md:inline"></i>
+          </button>
+
+     
+          <transition name="fade">
+            <div
+              v-if="profileOpen"
+              class="absolute right-0 mt-12 w-48 bg-white border border-gray-100 rounded-xl shadow-xl py-2 z-50"
+            >
+              <nuxt-link
+                to="/account"
+                class="block px-4 py-2 text-gray-700 hover:bg-green-50"
+                @click="profileOpen = false"
+              >
+                <i class="mdi mdi-view-dashboard-outline mr-2 text-green-600"></i>
+                Dashboard
+              </nuxt-link>
+              <hr class="my-1 border-gray-200" />
+              <button
+                @click="logout(); profileOpen = false"
+                class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+              >
+                <i class="mdi mdi-logout mr-2"></i>
+                Logout
+              </button>
+            </div>
+          </transition>
+        </template>
+
+   
         <button
           class="md:hidden p-2 rounded-md text-white hover:bg-white/10 transition"
           @click="mobileMenu = !mobileMenu"
@@ -92,7 +100,7 @@
       </div>
     </div>
 
-    <!-- Mobile Dropdown -->
+   
     <transition name="slide">
       <nav
         v-if="mobileMenu"
@@ -109,18 +117,26 @@
             :href="href"
             @click="item.command ? item.command() : navigate(); mobileMenu = false"
             class="flex items-center py-2 px-3 rounded-lg transition-all"
-            :class="[
-              activeRoute === item.route
-                ? 'bg-white/10 text-emerald-300 font-semibold'
-                : item.command
-                ? 'text-red-400 hover:bg-red-900/30'
-                : 'text-gray-200 hover:text-white hover:bg-white/5',
-            ]"
+            :class="[activeRoute === item.route
+              ? 'bg-white/10 text-emerald-300 font-semibold'
+              : item.command
+              ? 'text-red-400 hover:bg-red-900/30'
+              : 'text-gray-200 hover:text-white hover:bg-white/5']"
           >
             <i :class="[item.icon, 'text-lg mr-3']"></i>
             {{ item.label }}
           </a>
         </router-link>
+
+      
+        <div v-if="!authUser">
+          <nuxt-link
+            to="/auth"
+            class="flex items-center py-2 px-3 rounded-lg transition-all text-gray-200 hover:text-white hover:bg-white/5"
+          >
+            <i class="mdi mdi-login text-lg mr-3"></i> Login
+          </nuxt-link>
+        </div>
       </nav>
     </transition>
   </header>
@@ -129,14 +145,21 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
+const { authUser } = useAuth() // ✅ برای تشخیص لاگین بودن کاربر
 
 const route = useRoute()
 const activeRoute = computed(() => route.path)
 const profileOpen = ref(false)
 const mobileMenu = ref(false)
 
-const logout = () => {
-  alert('You have been logged out.')
+const logout = async () => {
+  try {
+    await $fetch('/api/auth/logout', { method: 'POST' })
+    authUser.value = null
+    navigateTo('/')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
 }
 
 const items = ref([
@@ -145,7 +168,6 @@ const items = ref([
   { label: 'Add Funds', route: '/addfunds', icon: 'mdi mdi-wallet-plus-outline' },
   { label: 'About Us', route: '/abouteus', icon: 'mdi mdi-information-outline' },
   { label: 'Support', route: '/support', icon: 'mdi mdi-lifebuoy' },
-  { label: 'Logout', icon: 'mdi mdi-logout', command: logout },
 ])
 </script>
 
