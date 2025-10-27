@@ -1,232 +1,260 @@
 <template>
-  <div class="login">
-    <div>
-      <nuxt-link to="/">
-        <span style="color: #405ff2"> صفحه اصلی / </span>
-      </nuxt-link>
-      <span>ورود</span>
-    </div>
-    <div>
-      <h1>حساب کاربری</h1>
-    </div>
-    <div class="mainlogin">
-      <div class="flex justify-center w-full my-16 pb-16">
-        <div class="bg-white sm-p-6 rounded w-full paper">
-          <!-- <h2 style="color: red; line-height: 35px">
-            در حال حاضر ورود با اسمس فعال نمی باشد گزینه ورود با نام کاربری و
-            رمز عبور را انتخاب کنید
-          </h2> -->
-    
-        </div>
+  <div class="forten-auth font-sans text-gray-100 bg-[#0a1325] min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"></div>
+
+    <div class="relative z-10 glass-card p-10 w-full max-w-md text-center rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+      <h1 class="text-3xl font-bold text-white mb-6 tracking-wide">
+        <span class="text-[#00c6ae]">Forten</span> Account
+      </h1>
+
+      <!-- Tabs -->
+      <div class="flex justify-around mb-8">
+        <button
+          :class="['tab-btn', activeTab === 'login' && 'active']"
+          @click="activeTab = 'login'"
+        >
+          Sign In
+        </button>
+        <button
+          :class="['tab-btn', activeTab === 'register' && 'active']"
+          @click="activeTab = 'register'"
+        >
+          Sign Up
+        </button>
       </div>
-      <hr />
+
+      <!-- Error Messages -->
+      <div v-if="errors.length" class="alert mb-4 text-red-400 text-sm text-left">
+        <ul>
+          <li v-for="(err, i) in errors" :key="i">• {{ err }}</li>
+        </ul>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div v-if="activeTab === 'login'" class="space-y-4">
+        <InputText
+          v-model="loginData.email"
+          placeholder="Email address"
+          class="auth-input"
+        />
+        <InputText
+          v-model="loginData.password"
+          type="password"
+          placeholder="Password"
+          class="auth-input"
+        />
+        <Button
+          label="Sign In"
+          icon="pi pi-sign-in"
+          class="forten-btn w-full"
+          :loading="loading"
+          @click="handleLogin"
+        />
+        <nuxt-link to="/forgotpassword" class="text-[#00c6ae] text-sm hover:underline block mt-4">
+          Forgot your password?
+        </nuxt-link>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div v-if="activeTab === 'register'" class="space-y-4">
+        <InputText
+          v-model="registerData.firstName"
+          placeholder="First name"
+          class="auth-input"
+        />
+        <InputText
+          v-model="registerData.lastName"
+          placeholder="Last name"
+          class="auth-input"
+        />
+        <InputText
+          v-model="registerData.email"
+          placeholder="Email address"
+          class="auth-input"
+        />
+        <InputText
+          v-model="registerData.password"
+          type="password"
+          placeholder="Password"
+          class="auth-input"
+        />
+        <InputText
+          v-model="registerData.confirmPassword"
+          type="password"
+          placeholder="Confirm password"
+          class="auth-input"
+        />
+        <Button
+          label="Create Account"
+          icon="pi pi-user-plus"
+          class="forten-btn w-full"
+          :loading="loading"
+          @click="handleRegister"
+        />
+      </div>
     </div>
-    <Toast />
+
+    <Toast class="z-50" />
   </div>
 </template>
-<style lang="scss">
-.login {
-  width: 100%;
-  .cubtn {
-    padding: 10px 0;
-  }
-  .p-tab-active {
-    color: #405ff2;
-    border-color: #405ff2 !important;
-  }
-  .paper {
-    width: 450px;
-  }
 
-  h1 {
-    font-size: 30px;
-    margin-top: 10px;
+<script setup>
+import { ref, reactive } from 'vue'
+import { useToast } from 'primevue/usetoast'
+
+definePageMeta({
+  middleware: 'guest',
+})
+
+const activeTab = ref('login')
+const loading = ref(false)
+const errors = ref([])
+const toast = useToast()
+const { authUser } = useAuth()
+
+// === Data ===
+const loginData = reactive({ email: '', password: '' })
+const registerData = reactive({
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+})
+
+// === Validators ===
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// === LOGIN ===
+async function handleLogin() {
+  errors.value = []
+  if (!isValidEmail(loginData.email)) errors.value.push('Enter a valid email.')
+  if (loginData.password.length < 6)
+    errors.value.push('Password must be at least 6 characters.')
+  if (errors.value.length) return
+
+  try {
+    loading.value = true
+    const res = await $fetch('/api/auth/login', { method: 'POST', body: loginData })
+    authUser.value = res.user
+    toast.add({
+      severity: 'success',
+      summary: 'Welcome back!',
+      detail: 'You have signed in successfully.',
+      life: 3000,
+    })
+    return navigateTo('/')
+  } catch (err) {
+    errors.value = [err?.data?.message || 'Login failed.']
+  } finally {
+    loading.value = false
   }
-  box-sizing: border-box;
-  padding: 10px 80px;
 }
-@media only screen and (max-width: 650px) {
-  .login {
-    padding: 10px 10px;
-    .paper {
-      width: 100%;
-    }
+
+// === REGISTER ===
+async function handleRegister() {
+  errors.value = []
+
+  if (!registerData.firstName || !registerData.lastName)
+    errors.value.push('First and last name are required.')
+  if (!isValidEmail(registerData.email))
+    errors.value.push('Enter a valid email address.')
+  if (registerData.password.length < 6)
+    errors.value.push('Password must be at least 6 characters.')
+  if (registerData.password !== registerData.confirmPassword)
+    errors.value.push('Passwords do not match.')
+  if (errors.value.length) return
+
+  try {
+    loading.value = true
+    await $fetch('/api/auth/register', { method: 'POST', body: registerData })
+    toast.add({
+      severity: 'info',
+      summary: 'Registration successful',
+      detail: 'Please verify your email to activate your account.',
+      life: 4000,
+    })
+    activeTab.value = 'login'
+  } catch (err) {
+    errors.value = [err?.data?.message || 'Registration failed.']
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+<style scoped lang="scss">
+/* === Forten Auth Style === */
+.forten-auth {
+  background: #0a1325;
+  color: #fff;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: #aaa;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-bottom: 2px solid transparent;
+}
+.tab-btn.active {
+  color: #00c6ae;
+  border-color: #00c6ae;
+}
+.tab-btn:hover {
+  color: #f4b000;
+}
+
+.auth-input {
+  width: 100%;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 10px 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.auth-input:focus {
+  border-color: #00c6ae;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.forten-btn {
+  background: linear-gradient(90deg, #00c6ae, #f4b000);
+  border: none;
+  border-radius: 50px;
+  color: #0a1325;
+  font-weight: 600;
+  padding: 10px 0;
+  transition: all 0.3s ease;
+}
+.forten-btn:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+.alert {
+  background: rgba(255, 0, 0, 0.1);
+  border-left: 3px solid #f87171;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 24px;
   }
 }
 </style>
-<script setup>
-definePageMeta({
-  middleware: "guest",
-});
-const counter = ref(0);
-let interval = null;
-
-const startCountdown = () => {
-  counter.value = 120;
-  if (interval) clearInterval(interval);
-  interval = setInterval(() => {
-    if (counter.value > 0) {
-      counter.value--;
-    } else {
-      clearInterval(interval);
-    }
-  }, 1000);
-};
-
-const handleSendSms = () => {
-
-  sendsms();
-  startCountdown();
-};
-
-const loading = ref(false);
-const errors = ref([]);
-const errorsfront = ref(false);
-const errorsfrontsms = ref(false);
-
-const formData = reactive({
-  cellphone: "",
-  password: "",
-  c_password: "",
-});
-const cellphonesms = ref();
-const otpcode = ref();
-const toast = useToast();
-const { authUser } = useAuth();
-
-function validateForm() {
-  // Reset errors
-  errorsfront.value = [];
-
-  // Check if cellphone is valid
-  if (!/^09\d{9}$/.test(formData.cellphone)) {
-    errorsfront.value.push("شماره موبایل باید با 09 شروع شود و 11 رقم باشد.");
-  }
-
-  // Check if password is valid
-  if (formData.password.length < 6) {
-    errorsfront.value.push("رمز عبور باید حداقل 6 کاراکتر باشد.");
-  }
-
-  return errorsfront.value.length === 0; // Return true if there are no errors
-}
-
-function validateFormSms() {
-  // Reset errors
-  errorsfrontsms.value = [];
-
-  // Check if cellphone is valid
-  if (!/^09\d{9}$/.test(cellphonesms.value)) {
-    errorsfrontsms.value.push(
-      "شماره موبایل باید با 09 شروع شود و 11 رقم باشد."
-    );
-  }
-
-  // Check if password is valid
-  // if (formData.password.length < 6) {
-  //   errorsfront.value.push("رمز عبور باید حداقل 6 کاراکتر باشد.");
-  // }
-
-  return errorsfrontsms.value.length === 0; // Return true if there are no errors
-}
-
-async function sendsms() {
-  if (!validateFormSms()) {
-    return; // Exit if validation fails
-  }
-  try {
-    loading.value = true;
-    const user = await $fetch("/api/auth/sendsms", {
-      method: "POST",
-      body: {
-        cellphone: cellphonesms.value,
-      },
-    });
-    // this.errors.value = null;
-    console.log("data", user);
-
-    // authUser.value = user;
-
-    toast.add({
-      severity: "success",
-      summary: "ارسال رمز عبور",
-      detail: "رمز عبور با موفقیت ارسال شد",
-      life: 3000,
-    });
-  } catch (error) {
-    console.log("error", error);
-
-    // errors.value = Object.values(error?.data?.data).flat();
-  } finally {
-    loading.value = false;
-  }
-}
-
-async function verifyotp() {
-  if (!validateFormSms()) {
-    return; // Exit if validation fails
-  }
-  try {
-    loading.value = true;
-    const user = await $fetch("/api/auth/verifyotp", {
-      method: "POST",
-      body: {
-        cellphone: cellphonesms.value,
-        otp_code: otpcode.value,
-      },
-    });
-    // this.errors.value = null;
-    console.log("data", user);
-
-    authUser.value = user;
-
-    toast.add({
-      severity: "success",
-      summary: "ورود موفق",
-      detail: "ورود به سایت با موفقیت انجام شد",
-      life: 3000,
-    });
-    return navigateTo("/");
-  } catch (error) {
-    console.log("error otp", error);
-
-    errors.value = Object.values(error?.data).flat();
-  } finally {
-    loading.value = false;
-  }
-}
-
-async function register() {
-  if (!validateForm()) {
-    return; // Exit if validation fails
-  }
-  try {
-    loading.value = true;
-    const user = await $fetch("/api/auth/register", {
-      method: "POST",
-      body: formData,
-    });
-    // this.errors.value = null;
-    console.log("user", user);
-
-    authUser.value = user;
-
-    toast.add({
-      severity: "success",
-      summary: "ثبت نام",
-      detail: "ثبت نام با موفقیت انجام شد",
-      life: 3000,
-    });
-    return navigateTo("/");
-  } catch (error) {
-    console.log("error", error);
-
-    errors.value = Object.values(error?.data?.data).flat();
-  } finally {
-    loading.value = false;
-  }
-}
-onBeforeUnmount(() => {
-  if (interval) clearInterval(interval);
-});
-</script>
