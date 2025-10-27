@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const token = getCookie(event, 'token');
 
     try {
-        const data = await $fetch(`${apiBase}/api/me`, {
+        const data = await $fetch(`${apiBase}/auth/refresh`, {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`
