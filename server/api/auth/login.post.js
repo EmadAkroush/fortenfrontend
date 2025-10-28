@@ -13,14 +13,7 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    // console.log("add the " , data.accessToken );
 
-   setCookie(event, "userId", data.user._id, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-      path: "/",
-    });
 
 
     setCookie(event, "accessToken", data.accessToken, {

@@ -8,7 +8,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
             headers
          })
 
+        
          authUser.value = user;
+                 console.log("user" , authUser.value  );
     } catch (error) {
         authUser.value = null;
     }

@@ -151,7 +151,7 @@
 import { ref, reactive } from 'vue'
 import { useToast } from 'primevue/usetoast'
 
-definePageMeta({ middleware: 'guest' })
+
 
 const activeTab = ref('login')
 const loading = ref(false)
@@ -161,6 +161,8 @@ const verifyModal = ref(false)
 const verifyToken = ref('')
 const loadingVerify = ref(false)
 const { authUser } = useAuth()
+
+definePageMeta({ middleware: 'guest' })
 
 // === Data ===
 const loginData = reactive({ email: '', password: '' })
