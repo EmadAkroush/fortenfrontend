@@ -15,12 +15,7 @@
       </div>
 
       <div class="flex gap-3 items-center W-full sm:w-auto">
-        <Button
-          class="p-button-outlined min-w-[140px]"
-          icon="mdi mdi-refresh"
-          @click="refreshData"
-          >Refresh</Button
-        >
+    
         <Button
           class="p-button-success min-w-[140px]"
           icon="mdi mdi-wallet-plus-outline"
@@ -32,6 +27,7 @@
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <!-- Total Balance -->
       <div class="kpi-card">
         <div class="kpi-left">
           <i class="mdi mdi-cash-multiple kpi-icon bg-gradient-emerald"></i>
@@ -45,36 +41,66 @@
         </div>
       </div>
 
-      <div class="kpi-card">
-        <div class="kpi-left">
-          <i class="mdi mdi-chart-line kpi-icon bg-gradient-cyan"></i>
-        </div>
-        <div>
-          <div class="kpi-label">Daily Rate</div>
-          <div class="kpi-value">
-            <span class="mr-2 text-lg">{{ displayDailyRate }}%</span>
-            <span v-if="isEligibleForUpgrade" class="text-xs text-amber-300"
-              >upgraded</span
-            >
-            <span v-else class="text-xs text-gray-400">base</span>
-          </div>
-          <div class="kpi-sub text-xs text-gray-400">
-            Auto-applies when referral condition met
+      <!-- 🟢 Profit Balance -->
+      <div class="kpi-card flex flex-col justify-between">
+        <div class="flex items-center gap-3">
+          <i class="mdi mdi-trending-up kpi-icon bg-gradient-cyan"></i>
+          <div>
+            <div class="kpi-label">Profit Balance</div>
+            <div class="kpi-value">${{ formatNumber(profitBalance) }}</div>
+            <div class="kpi-sub text-xs text-gray-400">
+              Earned from daily profits
+            </div>
           </div>
         </div>
+        <Button
+          label="Transfer to Main Balance"
+          icon="mdi mdi-arrow-right-bold"
+          class="mt-3 p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          @click="transferToMain('profit')"
+        />
       </div>
 
-      <div class="kpi-card">
-        <div class="kpi-left">
-          <i class="mdi mdi-wallet-outline kpi-icon bg-gradient-purple"></i>
-        </div>
-        <div>
-          <div class="kpi-label">Total Compounded</div>
-          <div class="kpi-value">${{ formatNumber(totalCompounded) }}</div>
-          <div class="kpi-sub text-xs text-gray-400">
-            Sum of all auto-added profits
+      <!-- 🟢 Referral Profit -->
+      <div class="kpi-card flex flex-col justify-between">
+        <div class="flex items-center gap-3">
+          <i class="mdi mdi-account-multiple-outline kpi-icon bg-gradient-purple"></i>
+          <div>
+            <div class="kpi-label">Referral Profit</div>
+            <div class="kpi-value">${{ formatNumber(referralProfit) }}</div>
+            <div class="kpi-sub text-xs text-gray-400">
+              Income from your referrals
+            </div>
           </div>
         </div>
+        <Button
+          label="Transfer to Main Balance"
+          icon="mdi mdi-arrow-right-bold"
+          class="mt-3 p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          @click="transferToMain('referral')"
+        />
+      </div>
+
+      <!-- 🟢 Bonus Balance -->
+      <div class="kpi-card flex flex-col justify-between">
+        <div class="flex items-center gap-3">
+          <i class="mdi mdi-gift-outline kpi-icon bg-gradient-pink"></i>
+          <div>
+            <div class="kpi-label">Bonus Balance</div>
+            <div class="kpi-value text-emerald-300">
+              ${{ formatNumber(bonusBalance) }}
+            </div>
+            <div class="kpi-sub text-xs text-gray-400">
+              Earned from direct referrals
+            </div>
+          </div>
+        </div>
+        <Button
+          label="Transfer to Main Balance"
+          icon="mdi mdi-arrow-right-bold"
+          class="mt-3 p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
+          @click="transferToMain('bonus')"
+        />
       </div>
 
       <div class="kpi-card">
@@ -90,19 +116,7 @@
         </div>
       </div>
 
-      <!-- 🟢 New Bonus Card -->
-      <div class="kpi-card">
-        <div class="kpi-left">
-          <i class="mdi mdi-gift-outline kpi-icon bg-gradient-pink"></i>
-        </div>
-        <div>
-          <div class="kpi-label">Level 1 Bonus</div>
-          <div class="kpi-value text-emerald-300">+ $8.00</div>
-          <div class="kpi-sub text-xs text-gray-400">
-            Earned from direct referrals
-          </div>
-        </div>
-      </div>
+   
     </div>
 
     <!-- Charts -->
@@ -194,128 +208,10 @@
       </div>
     </div>
 
-    <!-- Referrals & Activity -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="glass-card col-span-2">
-        <h3 class="text-lg font-semibold text-gray-100 mb-3">
-          Referral & Network
-        </h3>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-          <div class="ref-stat">
-            <div class="ref-num">{{ referrals.level1 }}</div>
-            <div class="ref-label">Direct (L1)</div>
-          </div>
-          <div class="ref-stat">
-            <div class="ref-num">{{ referrals.level2 }}</div>
-            <div class="ref-label">Level 2</div>
-          </div>
-          <div class="ref-stat">
-            <div class="ref-num">{{ referrals.level3 }}</div>
-            <div class="ref-label">Level 3</div>
-          </div>
-        </div>
 
-        <div class="mb-3 text-sm text-gray-300">
-          <div>Referral commissions: L1 15% / L2 10% / L3 5%</div>
-          <div class="mt-1">
-            Referral link:
-            <code class="text-xs px-2 py-1 bg-gray-800 rounded">{{
-              referralLink
-            }}</code>
-          </div>
-        </div>
 
-        <ProgressBar :value="referralProgress" />
-        <div class="text-xs text-gray-400 mt-2">
-          Progress toward next VIP level: {{ referralProgress }}%
-        </div>
-      </div>
 
-      <div class="glass-card">
-        <h3 class="text-lg font-semibold text-gray-100 mb-3">
-          Recent Activity
-        </h3>
-        <ul class="divide-y divide-white/5 text-sm text-gray-300">
-          <li
-            v-for="(a, i) in activities"
-            :key="i"
-            class="py-3 flex justify-between"
-          >
-            <div class="flex items-center gap-3">
-              <i :class="[a.icon, 'text-emerald-300 text-xl']"></i>
-              <div>
-                <div class="font-medium">{{ a.title }}</div>
-                <div class="text-xs text-gray-400">{{ a.desc }}</div>
-              </div>
-            </div>
-            <div class="text-xs text-gray-400">{{ a.time }}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="flex justify-end gap-3 mt-6">
-      <Button
-        class="p-button-outlined min-w-[140px]"
-        icon="mdi mdi-file-document-outline"
-        @click="downloadStatement"
-        >Export CSV</Button
-      >
-      <Button
-        class="p-button-success min-w-[140px]"
-        icon="mdi mdi-swap-horizontal-bold"
-        @click="openPortfolio"
-        >Manage Portfolio</Button
-      >
-    </div>
-
-    <!-- Cancel Investment Dialog -->
-    <Dialog
-      v-model:visible="showCancelDialog"
-      modal
-      :header="'Cancel Investment — ' + cancelItem?.title"
-      :style="{ width: '90%', maxWidth: '480px' }"
-    >
-      <div v-if="cancelItem" class="space-y-4">
-        <p class="text-sm text-gray-300">
-          Choose how much of the principal you want to release (free partial
-          cancellation — no time lock):
-        </p>
-
-        <label class="text-xs text-gray-400">Amount (USD)</label>
-        <InputNumber
-          v-model="cancelAmount"
-          :min="1"
-          :max="cancelItem.principal"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-          class="w-full"
-        />
-
-        <div class="text-sm text-gray-400">
-          After confirmation, the selected amount will be moved to your main
-          balance.
-        </div>
-      </div>
-
-      <template #footer>
-        <div class="flex justify-between w-full">
-          <Button
-            label="Close"
-            class="p-button-text"
-            @click="showCancelDialog = false"
-          />
-          <Button
-            label="Confirm Release"
-            class="p-button-success"
-            @click="confirmCancel"
-          />
-        </div>
-      </template>
-    </Dialog>
   </div>
 </template>
 
@@ -560,20 +456,13 @@ function confirmCancel() {
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
-function refreshData() {
-  // in real implementation: fetch user data from API
-  alert("Data refreshed (demo).");
-}
+
 function goToAddFunds() {
   // navigate to add funds page
   window.location.href = "/addfunds";
 }
-function openPortfolio() {
-  window.location.href = "/account?tab=portfolio";
-}
-function downloadStatement() {
-  alert("Exported CSV (demo).");
-}
+
+
 const level1Bonus = computed(() => referrals.value.level1 * 8)
 
 </script>
