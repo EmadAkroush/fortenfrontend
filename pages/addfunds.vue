@@ -86,7 +86,8 @@
           icon="mdi mdi-arrow-right-bold"
           class="w-full mt-6 forten-btn"
           :disabled="!selected || amount < 50"
-          @click="nextStep"
+          :loading="loading"
+          @click="createPayment"
         />
       </div>
 
@@ -156,13 +157,18 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
+import { useToast } from "primevue/usetoast";
 
+const toast = useToast();
 const router = useRouter();
+const { authUser } = useAuth();
+
 const currentStep = ref(1);
 const selected = ref(null);
 const amount = ref(null);
 const progress = ref(0);
-const generatedAddress = ref("0xA12F3B456C789D0E12BFA123456789AB98765432");
+const generatedAddress = ref("");
+const loading = ref(false);
 
 const steps = [
   { label: "Select Network", icon: "mdi mdi-wallet-outline" },
@@ -176,6 +182,40 @@ const networks = [
   { name: "ETH (ERC20)", icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
   { name: "TRON (TRC20)", icon: "https://cryptologos.cc/logos/tron-trx-logo.png" },
 ];
+
+async function createPayment() {
+  loading.value = true;
+
+  try {
+    // 🟢 ایجاد تراکنش در بک‌اند Forten
+    const res = await $fetch("/api/payment", {
+      method: "POST",
+      body: {
+        network: selected.value.name,
+        amountUsd: amount.value,
+        userId: authUser.value.user.id,
+ 
+      },
+    });
+
+    if (res?.address) {
+      generatedAddress.value = res.address;
+      currentStep.value = 2;
+    } else {
+      throw new Error("Invalid response from server");
+    }
+  } catch (err) {
+    console.error("Deposit error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Payment Error",
+      detail: err?.data?.message || "Failed to initiate deposit.",
+      life: 4000,
+    });
+  } finally {
+    loading.value = false;
+  }
+}
 
 function nextStep() {
   if (currentStep.value < 3) currentStep.value++;
@@ -195,7 +235,12 @@ function startProgress() {
 
 function copyAddress() {
   navigator.clipboard.writeText(generatedAddress.value);
-  alert("✅ Wallet address copied to clipboard!");
+  toast.add({
+    severity: "success",
+    summary: "Copied",
+    detail: "Wallet address copied to clipboard!",
+    life: 2000,
+  });
 }
 
 function goToDashboard() {
