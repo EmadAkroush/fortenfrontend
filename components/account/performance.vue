@@ -120,93 +120,95 @@
     </div>
 
     <!-- Charts -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      <!-- Compound Growth Simulation -->
-      <div class="glass-card">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-lg font-semibold text-gray-100">
-            Compound Growth (30 days)
-          </h3>
-          <div class="text-sm text-gray-400">
-            Projection at current daily rate
-          </div>
+ <!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  <!-- 🟢 Profit Balance Growth -->
+  <div class="glass-card">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold text-gray-100">
+        Profit Balance Growth (30 days)
+      </h3>
+      <div class="text-sm text-gray-400">
+        Performance over last month
+      </div>
+    </div>
+
+    <Chart
+      type="line"
+      :data="profitGrowthChartData"
+      :options="profitGrowthChartOptions"
+    />
+
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-300">
+      <div>
+        <div>
+          Starting Balance:
+          <span class="font-semibold text-emerald-300">
+            ${{ formatNumber(profitGrowthStart) }}
+          </span>
         </div>
-
-        <Chart
-          type="line"
-          :data="compoundChartData"
-          :options="compoundChartOptions"
-        />
-
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="text-sm text-gray-300">
-            <div>
-              Start Amount:
-              <span class="font-semibold text-emerald-300"
-                >${{ formatNumber(simStart) }}</span
-              >
-            </div>
-            <div>
-              Daily Rate:
-              <span class="font-semibold text-emerald-300"
-                >{{ displayDailyRate }}%</span
-              >
-            </div>
-          </div>
-          <div class="text-sm text-gray-300">
-            <div>
-              Projected (Day 30):
-              <span class="font-semibold text-emerald-300"
-                >${{ formatNumber(projectedDay30) }}</span
-              >
-            </div>
-            <div>
-              Projected Gain:
-              <span class="font-semibold text-emerald-300"
-                >${{ formatNumber(projectedDay30 - simStart) }}</span
-              >
-            </div>
-          </div>
+        <div>
+          Current Balance:
+          <span class="font-semibold text-emerald-300">
+            ${{ formatNumber(profitBalance) }}
+          </span>
         </div>
       </div>
-
-      <!-- Earnings & VX Plan -->
-      <div class="glass-card space-y-4">
-        <div class="flex items-center justify-between">
-          <h3 class="text-lg font-semibold text-gray-100">
-            Earnings Breakdown
-          </h3>
-          <div class="text-sm text-gray-400">Last 30 days</div>
+      <div>
+        <div>
+          Growth (30 days):
+          <span class="font-semibold text-emerald-300">
+            +${{ formatNumber(profitBalance - profitGrowthStart) }}
+          </span>
         </div>
-
-        <Chart
-          type="doughnut"
-          :data="earningsBreakdownData"
-          :options="donutOptions"
-        />
-
-        <div class="grid grid-cols-1 gap-2">
-          <div class="flex justify-between text-sm text-gray-300">
-            <div>Principal</div>
-            <div class="font-semibold">
-              ${{ formatNumber(portfolioPrincipal) }}
-            </div>
-          </div>
-          <div class="flex justify-between text-sm text-gray-300">
-            <div>Compound Profit</div>
-            <div class="font-semibold">
-              ${{ formatNumber(totalCompounded) }}
-            </div>
-          </div>
-          <div class="flex justify-between text-sm text-gray-300">
-            <div>Referral Income (est.)</div>
-            <div class="font-semibold">
-              ${{ formatNumber(estimatedReferralIncome) }}
-            </div>
-          </div>
+        <div>
+          Growth Rate:
+          <span class="font-semibold text-emerald-300">
+            {{ ((profitBalance - profitGrowthStart) / profitGrowthStart * 100).toFixed(2) }}%
+          </span>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 🟣 Balance Distribution -->
+  <div class="glass-card space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-100">
+        Balance Distribution
+      </h3>
+      <div class="text-sm text-gray-400">Across all earnings</div>
+    </div>
+
+    <Chart
+      type="doughnut"
+      :data="balanceDistributionData"
+      :options="donutOptions"
+    />
+
+    <div class="grid grid-cols-1 gap-2 text-sm text-gray-300">
+      <div class="flex justify-between">
+        <div>Profit Balance</div>
+        <div class="font-semibold text-emerald-300">
+          ${{ formatNumber(profitBalance) }}
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <div>Referral Balance</div>
+        <div class="font-semibold text-cyan-300">
+          ${{ formatNumber(referralProfit) }}
+        </div>
+      </div>
+      <div class="flex justify-between">
+        <div>Bonus Balance</div>
+        <div class="font-semibold text-pink-300">
+          ${{ formatNumber(bonusBalance) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -261,45 +263,10 @@ const estimatedReferralIncome = computed(() => {
   );
 });
 
-// activities
-const activities = ref([
-  {
-    icon: "mdi mdi-cash-plus",
-    title: "Deposit received",
-    desc: "$250 via USDT (BEP20)",
-    time: "3h ago",
-  },
-  {
-    icon: "mdi mdi-wallet-outline",
-    title: "Auto-compound applied",
-    desc: "Daily profit added to principal",
-    time: "15h ago",
-  },
-  {
-    icon: "mdi mdi-account-plus",
-    title: "Referral joined",
-    desc: "You gained 1 direct referral",
-    time: "2d ago",
-  },
-  {
-    icon: "mdi mdi-cash-minus",
-    title: "Withdrawal",
-    desc: "$100 pending",
-    time: "4d ago",
-  },
-]);
 
-// ---------- Referral / VIP progress ----------
-const referralProgress = computed(() => {
-  // sample: VIP5 requires 15 active direct referrals
-  const needed = 15;
-  const p = Math.min(100, Math.round((referrals.value.level1 / needed) * 100));
-  return p;
-});
 
-// referral link (note: per requirement should use username-based link, here mocked)
-const username = "alexjohn"; // replace with auth user
-const referralLink = `https://forten.example.com/register?ref=${username}`;
+
+
 
 // ---------- Auto-compound countdown ----------
 const nextCompoundAt = ref(Date.now() + 1000 * 60 * 60 * 5 + 1000 * 30); // sample: 5h30m from now
