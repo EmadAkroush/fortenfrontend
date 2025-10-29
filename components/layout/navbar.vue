@@ -154,7 +154,9 @@ const mobileMenu = ref(false)
 
 const logout = async () => {
   try {
-    await $fetch('/api/auth/logout', { method: 'POST' })
+    const res = await $fetch('/api/auth/logout', { method: 'POST' })
+   
+    
     authUser.value = null
     navigateTo('/')
   } catch (error) {

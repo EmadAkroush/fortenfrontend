@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
                 'Authorization': `Bearer ${refreshToken}`
             }
         })
-        console.log("data in refresh token api " , data);
+  
 
         return data;
     } catch (error) {

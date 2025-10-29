@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
 
   
   const accessToken = getCookie(event, "accessToken");
+   console.log("ggggg");
    
 
   try {
@@ -15,6 +16,8 @@ export default defineEventHandler(async (event) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+      console.log("11111" , data);
 
     setCookie(event, "accessToken", "", {
       httpOnly: true,
@@ -30,15 +33,11 @@ export default defineEventHandler(async (event) => {
       path: "/",
     });
 
-    setCookie(event, "userId", "", {
-      httpOnly: true,
-      secure: true,
-      maxAge: new Date(0),
-      path: "/",
-    });
-
     return data;
   } catch (error) {
+    console.log("error"  , error);
+    
     return error;
+
   }
 });
