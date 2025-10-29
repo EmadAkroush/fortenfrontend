@@ -2,7 +2,7 @@
 export default defineEventHandler(async (event) => {
     const { public: { apiBase } } = useRuntimeConfig()
     const refreshToken = getCookie(event, 'refreshToken');
-     console.log("data in refresh ");
+   
     try {
         const data = await $fetch(`${apiBase}/auth/refresh`, {
             headers: {
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
         return data;
     } catch (error) {
-        console.log("error" , error);
+     
         
         if(error.statusCode == 401) {
             setCookie(event, 'refreshToken', '', {

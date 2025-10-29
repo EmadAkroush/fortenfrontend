@@ -23,6 +23,9 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
+ 
+    
+
     return data
   } catch (error) {
     console.error('❌ Investment API Error:', error?.data || error)

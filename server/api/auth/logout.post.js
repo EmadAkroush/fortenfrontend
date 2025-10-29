@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
 
   
   const accessToken = getCookie(event, "accessToken");
-   console.log("ggggg");
+ 
    
 
   try {
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-      console.log("11111" , data);
+
 
     setCookie(event, "accessToken", "", {
       httpOnly: true,

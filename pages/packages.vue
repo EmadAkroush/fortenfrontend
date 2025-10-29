@@ -14,6 +14,7 @@
         </p>
       </div>
 
+
       <!-- Bundles Grid -->
       <div v-if="loading" class="text-center text-gray-400 py-20">
         <i class="pi pi-spin pi-spinner text-3xl"></i>
@@ -103,9 +104,7 @@
     >
       <div v-if="selectedBundle" class="space-y-3 text-gray-700">
         <p>
-          <strong>Invest Range:</strong> ${{ selectedBundle.minAmount }} - ${{
-            selectedBundle.maxAmount
-          }}
+          <strong>Invest Range:</strong> {{ selectedBundle.range }}
         </p>
         <p>
           <strong>Base Daily Return:</strong> {{ selectedBundle.dailyRate }}%
@@ -289,15 +288,20 @@ async function confirmInvestment() {
 
   try {
     loadingInvest.value = true;
+
+    
     const res = await $fetch(`api/investments`, {
       method: "POST",
       body: {
         packageId: selectedBundle.value._id,
         amount: investAmount.value,
         transactionId: transactionId.value,
-        userId: authUser.value._id,
+        userId: authUser.value.user.id,
       },
     });
+
+
+    
 
     toast.add({
       severity: "success",
