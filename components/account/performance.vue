@@ -143,16 +143,18 @@ const toast = useToast();
 const balances = ref({
   mainBalance: 0,
   profitBalance: 0,
-  referralBalance: 0,
+  referralProfit: 0,
   bonusBalance: 0,
 });
+
 const totalBalance = computed(() =>
   balances.value.mainBalance +
   balances.value.profitBalance +
-  balances.value.referralBalance +
+  balances.value.referralProfit +
   balances.value.bonusBalance
 );
 
+// ✅ Chart states
 const profitGrowthChartData = ref({ labels: [], datasets: [] });
 const profitGrowthChartOptions = {
   plugins: { legend: { display: false } },
@@ -167,7 +169,7 @@ const balanceDistributionData = computed(() => ({
     {
       data: [
         balances.value.profitBalance,
-        balances.value.referralBalance,
+        balances.value.referralProfit,
         balances.value.bonusBalance,
       ],
       backgroundColor: ["#10b981", "#06b6d4", "#ec4899"],
@@ -178,6 +180,7 @@ const donutOptions = {
   plugins: { legend: { position: "bottom", labels: { color: "#cbd5e1" } } },
 };
 
+// ✅ Timer for auto-compound
 const nextCompoundAt = ref(Date.now() + 1000 * 60 * 60 * 5);
 const nextCompoundCountdown = ref("");
 let countdownTimer = null;
@@ -198,10 +201,18 @@ onMounted(() => {
 });
 onBeforeUnmount(() => clearInterval(countdownTimer));
 
-// ✅ API Calls
+/* ======================
+   ✅ API Calls (Backend)
+   ====================== */
+
+// 🔹 گرفتن موجودی کاربر از بک‌اند (users/balances)
 async function fetchBalances() {
   try {
-    const res = await $fetch("/api/user/balances");
+    const userId = localStorage.getItem("userId");
+    const res = await $fetch("/api/balances", {
+      method: "POST",
+      body: { userId },
+    });
     balances.value = res;
   } catch (error) {
     toast.add({
@@ -213,9 +224,14 @@ async function fetchBalances() {
   }
 }
 
+// 🔹 دریافت سابقه رشد سود (اختیاری — در صورت وجود API)
 async function fetchProfitHistory() {
   try {
-    const res = await $fetch("/api/user/profit-history");
+    const userId = localStorage.getItem("userId");
+    const res = await $fetch("/api/user/profit-history", {
+      method: "POST",
+      body: { userId },
+    });
     profitGrowthChartData.value = {
       labels: res.map((d) => d.date),
       datasets: [
@@ -234,20 +250,32 @@ async function fetchProfitHistory() {
   }
 }
 
+/* ==========================
+   ✅ Transfer to Main Logic
+   ========================== */
 const loadingTransfer = ref(null);
 async function transferToMain(type) {
   try {
     loadingTransfer.value = type;
-    const res = await $fetch("/api/user/transfer-to-main", {
+    const userId = localStorage.getItem("userId");
+
+    let endpoint = "";
+    if (type === "profit") endpoint = "/api/activity/transfer-profit";
+    else if (type === "referral") endpoint = "/api/activity/transfer-referral";
+    else if (type === "bonus") endpoint = "/api/activity/transfer-bonus";
+
+    const res = await $fetch(endpoint, {
       method: "POST",
-      body: { from: type },
+      body: { userId, amount: balances.value[`${type}Balance`] },
     });
+
     toast.add({
       severity: "success",
       summary: "Transfer Successful",
       detail: res.message || "Funds moved to Main Balance",
       life: 4000,
     });
+
     fetchBalances();
   } catch (err) {
     toast.add({
@@ -261,7 +289,9 @@ async function transferToMain(type) {
   }
 }
 
-// Utils
+/* ======================
+   ✅ Utils
+   ====================== */
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
@@ -269,6 +299,7 @@ function goToAddFunds() {
   navigateTo("/addfunds");
 }
 </script>
+
 
 <style scoped lang="scss">
 .forten-performance {
