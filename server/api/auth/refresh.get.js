@@ -10,6 +10,28 @@ export default defineEventHandler(async (event) => {
                 'Authorization': `Bearer ${refreshToken}`
             }
         })
+
+
+
+    setCookie(event, "accessToken", data.accessToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: "/",
+    });
+
+    setCookie(event, "refreshToken", data.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: "/",
+    });
+
+
+
+
+
+
   
 
         return data;

@@ -14,7 +14,6 @@
         </p>
       </div>
 
-
       <!-- Bundles Grid -->
       <div v-if="loading" class="text-center text-gray-400 py-20">
         <i class="pi pi-spin pi-spinner text-3xl"></i>
@@ -44,9 +43,7 @@
           <div class="p-6 text-left space-y-4">
             <p class="flex justify-between">
               <span class="font-semibold text-gray-300">Invest Range:</span>
-              <span class="text-[#00c6ae] font-bold"
-                >{{ item.range }} </span
-              >
+              <span class="text-[#00c6ae] font-bold">{{ item.range }}</span>
             </p>
 
             <p class="flex justify-between">
@@ -56,11 +53,14 @@
               >
             </p>
 
-          <p class="flex justify-between">
-              <span class="font-semibold text-gray-300">Referral Requirement:</span>
-              <span class="text-[#f4b000] font-semibold">{{ item.referralRequirement }}</span>
+            <p class="flex justify-between">
+              <span class="font-semibold text-gray-300"
+                >Referral Requirement:</span
+              >
+              <span class="text-[#f4b000] font-semibold">{{
+                item.referralRequirement
+              }}</span>
             </p>
-
 
             <p class="flex justify-between">
               <span class="font-semibold text-gray-300">Upgrade Rate:</span>
@@ -147,6 +147,14 @@
           <strong>{{ selectedBundle.name }}</strong> plan.
         </p>
 
+        <!-- Error Message -->
+        <div
+          v-if="errorMessage"
+          class="bg-red-100 text-red-700 border border-red-300 p-3 rounded-md text-sm"
+        >
+          {{ errorMessage }}
+        </div>
+
         <div>
           <label class="block text-sm font-semibold text-gray-600 mb-1"
             >Amount (USD)</label
@@ -156,31 +164,14 @@
             mode="currency"
             currency="USD"
             locale="en-US"
-            :min="selectedBundle.minAmount"
-            :max="selectedBundle.maxAmount"
             class="w-full"
             placeholder="Enter amount"
           />
         </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-gray-600 mb-1"
-            >Your Saved Wallet</label
-          >
-          <InputText v-model="userWallet" class="w-full" disabled />
-          <p class="text-xs text-gray-500 mt-1">
-            (You can change wallet address in your account settings)
-          </p>
-        </div>
+   
 
-        <div class="bg-gray-50 border border-gray-200 p-3 rounded-md">
-          <p class="text-xs text-gray-700">
-            <strong>Transaction ID:</strong>
-            <span class="text-[#00c6ae] font-mono ml-2">{{
-              transactionId
-            }}</span>
-          </p>
-        </div>
+        
       </div>
 
       <template #footer>
@@ -221,10 +212,8 @@ const transactionId = ref("");
 const bundles = ref([]);
 const loading = ref(true);
 const loadingInvest = ref(false);
+const errorMessage = ref("");
 
-const runtimeConfig = useRuntimeConfig();
-
-// 🟢 لود پلن‌ها از بک‌اند Forten
 onMounted(async () => {
   try {
     const data = await $fetch(`api/packages`);
@@ -241,7 +230,6 @@ onMounted(async () => {
     loading.value = false;
   }
 
-  // واکشی اطلاعات کیف پول کاربر
   if (authUser.value) {
     userWallet.value = authUser.value.walletAddress || "Not set";
   } else {
@@ -270,26 +258,33 @@ function openInvest(item) {
   transactionId.value = `FRT-CASHIN-${Math.floor(
     100000 + Math.random() * 900000
   )}`;
+  errorMessage.value = "";
 }
 
 async function confirmInvestment() {
-  if (
-    !investAmount.value ||
-    investAmount.value < selectedBundle.value.minAmount
-  ) {
-    toast.add({
-      severity: "warn",
-      summary: "Invalid Amount",
-      detail: "Please enter a valid investment amount.",
-      life: 3000,
-    });
+  errorMessage.value = "";
+
+  if (!investAmount.value) {
+    errorMessage.value = "Please enter an investment amount.";
+    return;
+  }
+
+  const min = selectedBundle.value.minDeposit;
+  const max = selectedBundle.value.maxDeposit;
+
+  if (investAmount.value < min) {
+    errorMessage.value = `Minimum investment for this plan is $${min}.`;
+    return;
+  }
+
+  if (investAmount.value > max) {
+    errorMessage.value = `Maximum investment for this plan is $${max}.`;
     return;
   }
 
   try {
     loadingInvest.value = true;
 
-    
     const res = await $fetch(`api/investments`, {
       method: "POST",
       body: {
@@ -300,9 +295,6 @@ async function confirmInvestment() {
       },
     });
 
-
-    
-
     toast.add({
       severity: "success",
       summary: "Investment Successful",
@@ -312,12 +304,16 @@ async function confirmInvestment() {
     visibleInvest.value = false;
   } catch (error) {
     console.error("Investment Error:", error);
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: error?.data?.message || "Failed to complete investment",
-      life: 5000,
-    });
+    const msg =
+      error?.data?.message ||
+      error?.response?._data?.message ||
+      "Something went wrong.";
+
+    if (msg.includes("Insufficient balance")) {
+      errorMessage.value = "Your main balance is not enough for this investment.";
+    } else {
+      errorMessage.value = msg;
+    }
   } finally {
     loadingInvest.value = false;
   }
