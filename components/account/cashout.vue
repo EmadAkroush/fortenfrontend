@@ -98,29 +98,9 @@
             <span>Crypto (USDT / BTC)</span>
           </div>
 
-          <div
-            class="method-card"
-            :class="{ active: method === 'bank' }"
-            @click="method = 'bank'"
-          >
-            <i class="mdi mdi-bank-outline text-blue-400 text-2xl"></i>
-            <span>Bank Transfer</span>
-          </div>
         </div>
 
-        <div v-if="method === 'crypto'" class="mt-5">
-          <label class="block text-sm mb-2 text-gray-300">Select Saved Wallet</label>
-          <Dropdown
-            v-model="selectedCryptoWallet"
-            :options="userWallets"
-            optionLabel="name"
-            placeholder="Choose from your saved wallets"
-            class="w-full"
-          />
-          <p v-if="selectedCryptoWallet" class="text-xs text-gray-400 mt-2">
-            Network: <span class="text-emerald-300 font-medium">{{ selectedCryptoWallet.network }}</span>
-          </p>
-        </div>
+       
 
         <div v-if="method === 'bank'" class="mt-5 text-sm text-gray-300">
           Bank transfers are processed manually within 3–5 business days.
@@ -137,7 +117,7 @@
             label="Confirm Cashout"
             icon="mdi mdi-check"
             class="p-button-success glass-btn"
-            :disabled="!method || (method === 'crypto' && !selectedCryptoWallet)"
+
             @click="completeCashout"
           />
         </div>
