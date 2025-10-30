@@ -64,6 +64,7 @@
           :rows="6"
           responsiveLayout="scroll"
           class="text-sm"
+          :loading="loading"
         >
           <Column header="Date" field="date" sortable></Column>
 
@@ -79,7 +80,7 @@
           <Column header="Amount" field="amount" sortable>
             <template #body="slotProps">
               <span class="font-semibold text-emerald-200">
-                {{ slotProps.data.amount }}
+                ${{ slotProps.data.amount }}
               </span>
             </template>
           </Column>
@@ -95,11 +96,11 @@
             </template>
           </Column>
 
-          <Column header="Transaction ID" field="id">
+          <Column header="Transaction ID" field="_id">
             <template #body="slotProps">
-              <span class="font-mono text-gray-400 text-xs">{{
-                slotProps.data.id
-              }}</span>
+              <span class="font-mono text-gray-400 text-xs">
+                {{ slotProps.data._id }}
+              </span>
             </template>
           </Column>
 
@@ -126,17 +127,17 @@
       <div v-if="selectedTx" class="space-y-3 text-gray-300">
         <p><strong>Date:</strong> {{ selectedTx.date }}</p>
         <p><strong>Type:</strong> {{ selectedTx.type }}</p>
-        <p><strong>Amount:</strong> {{ selectedTx.amount }}</p>
+        <p><strong>Amount:</strong> ${{ selectedTx.amount }}</p>
         <p><strong>Status:</strong> {{ selectedTx.status }}</p>
-        <p><strong>Transaction ID:</strong> {{ selectedTx.id }}</p>
-        <p><strong>Details:</strong> {{ selectedTx.details }}</p>
+        <p><strong>Transaction ID:</strong> {{ selectedTx._id }}</p>
+        <p><strong>Details:</strong> {{ selectedTx.note || "—" }}</p>
       </div>
     </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
 import Card from "primevue/card"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -145,15 +146,14 @@ import Dropdown from "primevue/dropdown"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
 import Calendar from "primevue/calendar"
+import { useAuth } from "@/composables/useAuth"
+import { useToast } from "primevue/usetoast"
 
-const transactions = ref([
-  { date: "2025-09-01", type: "Cashout", amount: "$250", status: "Completed", id: "VX-CASHOUT-928374", details: "Withdrawal processed to your USDT wallet (TRC20)." },
-  { date: "2025-08-15", type: "Top-Up", amount: "$500", status: "Completed", id: "VX-TOPUP-412398", details: "Funds added via TRC20 network." },
-  { date: "2025-08-01", type: "Profit Payout", amount: "$120", status: "Completed", id: "VX-PROFIT-219837", details: "Monthly profit added to Profits Wallet." },
-  { date: "2025-07-20", type: "Cashout", amount: "$300", status: "Pending", id: "VX-CASHOUT-871234", details: "Awaiting blockchain confirmation." },
-  { date: "2025-07-01", type: "Profit Payout", amount: "$100", status: "Completed", id: "VX-PROFIT-128765", details: "Profit credited successfully." },
-  { date: "2025-06-15", type: "Top-Up", amount: "$400", status: "Failed", id: "VX-TOPUP-534221", details: "Payment failed due to network timeout." },
-])
+const { authUser } = useAuth()
+const toast = useToast()
+
+const transactions = ref([])
+const loading = ref(false)
 
 const search = ref("")
 const selectedType = ref(null)
@@ -162,23 +162,61 @@ const dateFrom = ref(null)
 const dateTo = ref(null)
 
 const typeOptions = [
-  { label: "Cashout", value: "Cashout" },
-  { label: "Top-Up", value: "Top-Up" },
-  { label: "Profit Payout", value: "Profit Payout" },
+  { label: "Cashout", value: "withdraw" },
+  { label: "Top-Up", value: "deposit" },
+  { label: "Profit Payout", value: "profit" },
 ]
 
 const statusOptions = [
-  { label: "Completed", value: "Completed" },
-  { label: "Pending", value: "Pending" },
-  { label: "Failed", value: "Failed" },
+  { label: "Completed", value: "completed" },
+  { label: "Pending", value: "pending" },
+  { label: "Failed", value: "failed" },
 ]
 
+// 🟢 دریافت تراکنش‌ها از بک‌اند
+onMounted(async () => {
+  try {
+    loading.value = true
+    const userId = authUser.value?.user?.id
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Login Required",
+        detail: "Please login to view transactions.",
+        life: 3000,
+      })
+      return
+    }
+
+    const data = await $fetch("/api/transactions/my", {
+      method: "POST",
+      body: { userId },
+    })
+
+    transactions.value = data.map((tx) => ({
+      ...tx,
+      date: new Date(tx.createdAt).toLocaleDateString(),
+    }))
+  } catch (err) {
+    console.error("❌ Failed to fetch transactions:", err)
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: err?.data?.message || "Failed to load transactions.",
+      life: 4000,
+    })
+  } finally {
+    loading.value = false
+  }
+})
+
+// 🧠 فیلتر محلی
 const filteredTransactions = computed(() => {
   return transactions.value.filter((tx) => {
     const matchesSearch =
       !search.value ||
-      tx.type.toLowerCase().includes(search.value.toLowerCase()) ||
-      tx.amount.toLowerCase().includes(search.value.toLowerCase())
+      tx.type?.toLowerCase().includes(search.value.toLowerCase()) ||
+      tx.amount?.toString().includes(search.value)
 
     const matchesType = !selectedType.value || tx.type === selectedType.value
     const matchesStatus = !selectedStatus.value || tx.status === selectedStatus.value
@@ -192,19 +230,24 @@ const filteredTransactions = computed(() => {
   })
 })
 
+// آیکون نوع تراکنش
 const typeIcon = (type) => {
   switch (type) {
-    case "Cashout": return "mdi mdi-wallet-outline text-emerald-400"
-    case "Top-Up": return "mdi mdi-arrow-up-bold-circle-outline text-cyan-400"
-    case "Profit Payout": return "mdi mdi-chart-line text-amber-400"
-    default: return "mdi mdi-cash text-gray-400"
+    case "withdraw":
+      return "mdi mdi-wallet-outline text-emerald-400"
+    case "deposit":
+      return "mdi mdi-arrow-up-bold-circle-outline text-cyan-400"
+    case "profit":
+      return "mdi mdi-chart-line text-amber-400"
+    default:
+      return "mdi mdi-cash text-gray-400"
   }
 }
 
 const statusClass = (status) => ({
-  "bg-emerald-900/30 text-emerald-300": status === "Completed",
-  "bg-yellow-900/30 text-yellow-300": status === "Pending",
-  "bg-red-900/30 text-red-300": status === "Failed",
+  "bg-emerald-900/30 text-emerald-300": status === "completed",
+  "bg-yellow-900/30 text-yellow-300": status === "pending",
+  "bg-red-900/30 text-red-300": status === "failed",
 })
 
 const visible = ref(false)
@@ -216,12 +259,10 @@ const showDetails = (tx) => {
 </script>
 
 <style scoped lang="scss">
-
 .forten-history {
   background: radial-gradient(circle at top left, #021312, #01060a);
   font-family: "Inter", sans-serif;
   color: #e6fef5;
-
 }
 
 .glass-card {
@@ -247,7 +288,6 @@ const showDetails = (tx) => {
   font-weight: 600;
   font-size: 0.9rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
 }
 
 /* === Table Rows === */
