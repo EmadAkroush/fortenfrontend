@@ -9,22 +9,7 @@
       <div class="divider"></div>
 
       <div class="flex flex-col md:flex-row items-center gap-8">
-        <!-- Avatar -->
-        <div class="flex flex-col items-center">
-          <img
-            :src="profile.avatar"
-            class="w-28 h-28 rounded-full object-cover border-4 border-primary shadow-md mb-3"
-            alt="Avatar"
-          />
-          <FileUpload
-            mode="basic"
-            chooseLabel="Upload Avatar"
-            accept="image/*"
-            customUpload
-            @select="onAvatarUpload"
-            class="upload-btn"
-          />
-        </div>
+ 
 
         <!-- Inputs -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1">
@@ -49,38 +34,7 @@
       </div>
     </div>
 
-    <!-- Security -->
-    <div class="glass-card p-6 rounded-2xl">
-      <h3 class="section-title">Security</h3>
-      <div class="divider"></div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label class="label">Current Password</label>
-          <Password v-model="security.current" toggleMask class="input w-full" />
-        </div>
-        <div>
-          <label class="label">New Password</label>
-          <Password v-model="security.newPass" toggleMask class="input w-full" />
-        </div>
-        <div>
-          <label class="label">Confirm Password</label>
-          <Password v-model="security.confirm" toggleMask class="input w-full" />
-        </div>
-        <div class="flex items-center justify-between md:col-span-2">
-          <span class="label">Enable 2FA for withdrawals</span>
-          <InputSwitch v-model="security.twoFA" />
-        </div>
-      </div>
-
-      <div class="mt-6 text-right">
-        <Button
-          label="Update Security"
-          icon="mdi mdi-lock"
-          class="btn-warning"
-        />
-      </div>
-    </div>
   </div>
 </template>
 
