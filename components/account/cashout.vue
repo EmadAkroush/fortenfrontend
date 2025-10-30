@@ -37,10 +37,6 @@
           placeholder="Choose your wallet"
           class="w-full mb-4"
         />
-        <!-- <p v-if="selectedWallet" class="text-sm text-gray-300">
-          Balance:
-          <span class="text-emerald-300 font-semibold">${{ selectedWallet.balance }}</span>
-        </p> -->
         <div class="text-center mt-6">
           <Button
             label="Next"
@@ -97,14 +93,16 @@
             <i class="mdi mdi-bitcoin text-yellow-400 text-2xl"></i>
             <span>Crypto (USDT / BTC)</span>
           </div>
-
         </div>
-
-       
 
         <div v-if="method === 'bank'" class="mt-5 text-sm text-gray-300">
           Bank transfers are processed manually within 3–5 business days.
         </div>
+
+        <!-- 🔴 نمایش خطای سمت بک‌اند -->
+        <p v-if="errorMessage" class="text-red-400 text-sm mt-4 text-center">
+          {{ errorMessage }}
+        </p>
 
         <div class="flex justify-between mt-8">
           <Button
@@ -117,7 +115,7 @@
             label="Confirm Cashout"
             icon="mdi mdi-check"
             class="p-button-success glass-btn"
-
+            :loading="loading"
             @click="completeCashout"
           />
         </div>
@@ -181,6 +179,7 @@ const method = ref(null);
 const selectedCryptoWallet = ref(null);
 const transactionId = ref("");
 const loading = ref(false);
+const errorMessage = ref(""); // 🔴 متغیر برای نمایش خطا
 
 const nextStep = () => (currentStep.value += 1);
 const prevStep = () => (currentStep.value -= 1);
@@ -192,13 +191,9 @@ const generateTransactionId = () => {
 
 // 🟢 API: ارسال درخواست برداشت
 const completeCashout = async () => {
+  errorMessage.value = ""; // پاک کردن خطا قبل از هر درخواست
   if (!amount.value || amount.value < 50) {
-    toast.add({
-      severity: "warn",
-      summary: "Invalid Amount",
-      detail: "Minimum withdrawal is $50.",
-      life: 3000,
-    });
+    errorMessage.value = "Minimum withdrawal is $50.";
     return;
   }
 
@@ -206,12 +201,7 @@ const completeCashout = async () => {
     loading.value = true;
     const userId = authUser.value?.user?.id;
     if (!userId) {
-      toast.add({
-        severity: "warn",
-        summary: "Login Required",
-        detail: "Please login to continue.",
-        life: 3000,
-      });
+      errorMessage.value = "Please login to continue.";
       return;
     }
 
@@ -235,12 +225,8 @@ const completeCashout = async () => {
     nextStep();
   } catch (err) {
     console.error("❌ Cashout Error:", err);
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: err?.data?.message || "Something went wrong.",
-      life: 4000,
-    });
+    errorMessage.value =
+      err?.data?.message || "Something went wrong. Please try again.";
   } finally {
     loading.value = false;
   }
@@ -253,6 +239,7 @@ const resetSteps = () => {
   method.value = null;
   selectedCryptoWallet.value = null;
   transactionId.value = "";
+  errorMessage.value = "";
 };
 </script>
 
