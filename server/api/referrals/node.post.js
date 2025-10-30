@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // 🟢 ارسال درخواست به بک‌اند Forten با توکن
-    const data = await $fetch(`${apiBase}/investments`, {
+    const data = await $fetch(`${apiBase}/referrals/node`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
