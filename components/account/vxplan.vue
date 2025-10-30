@@ -28,19 +28,7 @@
           />
         </div>
 
-        <Button
-          label="Top-Up"
-          icon="mdi mdi-wallet"
-          class="p-button-success"
-          @click="showTopUp = true"
-        />
-
-        <Button
-          label="Export CSV"
-          icon="mdi mdi-file-export"
-          class="p-button-outlined"
-          @click="exportCsv"
-        />
+       
       </div>
     </div>
 
@@ -89,19 +77,6 @@
         </div>
       </div>
 
-      <!-- 🟢 New Bonus Card -->
-      <div class="kpi-card">
-        <div class="kpi-left">
-          <i class="mdi mdi-gift-outline kpi-icon bg-gradient-pink"></i>
-        </div>
-        <div>
-          <div class="kpi-label">Level 1 Bonus</div>
-          <div class="kpi-value text-emerald-300">+ $8.00</div>
-          <div class="kpi-sub text-xs text-gray-400">
-            Earned from direct referrals
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Chart / Org container -->
@@ -190,12 +165,7 @@
 
         <div class="mb-3 text-sm text-gray-300">
           <div>Referral commissions: L1 15% / L2 10% / L3 5%</div>
-          <div class="mt-1">
-            Referral link:
-            <code class="text-xs px-2 py-1 bg-gray-800 rounded">{{
-              referralLink
-            }}</code>
-          </div>
+        
         </div>
 
         <ProgressBar :value="referralProgress" />
@@ -251,44 +221,7 @@
         </div>
       </div>
 
-      <div
-        class="w-full bg-white/5 border border-white/10 rounded-xl backdrop-blur-md p-4 sm:p-5 shadow-[0_0_20px_rgba(0,255,190,0.05)] hover:shadow-[0_0_25px_rgba(0,255,190,0.15)] transition-all duration-300"
-        style="width: 110%"
-      >
-        <h3 class="text-lg font-semibold text-gray-100 mb-3 sm:mb-4">
-          Recent Activity
-        </h3>
-
-        <ul class="divide-y divide-white/10 text-sm text-gray-300">
-          <li
-            v-for="(a, i) in activities"
-            :key="i"
-            class="py-3 flex justify-between items-start sm:items-center flex-wrap w-full"
-          >
-            <!-- Left -->
-            <div class="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-              <i
-                :class="[a.icon, 'text-emerald-300 text-xl flex-shrink-0']"
-              ></i>
-              <div class="truncate">
-                <div class="font-medium leading-tight truncate">
-                  {{ a.title }}
-                </div>
-                <div class="text-xs text-gray-400 truncate">
-                  {{ a.desc }}
-                </div>
-              </div>
-            </div>
-
-            <!-- Right -->
-            <div
-              class="text-xs text-gray-400 mt-1 sm:mt-0 ml-auto whitespace-nowrap"
-            >
-              {{ a.time }}
-            </div>
-          </li>
-        </ul>
-      </div>
+   
     </div>
 
     <!-- Node Details Dialog -->
@@ -353,12 +286,7 @@
             class="p-button-outlined w-full sm:w-auto border-emerald-400 text-emerald-300 hover:bg-emerald-400/10"
             @click="copyCode(selectedNode.data.vxCode)"
           />
-          <Button
-            label="Top-Up"
-            icon="mdi mdi-plus"
-            class="p-button-success w-full sm:w-auto"
-            @click="openTopUpFromNode"
-          />
+    
           <Button
             label="Close"
             icon="mdi mdi-close"
@@ -368,33 +296,7 @@
         </div>
       </div>
     </Dialog>
-    <!-- TopUp Dialog -->
-    <Dialog header="Top Up" v-model:visible="showTopUp" :modal="true">
-      <div class="space-y-3">
-        <div class="text-sm">Minimum deposit: $50</div>
-        <InputNumber
-          v-model="topUpAmount"
-          :min="50"
-          :showButtons="true"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-        />
-        <div class="flex gap-2">
-          <Button
-            label="Confirm"
-            icon="mdi mdi-check"
-            class="p-button-success"
-            @click="confirmTopUp"
-          />
-          <Button
-            label="Cancel"
-            class="p-button-secondary"
-            @click="() => (showTopUp = false)"
-          />
-        </div>
-      </div>
-    </Dialog>
+
 
     <Toast />
   </div>
@@ -647,64 +549,10 @@ function openNodeDetails(node) {
   showNodeDetails.value = true;
 }
 
-// function copyCode(code) {
-//   if (!code) return;
-//   navigator.clipboard?.writeText(code);
-// }
 
-/* ---------- TopUp logic ---------- */
-const showTopUp = ref(false);
-const topUpAmount = ref(50);
-function openTopUpFromNode() {
-  showTopUp.value = true;
-  showNodeDetails.value = false;
-}
-function confirmTopUp() {
-  if (topUpAmount.value < 50) {
-    alert("Minimum deposit is $50");
-    return;
-  }
-  accountBalance.value += topUpAmount.value;
-  showTopUp.value = false;
-  alert(`Top-up successful: $${topUpAmount.value}`);
-}
 
-/* ---------- other controls ---------- */
-function activateCode() {
-  if (accountBalance.value < 5) {
-    alert("Insufficient balance");
-    return;
-  }
-  if (!confirm("Activate VX Code for $5?")) return;
-  accountBalance.value -= 5;
-  alert("VX Code activated");
-}
 
-function exportCsv() {
-  const rows = [];
-  function walk(node) {
-    rows
-      .push({
-        key: node.key,
-        name: node.data.name,
-        vxCode: node.data.vxCode,
-        children: (node.children || []).length,
-      })(node.children || [])
-      .forEach(walk);
-  }
-  walk(data.value);
-  const csv = [
-    "key,name,vxCode,children",
-    ...rows.map((r) => `${r.key},${r.name},${r.vxCode},${r.children}`),
-  ].join("\n");
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "vx_team.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
+
 
 /* ---------- helper ---------- */
 function getNodeCapacity(node) {
