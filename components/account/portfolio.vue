@@ -13,12 +13,7 @@
           time.
         </p>
       </div>
-      <Button
-        class="p-button-success compact-btn"
-        icon="mdi mdi-wallet-plus-outline"
-        label="New Investment"
-        @click="openNewInvestment"
-      />
+  
     </div>
 
     <!-- ===== Overview Cards ===== -->
@@ -243,12 +238,22 @@ const showUpgradeDialog = ref(false);
 /* ---------------- Fetch Active Investment ---------------- */
 onMounted(async () => {
   try {
-    const res = await $fetch(`/api/investments/${authUser.value.user.id}`);
+    // 🟢 ارسال درخواست POST با userId در body
+    const res = await $fetch("/api/investments/my", {
+      method: "POST",
+      body: {
+        userId: authUser.value.user.id,
+      },
+    });
+
     if (res && res.length > 0) {
       activePack.value = res[0];
       currentProfit.value = activePack.value.totalProfit;
-      expectedReturns.value = activePack.value.amount * (activePack.value.dailyRate / 100) * 30;
+      expectedReturns.value =
+        activePack.value.amount * (activePack.value.dailyRate / 100) * 30;
     }
+
+    // 🟢 دریافت لیست پلن‌ها
     const plans = await $fetch("/api/packages");
     upgradeOptions.value = plans;
   } catch (err) {
@@ -261,31 +266,32 @@ onMounted(async () => {
   }
 });
 
+
 /* ---------------- Transfer Profit ---------------- */
-async function transferProfit() {
-  try {
-    loadingAction.value = true;
-    await $fetch("/api/investments/transfer-profit", {
-      method: "POST",
-      body: { userId: authUser.value.user.id },
-    });
-    toast.add({
-      severity: "success",
-      summary: "Profit Transferred",
-      detail: "Your profit has been added to main balance.",
-      life: 3000,
-    });
-  } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: error?.data?.message || "Failed to transfer profit.",
-      life: 3000,
-    });
-  } finally {
-    loadingAction.value = false;
-  }
-}
+// async function transferProfit() {
+//   try {
+//     loadingAction.value = true;
+//     await $fetch("/api/investments/transfer-profit", {
+//       method: "POST",
+//       body: { userId: authUser.value.user.id },
+//     });
+//     toast.add({
+//       severity: "success",
+//       summary: "Profit Transferred",
+//       detail: "Your profit has been added to main balance.",
+//       life: 3000,
+//     });
+//   } catch (error) {
+//     toast.add({
+//       severity: "error",
+//       summary: "Error",
+//       detail: error?.data?.message || "Failed to transfer profit.",
+//       life: 3000,
+//     });
+//   } finally {
+//     loadingAction.value = false;
+//   }
+// }
 
 /* ---------------- Cancel Investment ---------------- */
 async function confirmCancel() {
@@ -327,7 +333,7 @@ async function confirmUpgrade() {
   }
   try {
     loadingAction.value = true;
-    await $fetch("/api/investments/upgrade", {
+    await $fetch("/api/investments", {
       method: "POST",
       body: {
         userId: authUser.value.user.id,
@@ -359,9 +365,7 @@ async function confirmUpgrade() {
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
-function openNewInvestment() {
-  navigateTo("/account?tab=new");
-}
+
 function openCancelDialog() {
   showCancelDialog.value = true;
 }
