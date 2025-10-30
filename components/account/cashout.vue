@@ -37,10 +37,10 @@
           placeholder="Choose your wallet"
           class="w-full mb-4"
         />
-        <p v-if="selectedWallet" class="text-sm text-gray-300">
+        <!-- <p v-if="selectedWallet" class="text-sm text-gray-300">
           Balance:
           <span class="text-emerald-300 font-semibold">${{ selectedWallet.balance }}</span>
-        </p>
+        </p> -->
         <div class="text-center mt-6">
           <Button
             label="Next"
@@ -175,11 +175,13 @@ import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
 import InputNumber from "primevue/inputnumber";
 import { ref } from "vue";
+import { useToast } from "primevue/usetoast";
+import { useAuth } from "@/composables/useAuth";
 
-const wallets = [
-  { label: "main Wallet", balance: 1200 },
-];
+const { authUser } = useAuth();
+const toast = useToast();
 
+const wallets = [{ label: "Main Wallet", balance: 1200 }];
 const userWallets = [
   { name: "USDT Wallet - TRC20", network: "TRON" },
   { name: "BTC Wallet", network: "Bitcoin" },
@@ -198,6 +200,7 @@ const amount = ref(null);
 const method = ref(null);
 const selectedCryptoWallet = ref(null);
 const transactionId = ref("");
+const loading = ref(false);
 
 const nextStep = () => (currentStep.value += 1);
 const prevStep = () => (currentStep.value -= 1);
@@ -207,9 +210,60 @@ const generateTransactionId = () => {
   return `FTN-CASHOUT-${random}`;
 };
 
-const completeCashout = () => {
-  transactionId.value = generateTransactionId();
-  nextStep();
+// 🟢 API: ارسال درخواست برداشت
+const completeCashout = async () => {
+  if (!amount.value || amount.value < 50) {
+    toast.add({
+      severity: "warn",
+      summary: "Invalid Amount",
+      detail: "Minimum withdrawal is $50.",
+      life: 3000,
+    });
+    return;
+  }
+
+  try {
+    loading.value = true;
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Login Required",
+        detail: "Please login to continue.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 📡 ارسال به API بک‌اند
+    await $fetch("/api/transactions/withdraw", {
+      method: "POST",
+      body: {
+        userId,
+        amount: amount.value,
+      },
+    });
+
+    transactionId.value = generateTransactionId();
+    toast.add({
+      severity: "success",
+      summary: "Cashout Submitted",
+      detail: "Your withdrawal request has been sent successfully.",
+      life: 4000,
+    });
+
+    nextStep();
+  } catch (err) {
+    console.error("❌ Cashout Error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: err?.data?.message || "Something went wrong.",
+      life: 4000,
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 
 const resetSteps = () => {
@@ -243,7 +297,6 @@ const resetSteps = () => {
     margin-bottom: 1rem;
   }
 
-  /* Step Progress */
   .step-circle {
     width: 2.5rem;
     height: 2.5rem;
@@ -281,7 +334,6 @@ const resetSteps = () => {
     background: #10b981;
   }
 
-  /* Method Cards */
   .method-card {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.03);
@@ -301,7 +353,6 @@ const resetSteps = () => {
     background: rgba(16, 185, 129, 0.15);
   }
 
-  /* Buttons */
   .glass-btn {
     backdrop-filter: blur(8px);
     border-radius: 8px;
