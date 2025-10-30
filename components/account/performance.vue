@@ -29,8 +29,8 @@
           <i class="mdi mdi-cash-multiple kpi-icon bg-gradient-emerald"></i>
         </div>
         <div>
-          <div class="kpi-label">Total Balance</div>
-          <div class="kpi-value">${{ formatNumber(totalBalance) }}</div>
+          <div class="kpi-label">Main Balance</div>
+          <div class="kpi-value">${{ formatNumber(balances.mainBalance) }}</div>
           <div class="kpi-sub text-xs text-gray-400">Includes compounded profit</div>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <div class="flex items-center gap-3">
           <i class="mdi mdi-account-multiple-outline kpi-icon bg-gradient-purple"></i>
           <div>
-            <div class="kpi-label">Referral Profit</div>
+            <div class="kpi-label">Referral Balance</div>
             <div class="kpi-value">${{ formatNumber(balances.referralBalance) }}</div>
             <div class="kpi-sub text-xs text-gray-400">Income from your referrals</div>
           </div>
@@ -137,20 +137,22 @@ import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import Chart from "primevue/chart";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
+const { authUser } = useAuth();
+
 const toast = useToast();
 
 // ✅ Reactive states
 const balances = ref({
   mainBalance: 0,
   profitBalance: 0,
-  referralProfit: 0,
+  referralBalance: 0,
   bonusBalance: 0,
 });
 
 const totalBalance = computed(() =>
   balances.value.mainBalance +
   balances.value.profitBalance +
-  balances.value.referralProfit +
+  balances.value.referralBalance +
   balances.value.bonusBalance
 );
 
@@ -169,7 +171,7 @@ const balanceDistributionData = computed(() => ({
     {
       data: [
         balances.value.profitBalance,
-        balances.value.referralProfit,
+        balances.value.referralBalance,
         balances.value.bonusBalance,
       ],
       backgroundColor: ["#10b981", "#06b6d4", "#ec4899"],
@@ -195,7 +197,7 @@ function updateCountdown() {
 }
 onMounted(() => {
   fetchBalances();
-  fetchProfitHistory();
+  // fetchProfitHistory();
   updateCountdown();
   countdownTimer = setInterval(updateCountdown, 1000);
 });
@@ -208,7 +210,7 @@ onBeforeUnmount(() => clearInterval(countdownTimer));
 // 🔹 گرفتن موجودی کاربر از بک‌اند (users/balances)
 async function fetchBalances() {
   try {
-    const userId = localStorage.getItem("userId");
+    const userId = authUser.value.user.id;
     const res = await $fetch("/api/balances", {
       method: "POST",
       body: { userId },
@@ -225,30 +227,30 @@ async function fetchBalances() {
 }
 
 // 🔹 دریافت سابقه رشد سود (اختیاری — در صورت وجود API)
-async function fetchProfitHistory() {
-  try {
-    const userId = localStorage.getItem("userId");
-    const res = await $fetch("/api/user/profit-history", {
-      method: "POST",
-      body: { userId },
-    });
-    profitGrowthChartData.value = {
-      labels: res.map((d) => d.date),
-      datasets: [
-        {
-          label: "Profit Balance ($)",
-          data: res.map((d) => d.amount),
-          borderColor: "#10b981",
-          backgroundColor: "rgba(16,185,129,0.15)",
-          tension: 0.3,
-          fill: true,
-        },
-      ],
-    };
-  } catch (err) {
-    console.error("Failed to fetch profit history:", err);
-  }
-}
+// async function fetchProfitHistory() {
+//   try {
+//     const userId = localStorage.getItem("userId");
+//     const res = await $fetch("/api/user/profit-history", {
+//       method: "POST",
+//       body: { userId },
+//     });
+//     profitGrowthChartData.value = {
+//       labels: res.map((d) => d.date),
+//       datasets: [
+//         {
+//           label: "Profit Balance ($)",
+//           data: res.map((d) => d.amount),
+//           borderColor: "#10b981",
+//           backgroundColor: "rgba(16,185,129,0.15)",
+//           tension: 0.3,
+//           fill: true,
+//         },
+//       ],
+//     };
+//   } catch (err) {
+//     console.error("Failed to fetch profit history:", err);
+//   }
+// }
 
 /* ==========================
    ✅ Transfer to Main Logic
@@ -257,12 +259,12 @@ const loadingTransfer = ref(null);
 async function transferToMain(type) {
   try {
     loadingTransfer.value = type;
-    const userId = localStorage.getItem("userId");
+    const userId = authUser.value.user.id;
 
     let endpoint = "";
-    if (type === "profit") endpoint = "/api/activity/transfer-profit";
-    else if (type === "referral") endpoint = "/api/activity/transfer-referral";
-    else if (type === "bonus") endpoint = "/api/activity/transfer-bonus";
+    if (type === "profit") endpoint = "/api/activity/transferprofit";
+    else if (type === "referral") endpoint = "/api/activity/transferreferral";
+    else if (type === "bonus") endpoint = "/api/activity/transferbonus";
 
     const res = await $fetch(endpoint, {
       method: "POST",
