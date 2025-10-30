@@ -255,9 +255,6 @@ function openInvest(item) {
   selectedBundle.value = item;
   visibleDetails.value = false;
   visibleInvest.value = true;
-  transactionId.value = `FRT-CASHIN-${Math.floor(
-    100000 + Math.random() * 900000
-  )}`;
   errorMessage.value = "";
 }
 
@@ -288,9 +285,7 @@ async function confirmInvestment() {
     const res = await $fetch(`api/investments`, {
       method: "POST",
       body: {
-        packageId: selectedBundle.value._id,
         amount: investAmount.value,
-        transactionId: transactionId.value,
         userId: authUser.value.user.id,
       },
     });

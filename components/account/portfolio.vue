@@ -336,10 +336,8 @@ async function confirmUpgrade() {
     await $fetch("/api/investments", {
       method: "POST",
       body: {
+        amount: additionalAmount.value,
         userId: authUser.value.user.id,
-        currentInvestmentId: activePack.value._id,
-        nextPackageId: selectedNextPack.value,
-        additionalAmount: additionalAmount.value,
       },
     });
     toast.add({
