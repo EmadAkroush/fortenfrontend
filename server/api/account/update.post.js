@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Unauthorized - Token missing',
     })
   }
-
+ console.log("body" , body );
   try {
     // 🟢 ارسال درخواست به بک‌اند Forten با توکن
     const data = await $fetch(`${apiBase}/users/update`, {
@@ -23,7 +23,8 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
- 
+    console.log("ffff" , data );
+    
     
 
     return data

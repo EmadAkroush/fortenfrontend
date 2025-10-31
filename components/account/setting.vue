@@ -9,14 +9,55 @@
       <div class="divider"></div>
 
       <div class="flex flex-col md:flex-row items-center gap-8">
-        <!-- Inputs -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1">
-          <div v-for="field in fields" :key="field.label">
-            <label class="label">{{ field.label }}</label>
+
+          <!-- Username -->
+          <div>
+            
+            <label class="label">Username</label>
             <InputText
-              v-model="profile[field.model]"
-              :placeholder="placeholders[field.model]"
-              :disabled="field.disabled"
+              v-model="profile.username"
+              :placeholder="placeholders.username"
+              class="input w-full"
+            />
+          </div>
+
+          <!-- First Name -->
+          <div>
+            <label class="label">First Name</label>
+            <InputText
+              v-model="profile.firstName"
+              :placeholder="placeholders.firstName"
+              class="input w-full"
+            />
+          </div>
+
+          <!-- Last Name -->
+          <div>
+            <label class="label">Last Name</label>
+            <InputText
+              v-model="profile.lastName"
+              :placeholder="placeholders.lastName"
+              class="input w-full"
+            />
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label class="label">Phone</label>
+            <InputText
+              v-model="profile.phone"
+              :placeholder="placeholders.phone"
+              class="input w-full"
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="label">Email</label>
+            <InputText
+              v-model="profile.email"
+              :placeholder="placeholders.email"
               class="input w-full"
             />
           </div>
@@ -40,6 +81,7 @@
             </div>
           </div>
 
+          <!-- Wallet -->
           <div class="md:col-span-2">
             <label class="label">Wallet Address</label>
             <InputText
@@ -97,14 +139,6 @@ const placeholders = ref({
   wallet: "Loading...",
 });
 
-const fields = [
-  { label: "Username", model: "username" },
-  { label: "First Name", model: "firstName" },
-  { label: "Last Name", model: "lastName" },
-  { label: "Phone", model: "phone" },
-  { label: "Email", model: "email" },
-];
-
 // 🟢 Load current user data from backend
 onMounted(async () => {
   try {
@@ -127,16 +161,17 @@ onMounted(async () => {
     });
 
     if (user) {
-      profile.value.username = user.username || "";
-      profile.value.firstName = user.firstName || "";
-      profile.value.lastName = user.lastName || "";
-      profile.value.phone = user.phone || "";
-      profile.value.email = user.email || "";
-      profile.value.wallet = user.wallet || "";
-      profile.value.leaderCode = user.referredBy || "";
+      profile.value = {
+        username: user.username || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        phone: user.phone || "",
+        email: user.email || "",
+        wallet: user.wallet || "",
+        leaderCode: user.referredBy || "",
+      };
     }
 
-    // set placeholders (for UX clarity)
     placeholders.value = {
       username: user.username || "Enter username",
       firstName: user.firstName || "Enter first name",
@@ -214,7 +249,6 @@ const connectLeader = async () => {
 const saveProfile = async () => {
   try {
     loadingSave.value = true;
-
     const userId = authUser.value?.user?.id;
     if (!userId) {
       toast.add({
@@ -230,6 +264,7 @@ const saveProfile = async () => {
       method: "POST",
       body: {
         userId,
+        username: profile.value.username,
         firstName: profile.value.firstName,
         lastName: profile.value.lastName,
         phone: profile.value.phone,
@@ -237,6 +272,7 @@ const saveProfile = async () => {
         wallet: profile.value.wallet,
       },
     });
+console.log("profile.value.firstName" , profile.value.username);
 
     toast.add({
       severity: res.success ? "success" : "info",
@@ -257,6 +293,7 @@ const saveProfile = async () => {
   }
 };
 </script>
+
 
 <style scoped>
 /* 🌌 FORTEN UI THEME */
