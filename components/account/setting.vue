@@ -9,8 +9,6 @@
       <div class="divider"></div>
 
       <div class="flex flex-col md:flex-row items-center gap-8">
- 
-
         <!-- Inputs -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1">
           <div v-for="field in fields" :key="field.label">
@@ -22,6 +20,25 @@
             />
           </div>
 
+          <!-- 🟢 Leader Code (Referral Section) -->
+          <div class="md:col-span-2">
+            <label class="label">Leader Code</label>
+            <div class="flex gap-3 items-center">
+              <InputText
+                v-model="profile.leaderCode"
+                placeholder="Enter Leader Code (e.g. VX12345)"
+                class="input flex-1"
+              />
+              <Button
+                label="Connect"
+                icon="mdi mdi-account-check"
+                class="btn-primary"
+                :loading="loadingLeader"
+                @click="connectLeader"
+              />
+            </div>
+          </div>
+
           <div class="md:col-span-2">
             <label class="label">Wallet Address</label>
             <InputText v-model="profile.wallet" class="input w-full" />
@@ -30,33 +47,40 @@
       </div>
 
       <div class="mt-6 text-right">
-        <Button label="Save Profile" icon="mdi mdi-check" class="btn-primary" />
+        <Button
+          label="Save Profile"
+          icon="mdi mdi-check"
+          class="btn-primary"
+          :loading="loadingSave"
+          @click="saveProfile"
+        />
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
-import Card from "primevue/card"
-import InputText from "primevue/inputtext"
-import Password from "primevue/password"
-import Button from "primevue/button"
-import InputSwitch from "primevue/inputswitch"
-import FileUpload from "primevue/fileupload"
+import { ref } from "vue";
+import InputText from "primevue/inputtext";
+import Button from "primevue/button";
+import { useToast } from "primevue/usetoast";
+import { useAuth } from "@/composables/useAuth";
+
+const toast = useToast();
+const { authUser } = useAuth();
+
+const loadingLeader = ref(false);
+const loadingSave = ref(false);
 
 const profile = ref({
-  avatar: "https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png",
   username: "john_doe",
   firstName: "John",
   lastName: "Doe",
   phone: "+123456789",
   email: "john@example.com",
-  vxCode: "FO-123456",
+  leaderCode: "",
   wallet: "0x123456789abcdef123456789abcdef123456789",
-})
+});
 
 const fields = [
   { label: "Username", model: "username" },
@@ -64,22 +88,107 @@ const fields = [
   { label: "Last Name", model: "lastName" },
   { label: "Phone", model: "phone" },
   { label: "Email", model: "email" },
-  { label: "FO Code", model: "vxCode", disabled: true },
-]
+];
 
-const security = ref({
-  current: "",
-  newPass: "",
-  confirm: "",
-  twoFA: false,
-})
-
-const onAvatarUpload = (event) => {
-  const file = event.files[0]
-  if (file) {
-    profile.value.avatar = URL.createObjectURL(file)
+// 🟢 اتصال کاربر به لیدر از طریق API
+const connectLeader = async () => {
+  if (!profile.value.leaderCode) {
+    toast.add({
+      severity: "warn",
+      summary: "Missing Code",
+      detail: "Please enter your leader code.",
+      life: 3000,
+    });
+    return;
   }
-}
+
+  try {
+    loadingLeader.value = true;
+
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Not Logged In",
+        detail: "Please log in to continue.",
+        life: 3000,
+      });
+      return;
+    }
+
+    const res = await $fetch("/api/referrals/register", {
+      method: "POST",
+      body: {
+        referrerCode: profile.value.leaderCode,
+        newUserId: userId,
+      },
+    });
+
+    toast.add({
+      severity: res.success ? "success" : "warn",
+      summary: res.success ? "Connected" : "Notice",
+      detail: res.message || "Request processed successfully.",
+      life: 4000,
+    });
+  } catch (err) {
+    console.error("Referral error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: err?.data?.message || "Failed to connect with leader.",
+      life: 4000,
+    });
+  } finally {
+    loadingLeader.value = false;
+  }
+};
+
+// 🟢 ذخیره پروفایل (API: /api/users/update)
+const saveProfile = async () => {
+  try {
+    loadingSave.value = true;
+
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Not Logged In",
+        detail: "Please log in to continue.",
+        life: 3000,
+      });
+      return;
+    }
+
+    const res = await $fetch("/api/users/update", {
+      method: "POST",
+      body: {
+        userId,
+        firstName: profile.value.firstName,
+        lastName: profile.value.lastName,
+        phone: profile.value.phone,
+        email: profile.value.email,
+        wallet: profile.value.wallet,
+      },
+    });
+
+    toast.add({
+      severity: res.success ? "success" : "info",
+      summary: "Profile Updated",
+      detail: res.message || "Your profile has been saved successfully.",
+      life: 4000,
+    });
+  } catch (err) {
+    console.error("Profile update error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: err?.data?.message || "Failed to save your profile.",
+      life: 4000,
+    });
+  } finally {
+    loadingSave.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -98,7 +207,6 @@ const onAvatarUpload = (event) => {
   color: #8fb3a4;
 }
 
-/* glass card container */
 .glass-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -111,7 +219,6 @@ const onAvatarUpload = (event) => {
   box-shadow: 0 8px 32px rgba(47, 241, 180, 0.2);
 }
 
-/* labels and inputs */
 .label {
   display: block;
   font-size: 0.85rem;
@@ -130,7 +237,6 @@ const onAvatarUpload = (event) => {
   box-shadow: 0 0 6px #2ff1b4aa;
 }
 
-/* buttons */
 .btn-primary {
   background: linear-gradient(135deg, #2ff1b4, #06b6d4);
   border: none;
@@ -144,19 +250,6 @@ const onAvatarUpload = (event) => {
   box-shadow: 0 0 14px #2ff1b477;
 }
 
-.btn-warning {
-  background: linear-gradient(135deg, #ffb347, #ff7730);
-  border: none;
-  color: #04100b;
-  font-weight: 600;
-  border-radius: 10px;
-  transition: 0.25s ease;
-}
-.btn-warning:hover {
-  box-shadow: 0 0 14px #ffb34766;
-}
-
-/* section title */
 .section-title {
   font-weight: 600;
   color: #2ff1b4;
@@ -167,16 +260,5 @@ const onAvatarUpload = (event) => {
   height: 1px;
   background: rgba(255, 255, 255, 0.06);
   margin: 0.5rem 0 1rem;
-}
-
-/* upload button */
-.upload-btn {
-  background: rgba(47, 241, 180, 0.1);
-  border: 1px solid rgba(47, 241, 180, 0.25);
-  color: #2ff1b4;
-  border-radius: 8px;
-}
-.upload-btn:hover {
-  background: rgba(47, 241, 180, 0.2);
 }
 </style>
