@@ -87,13 +87,13 @@
       </div>
 
       <div class="flex justify-end gap-2">
-        <Button
+        <!-- <Button
           class="p-button-success compact-btn"
           icon="mdi mdi-swap-horizontal-bold"
           label="Transfer Profit"
           :loading="loadingAction"
           @click="transferProfit"
-        />
+        /> -->
         <Button
           class="p-button-warning compact-btn"
           icon="mdi mdi-arrow-up-bold"
@@ -167,19 +167,7 @@
         </p>
         <div>
           <label class="text-sm text-gray-400 mb-1 block">Next Plan</label>
-          <select
-            v-model="selectedNextPack"
-            class="w-full bg-gray-800 border border-gray-700 text-gray-200 rounded-md p-2"
-          >
-            <option disabled value="">Choose next plan</option>
-            <option
-              v-for="p in upgradeOptions"
-              :key="p._id"
-              :value="p._id"
-            >
-              {{ p.name }} — {{ p.range }}
-            </option>
-          </select>
+      
         </div>
 
         <div>
