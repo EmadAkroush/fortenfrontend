@@ -196,7 +196,10 @@ async function handleLogin() {
       detail: 'You have signed in successfully.',
       life: 3000,
     })
-    return navigateTo('/')
+    navigateTo('/')       // 🔹 هدایت به صفحه اصلی
+    setTimeout(() => {    // 🔹 بعد از هدایت، سایت رفرش می‌شود
+      window.location.reload()
+    }, 500)
   } catch (err) {
     errors.value = [err?.data?.message || 'Login failed.']
     console.log('err', err)
@@ -204,6 +207,7 @@ async function handleLogin() {
     loading.value = false
   }
 }
+
 
 // === REGISTER ===
 async function handleRegister() {
