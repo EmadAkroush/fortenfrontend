@@ -15,12 +15,13 @@
             <label class="label">{{ field.label }}</label>
             <InputText
               v-model="profile[field.model]"
+              :placeholder="placeholders[field.model]"
               :disabled="field.disabled"
               class="input w-full"
             />
           </div>
 
-          <!-- 🟢 Leader Code (Referral Section) -->
+          <!-- 🟢 Leader Code -->
           <div class="md:col-span-2">
             <label class="label">Leader Code</label>
             <div class="flex gap-3 items-center">
@@ -41,7 +42,11 @@
 
           <div class="md:col-span-2">
             <label class="label">Wallet Address</label>
-            <InputText v-model="profile.wallet" class="input w-full" />
+            <InputText
+              v-model="profile.wallet"
+              :placeholder="placeholders.wallet"
+              class="input w-full"
+            />
           </div>
         </div>
       </div>
@@ -60,7 +65,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
@@ -71,15 +76,25 @@ const { authUser } = useAuth();
 
 const loadingLeader = ref(false);
 const loadingSave = ref(false);
+const loadingProfile = ref(false);
 
 const profile = ref({
-  username: "john_doe",
-  firstName: "John",
-  lastName: "Doe",
-  phone: "+123456789",
-  email: "john@example.com",
+  username: "",
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
   leaderCode: "",
-  wallet: "0x123456789abcdef123456789abcdef123456789",
+  wallet: "",
+});
+
+const placeholders = ref({
+  username: "Loading...",
+  firstName: "Loading...",
+  lastName: "Loading...",
+  phone: "Loading...",
+  email: "Loading...",
+  wallet: "Loading...",
 });
 
 const fields = [
@@ -90,7 +105,60 @@ const fields = [
   { label: "Email", model: "email" },
 ];
 
-// 🟢 اتصال کاربر به لیدر از طریق API
+// 🟢 Load current user data from backend
+onMounted(async () => {
+  try {
+    loadingProfile.value = true;
+
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      toast.add({
+        severity: "warn",
+        summary: "Not Logged In",
+        detail: "Please log in to view your account.",
+        life: 3000,
+      });
+      return;
+    }
+
+    const user = await $fetch("/api/account/find", {
+      method: "POST",
+      body: { id: userId },
+    });
+
+    if (user) {
+      profile.value.username = user.username || "";
+      profile.value.firstName = user.firstName || "";
+      profile.value.lastName = user.lastName || "";
+      profile.value.phone = user.phone || "";
+      profile.value.email = user.email || "";
+      profile.value.wallet = user.wallet || "";
+      profile.value.leaderCode = user.referredBy || "";
+    }
+
+    // set placeholders (for UX clarity)
+    placeholders.value = {
+      username: user.username || "Enter username",
+      firstName: user.firstName || "Enter first name",
+      lastName: user.lastName || "Enter last name",
+      phone: user.phone || "Enter phone number",
+      email: user.email || "Enter email",
+      wallet: user.wallet || "Enter wallet address",
+    };
+  } catch (err) {
+    console.error("Profile load error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to load user data.",
+      life: 4000,
+    });
+  } finally {
+    loadingProfile.value = false;
+  }
+});
+
+// 🟢 اتصال کاربر به لیدر
 const connectLeader = async () => {
   if (!profile.value.leaderCode) {
     toast.add({
@@ -104,7 +172,6 @@ const connectLeader = async () => {
 
   try {
     loadingLeader.value = true;
-
     const userId = authUser.value?.user?.id;
     if (!userId) {
       toast.add({
@@ -143,7 +210,7 @@ const connectLeader = async () => {
   }
 };
 
-// 🟢 ذخیره پروفایل (API: /api/users/update)
+// 🟢 ذخیره پروفایل (API: /api/account/update)
 const saveProfile = async () => {
   try {
     loadingSave.value = true;
@@ -159,7 +226,7 @@ const saveProfile = async () => {
       return;
     }
 
-    const res = await $fetch("/api/users/update", {
+    const res = await $fetch("/api/account/update", {
       method: "POST",
       body: {
         userId,
