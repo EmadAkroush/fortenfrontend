@@ -13,7 +13,6 @@
 
           <!-- Username -->
           <div>
-            
             <label class="label">Username</label>
             <InputText
               v-model="profile.username"
@@ -52,13 +51,14 @@
             />
           </div>
 
-          <!-- Email -->
+          <!-- Email (🔒 Readonly) -->
           <div>
             <label class="label">Email</label>
             <InputText
               v-model="profile.email"
               :placeholder="placeholders.email"
               class="input w-full"
+              readonly
             />
           </div>
 
@@ -272,7 +272,7 @@ const saveProfile = async () => {
         wallet: profile.value.wallet,
       },
     });
-console.log("profile.value.firstName" , profile.value.username);
+    console.log("profile.value.firstName", profile.value.username);
 
     toast.add({
       severity: res.success ? "success" : "info",
@@ -293,7 +293,6 @@ console.log("profile.value.firstName" , profile.value.username);
   }
 };
 </script>
-
 
 <style scoped>
 /* 🌌 FORTEN UI THEME */
