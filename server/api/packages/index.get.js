@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-    console.log("cvv");
+
     
     const { public: { apiBase } } = useRuntimeConfig();
     // const token = getCookie(event, 'token');

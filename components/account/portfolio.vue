@@ -310,15 +310,7 @@ async function confirmCancel() {
 
 /* ---------------- Upgrade Investment ---------------- */
 async function confirmUpgrade() {
-  if (!selectedNextPack.value || additionalAmount.value <= 0) {
-    toast.add({
-      severity: "warn",
-      summary: "Invalid Input",
-      detail: "Please select a valid plan and enter amount.",
-      life: 3000,
-    });
-    return;
-  }
+
   try {
     loadingAction.value = true;
     await $fetch("/api/investments", {

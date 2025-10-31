@@ -2,6 +2,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { public: { apiBase } } = useRuntimeConfig()
 
+
   // 🟢 گرفتن توکن از کوکی
   const accessToken = getCookie(event, 'accessToken')
 
@@ -23,6 +24,7 @@ export default defineEventHandler(async (event) => {
       body,
     })
 
+ console.log("data:", data);
  
     
 
