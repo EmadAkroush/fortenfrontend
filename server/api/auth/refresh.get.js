@@ -16,16 +16,16 @@ export default defineEventHandler(async (event) => {
 
     setCookie(event, "accessToken", data.accessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "none", // 🔥 حتما اضافه کن برای Cross-Site
+      secure: true,
+      sameSite: "lax", // ❗ حتما lax بزن نه none
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
     });
 
     setCookie(event, "refreshToken", data.refreshToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "none", // 🔥 حتما اضافه کن برای Cross-Site
+      secure: true,
+      sameSite: "lax", // ❗ حتما lax بزن نه none
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
     });
