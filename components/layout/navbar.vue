@@ -1,6 +1,6 @@
 <template>
   <header
-    class="forten-navbar fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10"
+    class="finalxcard-navbar fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10"
   >
     <div
       class="container mx-auto flex items-center justify-between px-4 sm:px-10 py-3"
@@ -174,7 +174,7 @@ const items = ref([
 </script>
 
 <style scoped lang="scss">
-.forten-navbar {
+.finalxcard-navbar {
   background: linear-gradient(to right, rgba(7, 12, 20, 0.85), rgba(16, 30, 50, 0.85));
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);

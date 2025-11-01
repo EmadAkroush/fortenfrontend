@@ -1,5 +1,5 @@
 <template>
-  <section class="forten-addfunds min-h-screen py-16 px-4 sm:px-10 bg-[#0a1325] text-gray-100">
+  <section class="finalxcard-addfunds min-h-screen py-16 px-4 sm:px-10 bg-[#0a1325] text-gray-100">
     <div class="max-w-2xl mx-auto">
       <!-- Header -->
       <div class="text-center mb-12">
@@ -11,7 +11,7 @@
       </div>
 
       <!-- Custom Stepper -->
-      <div class="flex justify-between items-center mb-10 relative forten-stepper">
+      <div class="flex justify-between items-center mb-10 relative finalxcard-stepper">
         <div
           v-for="(step, index) in steps"
           :key="index"
@@ -84,7 +84,7 @@
         <Button
           label="Continue"
           icon="mdi mdi-arrow-right-bold"
-          class="w-full mt-6 forten-btn"
+          class="w-full mt-6 finalxcard-btn"
           :disabled="!selected || amount < 50"
           :loading="loading"
           @click="createPayment"
@@ -116,7 +116,7 @@
           <Button
             label="I’ve Paid"
             icon="mdi mdi-check-circle"
-            class="w-full forten-btn"
+            class="w-full finalxcard-btn"
             @click="nextStep"
           />
         </div>
@@ -137,14 +137,14 @@
           Your payment of <span class="text-[#00c6ae] font-semibold">${{ amount }}</span> is being verified.
         </p>
 
-        <ProgressBar :value="progress" class="w-full forten-progress mb-4"></ProgressBar>
+        <ProgressBar :value="progress" class="w-full finalxcard-progress mb-4"></ProgressBar>
 
         <p v-if="progress < 100" class="text-xs text-gray-400">Processing blockchain confirmation...</p>
         <Button
           v-else
           label="Go to Dashboard"
           icon="mdi mdi-arrow-right"
-          class="w-full forten-btn"
+          class="w-full finalxcard-btn"
           @click="goToDashboard"
         />
       </div>
@@ -187,7 +187,7 @@ async function createPayment() {
   loading.value = true;
 
   try {
-    // 🟢 ایجاد تراکنش در بک‌اند Forten
+    // 🟢 ایجاد تراکنش در بک‌اند finalxcard
     const res = await $fetch("/api/payment", {
       method: "POST",
       body: {
@@ -249,21 +249,21 @@ function goToDashboard() {
 </script>
 
 <style scoped>
-.forten-btn {
+.finalxcard-btn {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
   border: none !important;
   color: #0a1325 !important;
   font-weight: 600;
   transition: all 0.3s ease;
 }
-.forten-btn:hover {
+.finalxcard-btn:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
 }
-.forten-progress .p-progressbar-value {
+.finalxcard-progress .p-progressbar-value {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
 }
-.forten-stepper::before {
+.finalxcard-stepper::before {
   content: "";
   position: absolute;
   top: 50%;

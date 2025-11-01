@@ -1,5 +1,5 @@
 <template>
-  <div class="forten-performance p-0 sm:p-8">
+  <div class="finalxcard-performance p-0 sm:p-8">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
@@ -304,7 +304,7 @@ function goToAddFunds() {
 
 
 <style scoped lang="scss">
-.forten-performance {
+.finalxcard-performance {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
   color: #e6eef0;
   .bg-gradient-pink {

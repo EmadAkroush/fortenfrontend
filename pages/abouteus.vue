@@ -1,5 +1,5 @@
 <template>
-  <section class="forten-about overflow-hidden">
+  <section class="finalxcard-about overflow-hidden">
     <!-- HERO -->
     <div class="hero relative flex flex-col items-center justify-center text-center px-6 py-28 sm:py-40">
       <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-30">
@@ -13,7 +13,7 @@
           <span class="text-[#f4b000]">Smart Investing</span>
         </h1>
         <p class="text-gray-300 text-lg sm:text-xl leading-relaxed">
-          Forten is redefining how people grow wealth — securely, transparently, and intelligently.
+          finalxcard is redefining how people grow wealth — securely, transparently, and intelligently.
         </p>
       </div>
     </div>
@@ -23,10 +23,10 @@
       <div class="max-w-5xl mx-auto space-y-6">
         <h2 class="text-3xl sm:text-4xl font-bold text-[#00d1b2] mb-4">Who We Are</h2>
         <p class="text-gray-300 text-lg leading-relaxed">
-          <strong>Forten</strong> is an advanced blockchain-based investment ecosystem built for those who
+          <strong>finalxcard</strong> is an advanced blockchain-based investment ecosystem built for those who
           seek consistent growth and real transparency.  
           Through automated compounding, AI-driven analytics, and community-powered expansion,
-          Forten gives investors total control over their financial evolution.
+          finalxcard gives investors total control over their financial evolution.
         </p>
       </div>
     </div>
@@ -77,7 +77,7 @@
     <div class="text-center py-24 bg-[#00d1b2] text-[#0a1325] px-6 sm:px-16">
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Join the Intelligent Investment Revolution</h2>
       <p class="text-gray-800 mb-6 max-w-2xl mx-auto">
-        Start growing your wealth with daily compounding and total transparency — powered by Forten’s smart finance system.
+        Start growing your wealth with daily compounding and total transparency — powered by finalxcard’s smart finance system.
       </p>
       <nuxt-link to="/addfunds">
         <Button
@@ -97,7 +97,7 @@ const milestones = [
   {
     title: "Founded with Purpose",
     icon: "mdi mdi-lightbulb-on-outline",
-    text: "Forten was created to revolutionize traditional investing by combining blockchain transparency with real financial intelligence.",
+    text: "finalxcard was created to revolutionize traditional investing by combining blockchain transparency with real financial intelligence.",
   },
   {
     title: "Empowering Global Investors",
@@ -112,7 +112,7 @@ const milestones = [
   {
     title: "Expanding Through Innovation",
     icon: "mdi mdi-rocket-launch-outline",
-    text: "Forten continues to innovate with AI-powered tools, smart contracts, and a strong referral system that rewards active investors.",
+    text: "finalxcard continues to innovate with AI-powered tools, smart contracts, and a strong referral system that rewards active investors.",
   },
 ];
 const values = [
@@ -135,7 +135,7 @@ const values = [
 </script>
 
 <style scoped lang="scss">
-.forten-about {
+.finalxcard-about {
   font-family: "Inter", sans-serif;
 
   .timeline::before {

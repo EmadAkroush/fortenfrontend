@@ -20,13 +20,13 @@ export default defineNuxtConfig({
     options: { theme: "none" },
   },
   site: {
-    url: "https://parsautoparts.ir",
-    name: "forten",
+    url: "https://finalxcard.com",
+    name: "finalxcard",
   },
 
   app: {
     head: {
-      title: "forten", // default fallback title
+      title: "finalxcard", // default fallback title
       htmlAttrs: {
         lang: "en",
       },
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
         {
           rel: "icon",
           type: "image/x-icon",
-          href: "./Photo_1760453095335.png",
+          href: "./newlogo.png",
         },
       ],
     },

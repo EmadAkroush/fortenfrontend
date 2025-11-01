@@ -295,7 +295,7 @@ const saveProfile = async () => {
 </script>
 
 <style scoped>
-/* 🌌 FORTEN UI THEME */
+/* 🌌 finalxcard UI THEME */
 .settings-page {
   color: #dfffee;
   background: linear-gradient(180deg, #071218, #061414);

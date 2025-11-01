@@ -1,5 +1,5 @@
 <template>
-  <div class="forten-cashout min-h-screen p-4 sm:p-10 max-w-3xl mx-auto space-y-8">
+  <div class="finalxcard-cashout min-h-screen p-4 sm:p-10 max-w-3xl mx-auto space-y-8">
     <!-- ===== Step Progress ===== -->
     <div class="steps relative flex items-center justify-between mb-10">
       <div v-for="(stepItem, i) in steps" :key="i" class="flex flex-col items-center relative">
@@ -244,7 +244,7 @@ const resetSteps = () => {
 </script>
 
 <style scoped lang="scss">
-.forten-cashout {
+.finalxcard-cashout {
   background: radial-gradient(circle at top left, #0c1d17, #07130f);
   color: #e6eef0;
   font-family: "Inter", sans-serif;

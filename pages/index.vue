@@ -1,5 +1,5 @@
 <template>
-  <div class="forten-home font-sans text-gray-100 bg-[#0a1325] overflow-hidden">
+  <div class="finalxcard-home font-sans text-gray-100 bg-[#0a1325] overflow-hidden">
     <!-- ===== HERO SECTION ===== -->
     <section
       class="relative flex flex-col items-center justify-center min-h-[90vh] text-center px-6 overflow-hidden"
@@ -10,7 +10,7 @@
           class="text-4xl sm:text-6xl font-extrabold text-white leading-tight mb-4 drop-shadow-[0_4px_10px_rgba(0,0,0,0.4)]"
         >
           Empower Your <span class="text-[#00c6ae]">Wealth</span><br />
-          with <span class="text-[#f4b000]">Forten</span>
+          with <span class="text-[#f4b000]">finalxcard</span>
         </h1>
         <p class="text-gray-300 text-lg sm:text-xl mb-8 opacity-90">
           Smart investment with daily compounded profit and a powerful referral system.
@@ -18,7 +18,7 @@
         <Button
           label="Start Investing"
           icon="mdi mdi-arrow-right"
-          class="p-button-rounded p-button-lg forten-btn shadow-lg hover:shadow-[0_0_25px_rgba(244,176,0,0.5)]"
+          class="p-button-rounded p-button-lg finalxcard-btn shadow-lg hover:shadow-[0_0_25px_rgba(244,176,0,0.5)]"
           @click="router.push('/signup')"
         />
       </div>
@@ -35,7 +35,7 @@
     <section class="py-20 bg-[#0e1a35] relative z-10">
       <div class="max-w-6xl mx-auto px-6 text-center">
         <h2 class="text-3xl sm:text-4xl font-bold text-[#00c6ae] mb-10 tracking-wide">
-          Why Choose Forten?
+          Why Choose finalxcard?
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
@@ -68,7 +68,7 @@
             <Button
               label="Invest Now"
               icon="mdi mdi-arrow-right-bold"
-              class="p-button-rounded forten-btn w-full shadow-md hover:shadow-[0_0_20px_rgba(0,198,174,0.4)]"
+              class="p-button-rounded finalxcard-btn w-full shadow-md hover:shadow-[0_0_20px_rgba(0,198,174,0.4)]"
             />
           </div>
         </div>
@@ -97,9 +97,9 @@
           <h2 class="text-3xl sm:text-4xl font-bold text-[#f4b000] mb-6">Secure & Transparent</h2>
           <p class="text-gray-300 leading-relaxed mb-4">
             All transactions are processed through USDT (BEP20) for instant deposits and withdrawals.
-            Forten provides full wallet transparency and audited smart systems for user protection.
+            finalxcard provides full wallet transparency and audited smart systems for user protection.
           </p>
-          <Button label="Learn More" icon="mdi mdi-shield-check" class="forten-btn mt-4" />
+          <Button label="Learn More" icon="mdi mdi-shield-check" class="finalxcard-btn mt-4" />
         </div>
         <div class="flex justify-center">
           <img src="/public/ChatGPT Image Oct 12, 2025, 05_53_45 AM.png" alt="Security" class="w-80 opacity-90 animate-float" />
@@ -111,12 +111,12 @@
     <section class="py-20 bg-[#0f2040] text-center border-t border-gray-700">
       <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white">Ready to Start Your Journey?</h2>
       <p class="text-gray-300 mb-8">
-        Join thousands of investors building their future with Forten.
+        Join thousands of investors building their future with finalxcard.
       </p>
       <Button
         label="Create Your Account"
         icon="mdi mdi-rocket-launch-outline"
-        class="p-button-rounded p-button-lg forten-btn shadow-lg hover:shadow-[0_0_25px_rgba(0,198,174,0.4)]"
+        class="p-button-rounded p-button-lg finalxcard-btn shadow-lg hover:shadow-[0_0_25px_rgba(0,198,174,0.4)]"
         @click="router.push('/signup')"
       />
     </section>
@@ -131,10 +131,10 @@ const router = useRouter();
 const features = [
   { title: "Auto Compounding Profit", icon: "mdi mdi-sync", desc: "Earn profit every 24 hours automatically added to your balance — full compound growth." },
   { title: "Flexible Withdrawals", icon: "mdi mdi-cash-minus", desc: "Withdraw your capital anytime. No lock-up period — your money, your control." },
-  { title: "Referral Growth System", icon: "mdi mdi-account-group-outline", desc: "Earn multi-level rewards through Forten’s advanced referral system." },
+  { title: "Referral Growth System", icon: "mdi mdi-account-group-outline", desc: "Earn multi-level rewards through finalxcard’s advanced referral system." },
   { title: "24/7 Support", icon: "mdi mdi-lifebuoy", desc: "Our expert support team is always here to assist you — anytime, anywhere." },
   { title: "Smart Analytics", icon: "mdi mdi-chart-line", desc: "Track your performance and earnings in real-time via your personalized dashboard." },
-  { title: "Trusted by Investors", icon: "mdi mdi-shield-star-outline", desc: "Forten is designed with transparency, verified security, and reliability at its core." },
+  { title: "Trusted by Investors", icon: "mdi mdi-shield-star-outline", desc: "finalxcard is designed with transparency, verified security, and reliability at its core." },
 ];
 
 const packages = [
@@ -154,14 +154,14 @@ const packages = [
 
 }
 
-.forten-btn {
+.finalxcard-btn {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
   border: none !important;
   color: #0a1325 !important;
   font-weight: 600;
   transition: all 0.3s ease;
 }
-.forten-btn:hover {
+.finalxcard-btn:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
 }

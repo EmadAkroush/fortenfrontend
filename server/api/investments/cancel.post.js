@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // 🟢 ارسال درخواست به بک‌اند Forten با توکن
+    // 🟢 ارسال درخواست به بک‌اند finalxcard با توکن
     const data = await $fetch(`${apiBase}/investments/cancel`, {
       method: 'POST',
       headers: {

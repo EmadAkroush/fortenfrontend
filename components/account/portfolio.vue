@@ -1,5 +1,5 @@
 <template>
-  <div class="forten-portfolio p-3 sm:p-8">
+  <div class="finalxcard-portfolio p-3 sm:p-8">
     <!-- ===== Header ===== -->
     <div
       class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
@@ -353,7 +353,7 @@ function openUpgradeDialog() {
 </script>
 
 <style scoped lang="scss">
-.forten-portfolio {
+.finalxcard-portfolio {
   color: #e6eef0;
   font-family: "Inter", sans-serif;
   .summary-card {

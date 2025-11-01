@@ -1,6 +1,6 @@
 <template>
   <div
-    class="forten-auth font-sans text-gray-100 bg-[#0a1325] min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
+    class="finalxcard-auth font-sans text-gray-100 bg-[#0a1325] min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
   >
     <div
       class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"
@@ -11,7 +11,7 @@
       class="relative z-10 glass-card p-10 w-full max-w-md text-center rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)]"
     >
       <h1 class="text-3xl font-bold text-white mb-6 tracking-wide">
-        <span class="text-[#00c6ae]">Forten</span> Account
+        <span class="text-[#00c6ae]">finalxcard</span> Account
       </h1>
 
       <!-- Tabs -->
@@ -53,7 +53,7 @@
         <Button
           label="Sign In"
           icon="pi pi-sign-in"
-          class="forten-btn w-full"
+          class="finalxcard-btn w-full"
           :loading="loading"
           @click="handleLogin"
         />
@@ -102,7 +102,7 @@
         <Button
           label="Create Account"
           icon="pi pi-user-plus"
-          class="forten-btn w-full"
+          class="finalxcard-btn w-full"
           :loading="loading"
           @click="handleRegister"
         />
@@ -114,7 +114,7 @@
       v-model:visible="verifyModal"
       modal
       header="Verify Your Email"
-      class="forten-modal"
+      class="finalxcard-modal"
       :draggable="false"
       :closable="true"
     >
@@ -131,7 +131,7 @@
       <Button
         label="Verify Email"
         icon="pi pi-check"
-        class="forten-btn w-full mt-4"
+        class="finalxcard-btn w-full mt-4"
         :loading="loadingVerify"
         @click="handleVerifyEmail"
       />
@@ -298,7 +298,7 @@ async function resendEmail() {
 </script>
 
 <style scoped lang="scss">
-.forten-auth {
+.finalxcard-auth {
   background: #0a1325;
   color: #fff;
 }
@@ -344,7 +344,7 @@ async function resendEmail() {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.forten-btn {
+.finalxcard-btn {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
   border: none;
   border-radius: 50px;
@@ -353,7 +353,7 @@ async function resendEmail() {
   padding: 10px 0;
   transition: all 0.3s ease;
 }
-.forten-btn:hover {
+.finalxcard-btn:hover {
   transform: scale(1.03);
   filter: brightness(1.1);
 }

@@ -1,5 +1,5 @@
 <template>
-  <section class="forten-support min-h-screen text-gray-100">
+  <section class="finalxcard-support min-h-screen text-gray-100">
     <!-- HERO -->
     <div class="relative hero-section text-center py-24 px-6 sm:px-16 overflow-hidden">
       <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-40">
@@ -9,7 +9,7 @@
 
       <div class="relative z-10 max-w-3xl mx-auto">
         <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 text-[#00d1b2] drop-shadow-lg">
-          Forten Support Center
+          finalxcard Support Center
         </h1>
         <p class="text-gray-300 text-lg leading-relaxed">
           Need assistance? Our <span class="text-[#f4b000] font-semibold">24/7 support</span> team is here to help with
@@ -79,7 +79,7 @@
           <ul class="space-y-4 text-gray-300">
             <li class="flex items-center gap-3">
               <i class="mdi mdi-email-outline text-2xl text-[#00d1b2]"></i>
-              <span>support@forten.io</span>
+              <span>support@finalxcard.io</span>
             </li>
             <li class="flex items-center gap-3">
               <i class="mdi mdi-phone text-2xl text-[#00d1b2]"></i>
@@ -179,7 +179,7 @@ const faqs = ref([
     open: false,
   },
   {
-    question: "How can I contact Forten support?",
+    question: "How can I contact finalxcard support?",
     answer:
       "You can reach us via email, WhatsApp, or Telegram 24/7. Our support staff responds within 30 minutes on average.",
     open: false,
@@ -192,7 +192,7 @@ function toggleFAQ(index) {
 </script>
 
 <style scoped lang="scss">
-.forten-support {
+.finalxcard-support {
   background: linear-gradient(180deg, #03121c 0%, #0a1829 100%);
   font-family: "Inter", sans-serif;
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="forten-forgot min-h-screen bg-[#0a1325] flex flex-col items-center justify-center relative overflow-hidden px-6"
+    class="finalxcard-forgot min-h-screen bg-[#0a1325] flex flex-col items-center justify-center relative overflow-hidden px-6"
   >
     <div class="absolute inset-0 bg-gradient-to-b from-[#0a1325] via-[#0f2040] to-[#0a1325] opacity-95"></div>
 
@@ -28,7 +28,7 @@
         <Button
           label="Send Reset Link"
           icon="pi pi-envelope"
-          class="forten-btn w-full mt-4"
+          class="finalxcard-btn w-full mt-4"
           :loading="loading"
           @click="requestReset"
         />
@@ -44,7 +44,7 @@
         <Button
           label="Verify Token"
           icon="pi pi-check"
-          class="forten-btn w-full mt-4"
+          class="finalxcard-btn w-full mt-4"
           :loading="loading"
           @click="verifyTokenHandler"
         />
@@ -73,7 +73,7 @@
         <Button
           label="Reset Password"
           icon="pi pi-refresh"
-          class="forten-btn w-full mt-4"
+          class="finalxcard-btn w-full mt-4"
           :loading="loading"
           @click="resetPassword"
         />
@@ -206,7 +206,7 @@ async function resendResetLink() {
 </script>
 
 <style scoped lang="scss">
-.forten-forgot {
+.finalxcard-forgot {
   color: #fff;
 }
 
@@ -232,7 +232,7 @@ async function resendResetLink() {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.forten-btn {
+.finalxcard-btn {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
   border: none;
   border-radius: 50px;
@@ -241,7 +241,7 @@ async function resendResetLink() {
   padding: 10px;
   transition: all 0.3s;
 }
-.forten-btn:hover {
+.finalxcard-btn:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
 }

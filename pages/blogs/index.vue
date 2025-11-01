@@ -1,5 +1,5 @@
 <template>
-  <div class="forten-performance p-0 sm:p-8">
+  <div class="finalxcard-performance p-0 sm:p-8">
     <!-- Header -->
     <div
       class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"
@@ -291,7 +291,7 @@ const earningsBreakdownData = { labels: [], datasets: [] };
 const donutOptions = {};
 const referrals = ref({ level1: 8, level2: 21, level3: 47 });
 const referralProgress = ref(40);
-const referralLink = "https://forten.example.com/register?ref=alexjohn";
+const referralLink = "https://finalxcard.example.com/register?ref=alexjohn";
 const activities = ref([]);
 
 function formatNumber(v) {
@@ -306,7 +306,7 @@ function goToAddFunds() {
 </script>
 
 <style scoped lang="scss">
-.forten-performance {
+.finalxcard-performance {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial;
   color: #e6eef0;

@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   }
  console.log("body" , body );
   try {
-    // 🟢 ارسال درخواست به بک‌اند Forten با توکن
+    // 🟢 ارسال درخواست به بک‌اند finalxcard با توکن
     const data = await $fetch(`${apiBase}/users/update`, {
       method: 'POST',
       headers: {

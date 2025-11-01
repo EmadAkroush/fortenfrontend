@@ -1,5 +1,5 @@
 <template>
-  <footer class="forten-footer relative overflow-hidden text-gray-300">
+  <footer class="finalxcard-footer relative overflow-hidden text-gray-300">
     <!-- Background Layer -->
     <div class="absolute inset-0 bg-gradient-to-br from-[#0f172a]/95 via-[#0b2a1b]/90 to-[#03140c]/95 backdrop-blur-2xl"></div>
     <div class="absolute -top-20 left-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl"></div>
@@ -56,7 +56,7 @@
         <ul class="space-y-3 text-sm">
           <li class="flex items-center gap-3">
             <i class="mdi mdi-email-outline text-emerald-400 text-xl"></i>
-            <a href="mailto:support@forten.io" class="footer-link">support@forten.io</a>
+            <a href="mailto:support@finalxcard.io" class="footer-link">support@finalxcard.io</a>
           </li>
           <li class="flex items-center gap-3">
             <i class="mdi mdi-map-marker text-emerald-400 text-xl"></i>
@@ -72,7 +72,7 @@
 
     <!-- Bottom Bar -->
     <div class="relative border-t border-white/10 py-4 text-center text-sm text-gray-400 flex flex-col sm:flex-row justify-between items-center max-w-7xl mx-auto px-6 z-10">
-      <p>© {{ currentYear }} Forten. All Rights Reserved.</p>
+      <p>© {{ currentYear }} finalxcard. All Rights Reserved.</p>
       <div class="flex gap-5 mt-2 sm:mt-0">
         <a href="#" class="hover:text-emerald-300 transition">Privacy Policy</a>
         <a href="#" class="hover:text-emerald-300 transition">Terms</a>
@@ -90,7 +90,7 @@ const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped lang="scss">
-.forten-footer {
+.finalxcard-footer {
   position: relative;
   color: #e5e7eb;
   font-family: "Inter", sans-serif;

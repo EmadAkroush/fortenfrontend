@@ -1,11 +1,11 @@
 <template>
-  <div class="forten-account min-h-screen flex flex-col bg-gradient-to-br from-[#040b0f] via-[#07191f] to-[#020608] text-gray-200">
+  <div class="finalxcard-account min-h-screen flex flex-col bg-gradient-to-br from-[#040b0f] via-[#07191f] to-[#020608] text-gray-200">
     <!-- ===== Global Navbar ===== -->
     <!-- <header class="main-navbar fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/10 border-b border-white/10">
       <div class="flex justify-between items-center px-4 sm:px-10 py-3">
         <div class="flex items-center gap-2">
           <img src="/" alt="Logo" class="w-10 h-10 rounded-md shadow-sm" />
-          <span class="font-bold text-emerald-400 text-xl tracking-wide">Forten</span>
+          <span class="font-bold text-emerald-400 text-xl tracking-wide">finalxcard</span>
         </div>
 
         <nav class="hidden md:flex gap-6 text-sm">

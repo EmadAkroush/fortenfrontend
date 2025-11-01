@@ -295,7 +295,7 @@ function handleTouchEnd() {
 }
 </script>
 <style scoped>
-/* Forten dark / neon theme */
+/* finalxcard dark / neon theme */
 .ref-stat {
   text-align: center;
   padding: 10px;

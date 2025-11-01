@@ -1,5 +1,5 @@
 <template>
-  <div class="forten-history p-2 sm:p-10 space-y-4">
+  <div class="finalxcard-history p-2 sm:p-10 space-y-4">
     <!-- ===== Header ===== -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
       <h2 class="text-2xl font-bold text-emerald-300 mb-4 sm:mb-0">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- ===== Table ===== -->
-    <Card class="glass-card shadow-lg forten-table p-0 sm:p-0">
+    <Card class="glass-card shadow-lg finalxcard-table p-0 sm:p-0">
       <template #content>
         <DataTable
           :value="filteredTransactions"
@@ -259,7 +259,7 @@ const showDetails = (tx) => {
 </script>
 
 <style scoped lang="scss">
-.forten-history {
+.finalxcard-history {
   background: radial-gradient(circle at top left, #021312, #01060a);
   font-family: "Inter", sans-serif;
   color: #e6fef5;
@@ -282,7 +282,7 @@ const showDetails = (tx) => {
 }
 
 /* === Table Header === */
-.forten-table ::v-deep(.p-datatable-thead > tr > th) {
+.finalxcard-table ::v-deep(.p-datatable-thead > tr > th) {
   background: rgba(255, 255, 255, 0.05);
   color: #b3f6e5;
   font-weight: 600;
@@ -291,26 +291,26 @@ const showDetails = (tx) => {
 }
 
 /* === Table Rows === */
-.forten-table ::v-deep(.p-datatable-tbody > tr) {
+.finalxcard-table ::v-deep(.p-datatable-tbody > tr) {
   background: transparent;
   transition: all 0.25s ease;
 }
 
-.forten-table ::v-deep(.p-datatable-tbody > tr:nth-child(odd)) {
+.finalxcard-table ::v-deep(.p-datatable-tbody > tr:nth-child(odd)) {
   background: rgba(16, 185, 129, 0.05);
 }
 
-.forten-table ::v-deep(.p-datatable-tbody > tr:nth-child(even)) {
+.finalxcard-table ::v-deep(.p-datatable-tbody > tr:nth-child(even)) {
   background: rgba(6, 182, 212, 0.04);
 }
 
-.forten-table ::v-deep(.p-datatable-tbody > tr:hover) {
+.finalxcard-table ::v-deep(.p-datatable-tbody > tr:hover) {
   background: rgba(16, 185, 129, 0.15);
   transform: scale(1.002);
 }
 
 /* Pagination */
-.forten-table ::v-deep(.p-paginator) {
+.finalxcard-table ::v-deep(.p-paginator) {
   background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

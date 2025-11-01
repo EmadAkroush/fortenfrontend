@@ -13,7 +13,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ---------- SCROLLBAR (Forten Neon Style) ---------- */
+/* ---------- SCROLLBAR (finalxcard Neon Style) ---------- */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

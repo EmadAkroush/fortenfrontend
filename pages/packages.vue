@@ -1,12 +1,12 @@
 <template>
   <section
-    class="forten-bundles py-20 px-4 sm:px-10 bg-[#0a1325] text-gray-100"
+    class="finalxcard-bundles py-20 px-4 sm:px-10 bg-[#0a1325] text-gray-100"
   >
     <div class="max-w-7xl mx-auto text-center">
       <!-- Header -->
       <div class="mb-14">
         <h2 class="text-4xl sm:text-5xl font-bold text-[#00c6ae] mb-3">
-          Forten Investment Plans
+          finalxcard Investment Plans
         </h2>
         <p class="text-gray-300 text-lg max-w-2xl mx-auto">
           Choose your plan, earn daily profit, and grow your capital
@@ -87,7 +87,7 @@
             <Button
               label="Invest Now"
               icon="mdi mdi-wallet-plus-outline"
-              class="p-button-sm forten-btn w-full"
+              class="p-button-sm finalxcard-btn w-full"
               @click="openInvest(item)"
             />
           </div>
@@ -128,7 +128,7 @@
         <Button
           label="Invest Now"
           icon="mdi mdi-wallet-plus-outline"
-          class="forten-btn"
+          class="finalxcard-btn"
           @click="openInvest(selectedBundle)"
         />
       </template>
@@ -184,7 +184,7 @@
         <Button
           label="Confirm Investment"
           icon="mdi mdi-check-circle"
-          class="forten-btn"
+          class="finalxcard-btn"
           :loading="loadingInvest"
           @click="confirmInvestment"
         />
@@ -316,14 +316,14 @@ async function confirmInvestment() {
 </script>
 
 <style scoped>
-.forten-btn {
+.finalxcard-btn {
   background: linear-gradient(90deg, #00c6ae, #f4b000);
   border: none !important;
   color: #0a1325 !important;
   font-weight: 600;
   transition: all 0.3s ease;
 }
-.forten-btn:hover {
+.finalxcard-btn:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
 }
