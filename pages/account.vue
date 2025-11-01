@@ -71,12 +71,12 @@
             <span class="font-medium text-sm sm:text-base">{{ item.label }}</span>
           </div>
         </nav>
-
+<!-- 
         <div class="mt-8 border-t border-white/10 pt-4">
           <button @click="logout" class="w-full flex items-center justify-center gap-2 text-red-400 hover:bg-red-500/10 py-2 rounded-lg transition">
             <i class="mdi mdi-logout"></i> Logout
           </button>
-        </div>
+        </div> -->
       </aside>
 
       <!-- Main Content -->
@@ -121,17 +121,17 @@ const showMobileMenu = ref(false)
 const activeItem = ref("performance")
 
 
-const logout = async () => {
-  try {
-    const res = await $fetch('/api/auth/logout', { method: 'POST' })
+// const logout = async () => {
+//   try {
+//     const res = await $fetch('/api/auth/logout', { method: 'POST' })
    
     
-    authUser.value = null
-    navigateTo('/')
-  } catch (error) {
-    console.error('Logout failed:', error)
-  }
-}
+//     authUser.value = null
+//     navigateTo('/')
+//   } catch (error) {
+//     console.error('Logout failed:', error)
+//   }
+// }
 
 const menuItems = ref([
   { key: "performance", label: "Dashboard", icon: "mdi mdi-finance" },
