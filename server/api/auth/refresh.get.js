@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
     setCookie(event, "accessToken", data.accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "none", // 🔥 حتما اضافه کن برای Cross-Site
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
 
     setCookie(event, "refreshToken", data.refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "none", // 🔥 حتما اضافه کن برای Cross-Site
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
