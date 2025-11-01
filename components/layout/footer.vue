@@ -19,12 +19,7 @@
           Empowering investors worldwide through transparent, intelligent, and secure financial growth systems.
         </p>
 
-        <div class="flex gap-4 mt-5">
-          <a href="#" aria-label="Telegram" class="social"><i class="mdi mdi-telegram"></i></a>
-          <a href="#" aria-label="Twitter" class="social"><i class="mdi mdi-twitter"></i></a>
-          <a href="#" aria-label="LinkedIn" class="social"><i class="mdi mdi-linkedin"></i></a>
-          <a href="#" aria-label="YouTube" class="social"><i class="mdi mdi-youtube"></i></a>
-        </div>
+     
       </div>
 
       <!-- Quick Links -->
@@ -39,16 +34,7 @@
         </ul>
       </div>
 
-      <!-- Legal -->
-      <div>
-        <h3 class="footer-heading">Legal</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="footer-link"><i class="mdi mdi-lock-outline mr-2 text-emerald-400"></i>Privacy Policy</a></li>
-          <li><a href="#" class="footer-link"><i class="mdi mdi-file-document-outline mr-2 text-emerald-400"></i>Terms of Service</a></li>
-          <li><a href="#" class="footer-link"><i class="mdi mdi-shield-check-outline mr-2 text-emerald-400"></i>AML & KYC Policy</a></li>
-          <li><a href="#" class="footer-link"><i class="mdi mdi-alert-circle-outline mr-2 text-emerald-400"></i>Risk Disclosure</a></li>
-        </ul>
-      </div>
+     
 
       <!-- Contact -->
       <div>
@@ -58,14 +44,7 @@
             <i class="mdi mdi-email-outline text-emerald-400 text-xl"></i>
             <a href="mailto:support@finalxcard.io" class="footer-link">support@finalxcard.io</a>
           </li>
-          <li class="flex items-center gap-3">
-            <i class="mdi mdi-map-marker text-emerald-400 text-xl"></i>
-            <span>London, United Kingdom</span>
-          </li>
-          <li class="flex items-center gap-3">
-            <i class="mdi mdi-phone text-emerald-400 text-xl"></i>
-            <a href="tel:+447712345678" class="footer-link">+44 7712 345678</a>
-          </li>
+         
         </ul>
       </div>
     </div>
