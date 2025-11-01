@@ -8,13 +8,13 @@
    
       <div class="flex items-center space-x-3">
         <img
-          src="/public/Photo_1760453095335.png"
+          src="/public/newlogo.png"
           alt="Logo"
           class="w-10 h-10 rounded-lg shadow-sm"
         />
         <span
           class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-lime-300 text-transparent bg-clip-text tracking-wide"
-          >Forten</span
+          >finalxcard</span
         >
       </div>
 

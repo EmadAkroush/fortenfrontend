@@ -10,9 +10,9 @@
       <!-- Brand -->
       <div>
         <div class="flex items-center gap-3 mb-3">
-          <img src="/public/Photo_1760453095335.png" alt="Logo" class="w-10 h-10 rounded-lg shadow-sm" />
+          <img src="/public/newlogo.png" alt="Logo" class="w-10 h-10 rounded-lg shadow-sm" />
           <h2 class="text-2xl font-bold bg-gradient-to-r from-emerald-300 to-lime-400 bg-clip-text text-transparent">
-            Forten
+            finalxcard
           </h2>
         </div>
         <p class="text-sm text-gray-400 leading-relaxed max-w-xs">

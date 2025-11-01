@@ -55,8 +55,8 @@
           <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-400 to-cyan-400 text-black flex items-center justify-center text-xl sm:text-2xl font-bold shadow-[0_0_20px_rgba(16,185,129,0.4)]">
             FT
           </div>
-          <h3 class="mt-3 font-semibold text-white">John Miller</h3>
-          <p class="text-xs text-gray-400">Investor ID: <span class="text-emerald-300">#FR1084</span></p>
+          <!-- <h3 class="mt-3 font-semibold text-white">John Miller</h3>
+          <p class="text-xs text-gray-400">Investor ID: <span class="text-emerald-300">#FR1084</span></p> -->
         </div>
 
         <nav class="space-y-1 sm:space-y-2">
