@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
   try {
     const data = await $fetch(`${apiBase}/auth/login`, {
       method: "POST",
+      credentials: 'include', // 🔥 بدون این، کوکی‌ها منتقل نمی‌شن
       body: body,
       headers: {
         Accept: "application/json",
