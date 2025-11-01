@@ -120,6 +120,19 @@ definePageMeta({ middleware: 'auth' })
 const showMobileMenu = ref(false)
 const activeItem = ref("performance")
 
+
+const logout = async () => {
+  try {
+    const res = await $fetch('/api/auth/logout', { method: 'POST' })
+   
+    
+    authUser.value = null
+    navigateTo('/')
+  } catch (error) {
+    console.error('Logout failed:', error)
+  }
+}
+
 const menuItems = ref([
   { key: "performance", label: "Dashboard", icon: "mdi mdi-finance" },
   { key: "portfolio", label: "My Invest", icon: "mdi mdi-currency-usd" },
@@ -159,7 +172,7 @@ const currentComponent = computed(() => {
   }
 })
 
-const logout = () => alert("You have been logged out.")
+
 const goToAddFunds = () => (window.location.href = "/addfunds")
 </script>
 
