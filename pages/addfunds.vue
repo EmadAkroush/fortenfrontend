@@ -17,7 +17,6 @@
           :key="index"
           class="flex-1 text-center relative"
         >
-          <!-- Circle -->
           <div
             class="w-10 h-10 rounded-full flex items-center justify-center mx-auto z-10 transition-all duration-300 font-semibold"
             :class="{
@@ -27,7 +26,7 @@
           >
             <i :class="step.icon" class="text-lg"></i>
           </div>
-          <!-- Label -->
+
           <p
             class="mt-2 text-sm"
             :class="currentStep >= index + 1 ? 'text-[#00c6ae]' : 'text-gray-400'"
@@ -35,7 +34,6 @@
             {{ step.label }}
           </p>
 
-          <!-- Connector -->
           <div
             v-if="index < steps.length - 1"
             class="absolute top-5 left-1/2 w-full h-0.5 z-0"
@@ -44,11 +42,8 @@
         </div>
       </div>
 
-      <!-- Step 1: Select Network -->
-      <div
-        v-if="currentStep === 1"
-        class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700"
-      >
+      <!-- Step 1 -->
+      <div v-if="currentStep === 1" class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700">
         <h3 class="text-lg font-semibold mb-4 flex items-center gap-2 text-[#f4b000]">
           <i class="mdi mdi-wallet-outline text-[#00c6ae] text-2xl"></i>
           Select Payment Network
@@ -91,11 +86,8 @@
         />
       </div>
 
-      <!-- Step 2: Payment Info -->
-      <div
-        v-else-if="currentStep === 2"
-        class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700 text-center"
-      >
+      <!-- Step 2 -->
+      <div v-else-if="currentStep === 2" class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700 text-center">
         <img :src="selected.icon" alt="crypto logo" class="w-14 h-14 mx-auto mb-4" />
         <h3 class="text-xl font-bold text-[#f4b000] mb-3">{{ selected.name }} Payment</h3>
         <p class="text-gray-300 mb-4">
@@ -121,16 +113,11 @@
           />
         </div>
 
-        <p class="text-xs text-gray-400 mt-4">
-          Confirmation takes 3–5 minutes on blockchain.
-        </p>
+        <p class="text-xs text-gray-400 mt-4">Confirmation takes 3–5 minutes on blockchain.</p>
       </div>
 
-      <!-- Step 3: Verification -->
-      <div
-        v-else-if="currentStep === 3"
-        class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700 text-center"
-      >
+      <!-- Step 3 -->
+      <div v-else-if="currentStep === 3" class="bg-[#101e42] rounded-2xl shadow-xl p-6 border border-gray-700 text-center">
         <i class="mdi mdi-shield-check-outline text-[#00c6ae] text-6xl mb-3"></i>
         <h3 class="text-2xl font-bold text-[#f4b000] mb-2">Payment Verification</h3>
         <p class="text-gray-300 mb-4">
@@ -158,6 +145,7 @@ import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import ProgressBar from "primevue/progressbar";
 import { useToast } from "primevue/usetoast";
+import { useAuth } from "@/composables/useAuth";
 
 const toast = useToast();
 const router = useRouter();
@@ -185,23 +173,24 @@ const networks = [
 
 async function createPayment() {
   loading.value = true;
-
   try {
-    // 🟢 ایجاد تراکنش در بک‌اند finalxcard
+    console.log("🟢 Sending payment request...");
     const res = await $fetch("/api/payment", {
       method: "POST",
       body: {
         network: selected.value.name,
         amountUsd: amount.value,
         userId: authUser.value.user.id,
- 
       },
     });
 
-    if (res?.address) {
-      generatedAddress.value = res.address;
+    console.log("✅ Response:", res);
+
+    if (res?.payAddress) {
+      generatedAddress.value = res.payAddress;
       currentStep.value = 2;
     } else {
+      console.error("❌ Invalid backend response:", res);
       throw new Error("Invalid response from server");
     }
   } catch (err) {
@@ -225,11 +214,8 @@ function nextStep() {
 function startProgress() {
   progress.value = 0;
   const timer = setInterval(() => {
-    if (progress.value >= 100) {
-      clearInterval(timer);
-    } else {
-      progress.value += 10;
-    }
+    if (progress.value >= 100) clearInterval(timer);
+    else progress.value += 10;
   }, 500);
 }
 
