@@ -165,10 +165,10 @@ const steps = [
 ];
 
 const networks = [
-  { name: "USDT (BEP20)", icon: "https://cryptologos.cc/logos/tether-usdt-logo.png" },
-  { name: "BTC", icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png" },
-  { name: "ETH (ERC20)", icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png" },
-  { name: "TRON (TRC20)", icon: "https://cryptologos.cc/logos/tron-trx-logo.png" },
+  { name: "MATIC (POLYGON)", icon: "./logos/tether-usdt-logo.png" },
+  { name: "USDT (BSC)", icon: "./logos/bitcoin-btc-logo.png" },
+  { name: "BNB (BSC)", icon: "./logos/ethereum-eth-logo.png" },
+  { name: "USDT (POLYGON)", icon: "./logos/tron-trx-logo.png" },
 ];
 
 async function createPayment() {
