@@ -165,10 +165,10 @@ const steps = [
 ];
 
 const networks = [
-  { name: "MATIC (POLYGON)", icon: "./logos/tether-usdt-logo.png" },
-  { name: "USDT (BSC)", icon: "./logos/bitcoin-btc-logo.png" },
-  { name: "BNB (BSC)", icon: "./logos/ethereum-eth-logo.png" },
-  { name: "USDT (POLYGON)", icon: "./logos/tron-trx-logo.png" },
+  { name: "MATIC (POLYGON)", show: "MATIC", icon: "./logos/tether-usdt-logo.png" },
+  { name: "USDT (BSC)", show: "USDTBSC" , icon: "./logos/bitcoin-btc-logo.png" },
+  { name: "BNB (BSC)", show: "BNBBSC" ,  icon: "./logos/ethereum-eth-logo.png" },
+  { name: "USDT (POLYGON)", show: "USDTMATIC" , icon: "./logos/tron-trx-logo.png" },
 ];
 
 async function createPayment() {
@@ -178,7 +178,7 @@ async function createPayment() {
     const res = await $fetch("/api/payment", {
       method: "POST",
       body: {
-        network: selected.value.name,
+        network: selected.value.show,
         amountUsd: amount.value,
         userId: authUser.value.user.id,
       },
