@@ -42,10 +42,14 @@
             label="Next"
             icon="mdi mdi-arrow-right"
             class="p-button-success glass-btn"
-            :disabled="!selectedWallet"
+            :disabled="!selectedWallet || !walletAllowed"
             @click="nextStep"
           />
         </div>
+
+        <p v-if="!walletAllowed" class="text-red-400 text-sm text-center mt-3">
+          Please set your wallet address in your account settings before withdrawing.
+        </p>
       </div>
     </transition>
 
@@ -152,7 +156,7 @@ import Card from "primevue/card";
 import Button from "primevue/button";
 import Dropdown from "primevue/dropdown";
 import InputNumber from "primevue/inputnumber";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
 import { useAuth } from "@/composables/useAuth";
 
@@ -179,7 +183,8 @@ const method = ref(null);
 const selectedCryptoWallet = ref(null);
 const transactionId = ref("");
 const loading = ref(false);
-const errorMessage = ref(""); // 🔴 متغیر برای نمایش خطا
+const errorMessage = ref("");
+const walletAllowed = ref(false); // 🟢 ولت اجازه برداشت
 
 const nextStep = () => (currentStep.value += 1);
 const prevStep = () => (currentStep.value -= 1);
@@ -189,9 +194,46 @@ const generateTransactionId = () => {
   return `FTN-CASHOUT-${random}`;
 };
 
+// 🟢 بررسی ولت قبل از شروع
+onMounted(async () => {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) {
+      errorMessage.value = "Please login to continue.";
+      return;
+    }
+
+    const user = await $fetch("/api/account/find", {
+      method: "POST",
+      body: { id: userId },
+    });
+
+    if (user.wallet && user.wallet.trim() !== "") {
+      walletAllowed.value = true;
+    } else {
+      walletAllowed.value = false;
+      errorMessage.value = "You must set your wallet address before requesting withdrawal.";
+      toast.add({
+        severity: "warn",
+        summary: "Wallet Required",
+        detail: "Please set your wallet address in your profile before withdrawing.",
+        life: 5000,
+      });
+    }
+  } catch (err) {
+    console.error("❌ Wallet Check Error:", err);
+    walletAllowed.value = false;
+  }
+});
+
 // 🟢 API: ارسال درخواست برداشت
 const completeCashout = async () => {
-  errorMessage.value = ""; // پاک کردن خطا قبل از هر درخواست
+  errorMessage.value = "";
+  if (!walletAllowed.value) {
+    errorMessage.value = "You must set your wallet address before requesting withdrawal.";
+    return;
+  }
+
   if (!amount.value || amount.value < 50) {
     errorMessage.value = "Minimum withdrawal is $50.";
     return;
@@ -205,7 +247,6 @@ const completeCashout = async () => {
       return;
     }
 
-    // 📡 ارسال به API بک‌اند
     await $fetch("/api/transactions/withdraw", {
       method: "POST",
       body: {
