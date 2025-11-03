@@ -88,6 +88,7 @@
               label="Invest Now"
               icon="mdi mdi-wallet-plus-outline"
               class="p-button-sm finalxcard-btn w-full"
+              :disabled="isDisabled(item.name)"
               @click="openInvest(item)"
             />
           </div>
@@ -129,6 +130,7 @@
           label="Invest Now"
           icon="mdi mdi-wallet-plus-outline"
           class="finalxcard-btn"
+          :disabled="isDisabled(selectedBundle?.name)"
           @click="openInvest(selectedBundle)"
         />
       </template>
@@ -168,10 +170,6 @@
             placeholder="Enter amount"
           />
         </div>
-
-   
-
-        
       </div>
 
       <template #footer>
@@ -186,6 +184,7 @@
           icon="mdi mdi-check-circle"
           class="finalxcard-btn"
           :loading="loadingInvest"
+          :disabled="isDisabled(selectedBundle?.name)"
           @click="confirmInvestment"
         />
       </template>
@@ -243,6 +242,8 @@ function openDetails(item) {
 }
 
 function openInvest(item) {
+  if (isDisabled(item.name)) return; // جلوگیری از باز شدن پلن غیرفعال
+
   if (!authUser.value) {
     toast.add({
       severity: "warn",
@@ -258,7 +259,14 @@ function openInvest(item) {
   errorMessage.value = "";
 }
 
+// 🔒 غیرفعال کردن دو پلن خاص
+function isDisabled(name) {
+  return name === "Pro Leader Pack" || name === "VIP Master Pack";
+}
+
 async function confirmInvestment() {
+  if (isDisabled(selectedBundle.value.name)) return;
+
   errorMessage.value = "";
 
   if (!investAmount.value) {
