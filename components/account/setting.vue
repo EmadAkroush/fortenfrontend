@@ -89,6 +89,7 @@
               :placeholder="placeholders.wallet"
               class="input w-full"
             />
+            <span style="color: red;">The wallet address you entered must be USDT (BSC), otherwise your funds will be lost.</span>
           </div>
         </div>
       </div>

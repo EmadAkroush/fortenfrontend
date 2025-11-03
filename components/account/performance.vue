@@ -45,13 +45,13 @@
             <div class="kpi-sub text-xs text-gray-400">Earned from daily profits</div>
           </div>
         </div>
-        <Button
+        <!-- <Button
           label="Transfer to Main Balance"
           icon="mdi mdi-arrow-right-bold"
           class="mt-3 p-button-sm p-button-outlined border-emerald-400 text-emerald-300"
           @click="transferToMain('profit')"
           :loading="loadingTransfer === 'profit'"
-        />
+        /> -->
       </div>
 
       <!-- Referral Profit -->
