@@ -10,7 +10,6 @@
           Auto-compounding active — profits are automatically added to principal every 24 hours.
         </p>
       </div>
-      
 
       <div class="flex gap-3 items-center W-full sm:w-auto">
         <Button
@@ -183,10 +182,20 @@ const donutOptions = {
   plugins: { legend: { position: "bottom", labels: { color: "#cbd5e1" } } },
 };
 
-// ✅ Timer for auto-compound
-const nextCompoundAt = ref(Date.now() + 1000 * 60 * 60 * 5);
+// ✅ Timer for auto-compound (تا ساعت ۱۲ شب)
+const nextCompoundAt = ref(0);
 const nextCompoundCountdown = ref("");
 let countdownTimer = null;
+
+// 🕒 محاسبه زمان تا ساعت 12 شب
+function setNextMidnight() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  nextCompoundAt.value = midnight.getTime();
+}
+
+// 🎯 بروزرسانی شمارش معکوس
 function updateCountdown() {
   const diff = Math.max(0, nextCompoundAt.value - Date.now());
   const h = Math.floor(diff / (1000 * 60 * 60));
@@ -196,9 +205,10 @@ function updateCountdown() {
     .toString()
     .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
+
 onMounted(() => {
   fetchBalances();
-  // fetchProfitHistory();
+  setNextMidnight(); // 🟢 تنظیم زمان تا ساعت 12 شب
   updateCountdown();
   countdownTimer = setInterval(updateCountdown, 1000);
 });
@@ -208,7 +218,6 @@ onBeforeUnmount(() => clearInterval(countdownTimer));
    ✅ API Calls (Backend)
    ====================== */
 
-// 🔹 گرفتن موجودی کاربر از بک‌اند (users/balances)
 async function fetchBalances() {
   try {
     const userId = authUser.value.user.id;
@@ -226,32 +235,6 @@ async function fetchBalances() {
     });
   }
 }
-
-// 🔹 دریافت سابقه رشد سود (اختیاری — در صورت وجود API)
-// async function fetchProfitHistory() {
-//   try {
-//     const userId = localStorage.getItem("userId");
-//     const res = await $fetch("/api/user/profit-history", {
-//       method: "POST",
-//       body: { userId },
-//     });
-//     profitGrowthChartData.value = {
-//       labels: res.map((d) => d.date),
-//       datasets: [
-//         {
-//           label: "Profit Balance ($)",
-//           data: res.map((d) => d.amount),
-//           borderColor: "#10b981",
-//           backgroundColor: "rgba(16,185,129,0.15)",
-//           tension: 0.3,
-//           fill: true,
-//         },
-//       ],
-//     };
-//   } catch (err) {
-//     console.error("Failed to fetch profit history:", err);
-//   }
-// }
 
 /* ==========================
    ✅ Transfer to Main Logic
