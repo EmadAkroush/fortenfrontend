@@ -10,6 +10,7 @@
           Auto-compounding active — profits are automatically added to principal every 24 hours.
         </p>
       </div>
+      
 
       <div class="flex gap-3 items-center W-full sm:w-auto">
         <Button

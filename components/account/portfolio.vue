@@ -18,13 +18,7 @@
 
     <!-- ===== Overview Cards ===== -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-      <div class="summary-card">
-        <i class="mdi mdi-chart-line summary-icon text-emerald-400"></i>
-        <div>
-          <p class="summary-label">Expected Returns</p>
-          <h3 class="summary-value">${{ formatNumber(expectedReturns) }}</h3>
-        </div>
-      </div>
+
 
       <div class="summary-card">
         <i class="mdi mdi-cash-multiple summary-icon text-cyan-400"></i>
