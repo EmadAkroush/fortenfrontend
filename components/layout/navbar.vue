@@ -167,7 +167,7 @@ const logout = async () => {
 const items = ref([
   { label: 'Home', route: '/', icon: 'mdi mdi-home-outline' },
   { label: 'Packages', route: '/packages', icon: 'mdi mdi-package-variant-closed' },
-  { label: 'Add Funds', route: '/addfunds', icon: 'mdi mdi-wallet-plus-outline' },
+
   { label: 'About Us', route: '/abouteus', icon: 'mdi mdi-information-outline' },
   { label: 'Support', route: '/support', icon: 'mdi mdi-lifebuoy' },
 ])

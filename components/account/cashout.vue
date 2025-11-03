@@ -60,7 +60,7 @@
           locale="en-US"
           class="w-full"
         />
-        <p class="text-xs text-gray-400 mt-2">Min withdrawal: $50 | Fee: 2%</p>
+        <p class="text-xs text-gray-400 mt-2">Min withdrawal: $30 | Fee: 10%</p>
         <div class="flex justify-between mt-8">
           <Button
             label="Back"
@@ -72,7 +72,7 @@
             label="Next"
             icon="mdi mdi-arrow-right"
             class="p-button-success glass-btn"
-            :disabled="!amount || amount < 50"
+            :disabled="!amount || amount < 30"
             @click="nextStep"
           />
         </div>

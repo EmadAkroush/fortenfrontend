@@ -28,7 +28,6 @@
         <ul class="space-y-2">
           <li><nuxt-link to="/" class="footer-link"><i class="mdi mdi-home-outline mr-2 text-emerald-400"></i>Home</nuxt-link></li>
           <li><nuxt-link to="/packages" class="footer-link"><i class="mdi mdi-package-variant-closed mr-2 text-emerald-400"></i>Packages</nuxt-link></li>
-          <li><nuxt-link to="/addfunds" class="footer-link"><i class="mdi mdi-wallet-plus-outline mr-2 text-emerald-400"></i>Add Funds</nuxt-link></li>
           <li><nuxt-link to="/abouteus" class="footer-link"><i class="mdi mdi-information-outline mr-2 text-emerald-400"></i>About Us</nuxt-link></li>
           <li><nuxt-link to="/support" class="footer-link"><i class="mdi mdi-lifebuoy mr-2 text-emerald-400"></i>Support</nuxt-link></li>
         </ul>
