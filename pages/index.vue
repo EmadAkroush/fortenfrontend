@@ -19,7 +19,7 @@
           label="Start Investing"
           icon="mdi mdi-arrow-right"
           class="p-button-rounded p-button-lg finalxcard-btn shadow-lg hover:shadow-[0_0_25px_rgba(244,176,0,0.5)]"
-          @click="router.push('/signup')"
+          @click="router.push('/auth')"
         />
       </div>
 
