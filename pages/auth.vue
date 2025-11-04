@@ -99,6 +99,14 @@
           placeholder="Confirm password"
           class="auth-input"
         />
+
+        <!-- 🟢 NEW: Optional Leader Code -->
+        <InputText
+          v-model="registerData.referrerCode"
+          placeholder="Leader Code (optional)"
+          class="auth-input"
+        />
+
         <Button
           label="Create Account"
           icon="pi pi-user-plus"
@@ -148,11 +156,11 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 
-
-
+const route = useRoute()
 const activeTab = ref('login')
 const loading = ref(false)
 const errors = ref([])
@@ -173,6 +181,14 @@ const registerData = reactive({
   email: '',
   password: '',
   confirmPassword: '',
+  referrerCode: '', // 🟢 added optional leader code
+})
+
+// 🟢 Read ref query param (like ?ref=FO-991189)
+onMounted(() => {
+  if (route.query.ref) {
+    registerData.referrerCode = route.query.ref
+  }
 })
 
 // === Validators ===
@@ -196,18 +212,16 @@ async function handleLogin() {
       detail: 'You have signed in successfully.',
       life: 3000,
     })
-    navigateTo('/')       // 🔹 هدایت به صفحه اصلی
-    setTimeout(() => {    // 🔹 بعد از هدایت، سایت رفرش می‌شود
+    navigateTo('/')
+    setTimeout(() => {
       window.location.reload()
     }, 500)
   } catch (err) {
     errors.value = [err?.data?.message || 'Login failed.']
-    console.log('err', err)
   } finally {
     loading.value = false
   }
 }
-
 
 // === REGISTER ===
 async function handleRegister() {
@@ -233,7 +247,7 @@ async function handleRegister() {
       detail: 'Check your email for a verification link or code.',
       life: 5000,
     })
-    verifyModal.value = true // 👈 باز کردن مودال تأیید ایمیل
+    verifyModal.value = true
   } catch (err) {
     errors.value = [err?.data?.message || 'Registration failed.']
   } finally {
@@ -365,7 +379,6 @@ async function resendEmail() {
   border-radius: 8px;
 }
 
-/* Modal */
 :deep(.p-dialog) {
   background: rgba(20, 30, 50, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
