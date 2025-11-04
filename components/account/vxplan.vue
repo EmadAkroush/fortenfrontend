@@ -32,17 +32,18 @@
 
     <!-- KPI Cards -->
     <div class="kpi-grid grid gap-4 mb-6">
+      <!-- ✅ Referral Code Card -->
       <div
         class="kpi-card flex flex-col bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-md shadow-[0_0_20px_rgba(0,255,190,0.05)] w-full max-w-sm"
       >
         <div class="flex items-center gap-3 mb-3">
-          <i class="mdi mdi-chart-box text-emerald-300 text-3xl"></i>
+          <i class="mdi mdi-account-key text-emerald-300 text-3xl"></i>
           <div>
-            <div class="text-sm text-gray-400">Account</div>
+            <div class="text-sm text-gray-400">Referral Code</div>
             <div class="text-lg font-semibold text-emerald-200">
               {{ vxCode || "Loading..." }}
             </div>
-            <div class="text-xs text-gray-500">Network Account</div>
+            <div class="text-xs text-gray-500">Your personal invite code</div>
           </div>
         </div>
 
@@ -52,6 +53,32 @@
         >
           <i class="mdi mdi-content-copy text-base"></i>
           Copy Referral Code
+        </button>
+      </div>
+
+      <!-- ✅ Referral Link Card -->
+      <div
+        class="kpi-card flex flex-col bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-md shadow-[0_0_20px_rgba(0,255,190,0.05)] w-full max-w-sm"
+      >
+        <div class="flex items-center gap-3 mb-3">
+          <i class="mdi mdi-link-variant text-emerald-300 text-3xl"></i>
+          <div>
+            <div class="text-sm text-gray-400">Referral Link</div>
+            <div class="text-xs text-emerald-200 break-all">
+              https://finalxcard.com/register?ref={{ vxCode }}
+            </div>
+            <div class="text-xs text-gray-500 mt-1">
+              Invite new users directly
+            </div>
+          </div>
+        </div>
+
+        <button
+          @click="copyReferralLink"
+          class="w-full flex items-center justify-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-medium px-3 py-2 rounded-lg text-sm transition active:scale-95"
+        >
+          <i class="mdi mdi-link text-base"></i>
+          Copy Referral Link
         </button>
       </div>
 
@@ -126,8 +153,14 @@
       <div v-if="selectedNode" class="space-y-4">
         <p><strong>Email:</strong> {{ selectedNode.data.email }}</p>
         <p><strong>VX Code:</strong> {{ selectedNode.data.vxCode }}</p>
-        <p><strong>Main Balance:</strong> ${{ selectedNode.data.balances?.main }}</p>
-        <p><strong>Profit Balance:</strong> ${{ selectedNode.data.balances?.profit }}</p>
+        <p>
+          <strong>Main Balance:</strong> ${{ selectedNode.data.balances?.main }}
+        </p>
+        <p>
+          <strong>Profit Balance:</strong> ${{
+            selectedNode.data.balances?.profit
+          }}
+        </p>
       </div>
     </Dialog>
 
@@ -161,8 +194,8 @@ const selectedNode = ref(null);
 // 📊 Load referral stats + tree from backend
 onMounted(async () => {
   try {
-     const userId = authUser.value?.user?.id;
-     const [stats, tree] = await Promise.all([
+    const userId = authUser.value?.user?.id;
+    const [stats, tree] = await Promise.all([
       $fetch("/api/referrals/stats", {
         method: "POST",
         body: { userId },
@@ -210,6 +243,17 @@ onMounted(async () => {
   }
 });
 
+function copyReferralLink() {
+  const link = `https://finalxcard.com/auth?ref=${vxCode.value}`;
+  navigator.clipboard.writeText(link);
+  toast.add({
+    severity: "success",
+    summary: "Copied!",
+    detail: `Referral link copied:\n${link}`,
+    life: 4000,
+  });
+}
+
 // 📎 Helpers
 function formatNumber(v) {
   return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -243,11 +287,17 @@ const panStart = ref({ x: 0, y: 0 });
 
 function startPan(e) {
   isPanning.value = true;
-  panStart.value = { x: e.clientX - translate.value.x, y: e.clientY - translate.value.y };
+  panStart.value = {
+    x: e.clientX - translate.value.x,
+    y: e.clientY - translate.value.y,
+  };
 }
 function doPan(e) {
   if (!isPanning.value) return;
-  translate.value = { x: e.clientX - panStart.value.x, y: e.clientY - panStart.value.y };
+  translate.value = {
+    x: e.clientX - panStart.value.x,
+    y: e.clientY - panStart.value.y,
+  };
 }
 function endPan() {
   isPanning.value = false;
