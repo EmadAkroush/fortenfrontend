@@ -68,7 +68,7 @@
             <div class="flex gap-3 items-center">
               <InputText
                 v-model="profile.leaderCode"
-                placeholder="Enter Leader Code (e.g. VX12345)"
+                placeholder="Enter Leader Code (e.g. FO12345)"
                 class="input flex-1"
               />
               <Button
