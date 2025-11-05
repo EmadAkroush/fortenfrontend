@@ -51,10 +51,10 @@
     <!-- Bottom Bar -->
     <div class="relative border-t border-white/10 py-4 text-center text-sm text-gray-400 flex flex-col sm:flex-row justify-between items-center max-w-7xl mx-auto px-6 z-10">
       <p>© {{ currentYear }} finalxcard. All Rights Reserved.</p>
-      <div class="flex gap-5 mt-2 sm:mt-0">
+      <!-- <div class="flex gap-5 mt-2 sm:mt-0">
         <a href="#" class="hover:text-emerald-300 transition">Privacy Policy</a>
         <a href="#" class="hover:text-emerald-300 transition">Terms</a>
-      </div>
+      </div> -->
     </div>
 
     <!-- Bottom Animated Line -->

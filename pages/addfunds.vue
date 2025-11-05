@@ -165,10 +165,10 @@ const steps = [
 ];
 
 const networks = [
-  { name: "MATIC (POLYGON)", show: "MATIC", icon: "./logos/tether-usdt-logo.png" },
-  { name: "USDT (BSC)", show: "USDTBSC" , icon: "./logos/bitcoin-btc-logo.png" },
-  { name: "BNB (BSC)", show: "BNBBSC" ,  icon: "./logos/ethereum-eth-logo.png" },
-  { name: "USDT (POLYGON)", show: "USDTMATIC" , icon: "./logos/tron-trx-logo.png" },
+  { name: "MATIC (POLYGON)", show: "MATIC", icon: "/payment/polygon-matic-logo.png" },
+  { name: "USDT (BSC)", show: "USDTBSC" , icon: "/payment/tether-usdt-logo.png" },
+  { name: "BNB (BSC)", show: "BNBBSC" ,  icon: "/payment/binance-coin-bnb-logo.png" },
+  { name: "USDT (POLYGON)", show: "USDTMATIC" , icon: "/payment/tether-usdt-logo.png" },
 ];
 
 async function createPayment() {
@@ -245,6 +245,8 @@ function goToDashboard() {
 .finalxcard-btn:hover {
   transform: scale(1.05);
   filter: brightness(1.1);
+  background-image: url(/public/payment/polygon-matic-logo.png);
+
 }
 .finalxcard-progress .p-progressbar-value {
   background: linear-gradient(90deg, #00c6ae, #f4b000);

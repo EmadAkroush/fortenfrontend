@@ -19,8 +19,8 @@
     </div>
 
     <!-- MAIN CONTENT -->
-    <div class="max-w-7xl mx-auto py-20 px-6 sm:px-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
-      <!-- Form Section -->
+    <!-- <div class="max-w-7xl mx-auto py-20 px-6 sm:px-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
+   
       <div
         class="lg:col-span-2 glass-card backdrop-blur-lg bg-white/10 border border-white/10 shadow-xl rounded-3xl p-8"
       >
@@ -70,43 +70,18 @@
         </div>
       </div>
 
-      <!-- Contact Info -->
+
       <div
         class="bg-gradient-to-b from-[#041a25] via-[#052e36] to-[#02131d] border border-[#0e3d45] shadow-lg rounded-3xl p-8 flex flex-col justify-between"
       >
         <div>
           <h3 class="text-xl font-bold mb-4 text-[#f4b000]">Contact Us Directly</h3>
-          <ul class="space-y-4 text-gray-300">
-            <li class="flex items-center gap-3">
-              <i class="mdi mdi-email-outline text-2xl text-[#00d1b2]"></i>
-              <span>support@finalxcard.io</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <i class="mdi mdi-phone text-2xl text-[#00d1b2]"></i>
-              <span>+1 (800) 555-2025</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <i class="mdi mdi-whatsapp text-2xl text-[#00d1b2]"></i>
-              <span>+44 7894 654321</span>
-            </li>
-            <li class="flex items-center gap-3">
-              <i class="mdi mdi-map-marker text-2xl text-[#00d1b2]"></i>
-              <span>London HQ – 123 Global Finance Avenue</span>
-            </li>
-          </ul>
+    
         </div>
 
-        <div class="mt-8">
-          <h4 class="font-semibold mb-3 text-[#f4b000]">Follow Us</h4>
-          <div class="flex gap-4 text-2xl">
-            <a href="#" class="hover:text-[#00d1b2]"><i class="mdi mdi-facebook"></i></a>
-            <a href="#" class="hover:text-[#00d1b2]"><i class="mdi mdi-twitter"></i></a>
-            <a href="#" class="hover:text-[#00d1b2]"><i class="mdi mdi-telegram"></i></a>
-            <a href="#" class="hover:text-[#00d1b2]"><i class="mdi mdi-linkedin"></i></a>
-          </div>
-        </div>
+     
       </div>
-    </div>
+    </div> -->
 
     <!-- FAQ -->
     <div class="faq-section bg-[#0a1829] py-20 px-6 sm:px-12">

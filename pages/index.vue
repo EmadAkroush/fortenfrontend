@@ -69,6 +69,7 @@
               label="Invest Now"
               icon="mdi mdi-arrow-right-bold"
               class="p-button-rounded finalxcard-btn w-full shadow-md hover:shadow-[0_0_20px_rgba(0,198,174,0.4)]"
+              @click="router.push(p.router)"
             />
           </div>
         </div>
@@ -99,7 +100,7 @@
             All transactions are processed through USDT (BEP20) for instant deposits and withdrawals.
             finalxcard provides full wallet transparency and audited smart systems for user protection.
           </p>
-          <Button label="Learn More" icon="mdi mdi-shield-check" class="finalxcard-btn mt-4" />
+          <Button   @click="router.push('/abouteus')" label="Learn More" icon="mdi mdi-shield-check" class="finalxcard-btn mt-4"  />
         </div>
         <div class="flex justify-center">
           <img src="/public/ChatGPT Image Oct 12, 2025, 05_53_45 AM.png" alt="Security" class="w-80 opacity-90 animate-float" />
@@ -117,7 +118,7 @@
         label="Create Your Account"
         icon="mdi mdi-rocket-launch-outline"
         class="p-button-rounded p-button-lg finalxcard-btn shadow-lg hover:shadow-[0_0_25px_rgba(0,198,174,0.4)]"
-        @click="router.push('/signup')"
+        @click="router.push('/auth')"
       />
     </section>
   </div>
@@ -138,9 +139,9 @@ const features = [
 ];
 
 const packages = [
-  { name: "Start Pack", range: "$50 - $199", rate: "1.5% / day", condition: "No referrals required" },
-  { name: "Active Pack", range: "$200 - $499", rate: "2% / day", condition: "3 active referrals for boost" },
-  { name: "Growth Pack", range: "$500 - $1499", rate: "2.5% / day", condition: "5 active referrals for boost" },
+  { name: "Start Pack", range: "$50 - $199", rate: "1.5% / day", condition: "No referrals required" ,  router: "/packages"},
+  { name: "Active Pack", range: "$200 - $499", rate: "2% / day", condition: "3 active referrals for boost" ,  router: "/packages" },
+  { name: "Growth Pack", range: "$500 - $1499", rate: "2.5% / day", condition: "5 active referrals for boost" , router: "/packages" },
 ];
 </script>
 

@@ -42,13 +42,16 @@
             class="timeline-item flex flex-col sm:flex-row items-center mb-16 relative"
           >
             <!-- Circle with Icon -->
-            <div class="circle absolute left-1/2 sm:left-1 transform -translate-x-1/2 sm:translate-x-0 sm:relative bg-[#00d1b2] w-14 h-14 rounded-full shadow-lg flex items-center justify-center border-4 border-[#0d2345]">
+            <div
+              class="circle bg-[#00d1b2] w-14 h-14 rounded-full shadow-lg flex items-center justify-center border-4 border-[#0d2345]
+              sm:relative sm:left-0 absolute left-1/2 transform -translate-x-1/2 sm:translate-x-0 top-[-30px] sm:top-0"
+            >
               <i :class="milestone.icon" class="text-2xl text-[#0d2345]"></i>
             </div>
 
             <!-- Content -->
             <div
-              class="content bg-[#0d2345] border border-[#0e3642] rounded-2xl p-6 sm:ml-12 sm:w-2/3 hover:shadow-xl hover:shadow-[#00d1b2]/20 transition-all duration-300"
+              class="content bg-[#0d2345] border border-[#0e3642] rounded-2xl p-6 sm:ml-12 sm:w-2/3 mt-10 sm:mt-0 hover:shadow-xl hover:shadow-[#00d1b2]/20 transition-all duration-300"
             >
               <h3 class="text-xl font-semibold text-[#f4b000] mb-2">{{ milestone.title }}</h3>
               <p class="text-gray-300 text-sm leading-relaxed">{{ milestone.text }}</p>
@@ -79,7 +82,7 @@
       <p class="text-gray-800 mb-6 max-w-2xl mx-auto">
         Start growing your wealth with daily compounding and total transparency — powered by finalxcard’s smart finance system.
       </p>
-      <nuxt-link to="/addfunds">
+      <nuxt-link to="/auth">
         <Button
           label="Start Now"
           icon="mdi mdi-arrow-right"
@@ -115,6 +118,7 @@ const milestones = [
     text: "finalxcard continues to innovate with AI-powered tools, smart contracts, and a strong referral system that rewards active investors.",
   },
 ];
+
 const values = [
   {
     icon: "mdi mdi-shield-check-outline",
