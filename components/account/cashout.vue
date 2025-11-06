@@ -94,8 +94,8 @@
             :class="{ active: method === 'crypto' }"
             @click="method = 'crypto'"
           >
-            <i class="mdi mdi-bitcoin text-yellow-400 text-2xl"></i>
-            <span>Crypto (USDT / BTC)</span>
+            <img src="../../public/payment/tether-usdt-logo.png" alt="" style="width: 20x; height: 20px;">
+            <span>Crypto USDT (BSC)</span>
           </div>
         </div>
 
@@ -234,8 +234,8 @@ const completeCashout = async () => {
     return;
   }
 
-  if (!amount.value || amount.value < 50) {
-    errorMessage.value = "Minimum withdrawal is $50.";
+  if (!amount.value || amount.value < 30) {
+    errorMessage.value = "Minimum withdrawal is $30.";
     return;
   }
 
