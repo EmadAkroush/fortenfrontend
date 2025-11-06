@@ -141,6 +141,89 @@
         </OrganizationChart>
       </div>
     </div>
+   
+   <!-- ===== Referral & Activity Section ===== -->
+    <div class="grid  gap-6 mt-6">
+      <div class="glass-card col-span-2">
+        <h3 class="text-lg font-semibold text-gray-100 mb-3">
+          Referral & Network
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div class="ref-stat">
+            <div class="ref-num">{{ referrals.level1 }}</div>
+            <div class="ref-label">Direct (L1)</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-num">{{ referrals.level2 }}</div>
+            <div class="ref-label">Level 2</div>
+          </div>
+          <div class="ref-stat">
+            <div class="ref-num">{{ referrals.level3 }}</div>
+            <div class="ref-label">Level 3</div>
+          </div>
+        </div>
+
+        <div class="mb-3 text-sm text-gray-300">
+          <div>Referral commissions: L1 15% / L2 10% / L3 5%</div>
+        
+        </div>
+
+     
+
+        <!-- ===== New Sub-Referrals Earnings Section ===== -->
+
+        <div
+          class="mt-6 p-4 rounded-lg bg-white/5 border border-emerald-400/20"
+        >
+          <h4 class="text-emerald-300 font-semibold mb-3">
+            Referral Investment Summary
+          </h4>
+          <div class="text-sm text-gray-300 space-y-2">
+            <div>
+              Level 1 Total Investment:
+              <span class="font-semibold text-gray-100"
+                >${{ formatNumber(referralInvestments.level1) }}</span
+              >
+            </div>
+            <div>
+              Level 1 Bonus Received:
+              <span class="font-semibold text-emerald-300"
+                >${{ formatNumber(referralEarnings.level1) }}</span
+              >
+            </div>
+            <div>
+              Level 2 Total Investment:
+              <span class="font-semibold text-gray-100"
+                >${{ formatNumber(referralInvestments.level2) }}</span
+              >
+            </div>
+            <div>
+              Level 2 Bonus Received:
+              <span class="font-semibold text-emerald-300"
+                >${{ formatNumber(referralEarnings.level2) }}</span
+              >
+            </div>
+            <div>
+              Level 3 Total Investment:
+              <span class="font-semibold text-gray-100"
+                >${{ formatNumber(referralInvestments.level3) }}</span
+              >
+            </div>
+            <div>
+              Level 3 Bonus Received:
+              <span class="font-semibold text-emerald-300"
+                >${{ formatNumber(referralEarnings.level3) }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+
+   
 
     <!-- Node Details Dialog -->
     <Dialog
@@ -343,6 +426,81 @@ function handleTouchEnd() {
   touchDistance = null;
   isPanning.value = false;
 }
+
+// ==== Referral Stats & Earnings ====
+const referrals = ref({
+  level1: 0,
+  level2: 0,
+  level3: 0,
+});
+
+const referralEarnings = ref({
+  level1: 0,
+  level2: 0,
+  level3: 0,
+});
+
+const referralInvestments = ref({
+  level1: 0,
+  level2: 0,
+  level3: 0,
+});
+
+const referralProgress = ref(0);
+const referralLink = ref("");
+
+// 🧠 Load referral data from backend
+async function loadReferralData() {
+  try {
+    const userId = authUser.value?.user?.id;
+    if (!userId) return;
+
+    // آمار شبکه (تعداد اعضا)
+    const stats = await $fetch("/api/referrals/stats", {
+      method: "POST",
+      body: { userId },
+    });
+
+    referrals.value = {
+      level1: stats.level1Count || 0,
+      level2: stats.level2Count || 0,
+      level3: stats.level3Count || 0,
+    };
+    referralProgress.value = stats.progress || 0;
+  
+
+    // پاداش‌ها و سرمایه‌گذاری‌های لِول‌ها
+    const earnings = await $fetch("/api/referrals/earnings", {
+      method: "POST",
+      body: { userId },
+    });
+
+    referralInvestments.value = {
+      level1: earnings.level1Investment || 0,
+      level2: earnings.level2Investment || 0,
+      level3: earnings.level3Investment || 0,
+    };
+
+    referralEarnings.value = {
+      level1: earnings.level1Bonus || 0,
+      level2: earnings.level2Bonus || 0,
+      level3: earnings.level3Bonus || 0,
+    };
+  } catch (err) {
+    console.error("Referral load error:", err);
+    toast.add({
+      severity: "error",
+      summary: "Referral data failed",
+      detail: err?.data?.message || "Could not load referral stats.",
+      life: 4000,
+    });
+  }
+}
+
+onMounted(() => {
+  loadReferralData();
+});
+
 </script>
 <style scoped>
 /* finalxcard dark / neon theme */
