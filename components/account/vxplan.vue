@@ -186,36 +186,21 @@
                 >${{ formatNumber(referralInvestments.level1) }}</span
               >
             </div>
-            <div>
-              Level 1 Bonus Received:
-              <span class="font-semibold text-emerald-300"
-                >${{ formatNumber(referralEarnings.level1) }}</span
-              >
-            </div>
+       
             <div>
               Level 2 Total Investment:
               <span class="font-semibold text-gray-100"
                 >${{ formatNumber(referralInvestments.level2) }}</span
               >
             </div>
-            <div>
-              Level 2 Bonus Received:
-              <span class="font-semibold text-emerald-300"
-                >${{ formatNumber(referralEarnings.level2) }}</span
-              >
-            </div>
+          
             <div>
               Level 3 Total Investment:
               <span class="font-semibold text-gray-100"
                 >${{ formatNumber(referralInvestments.level3) }}</span
               >
             </div>
-            <div>
-              Level 3 Bonus Received:
-              <span class="font-semibold text-emerald-300"
-                >${{ formatNumber(referralEarnings.level3) }}</span
-              >
-            </div>
+          
           </div>
         </div>
       </div>
@@ -456,7 +441,7 @@ async function loadReferralData() {
     if (!userId) return;
 
     // آمار شبکه (تعداد اعضا)
-    const stats = await $fetch("/api/referrals/stats", {
+    const stats = await $fetch("/api/referrals/statscount", {
       method: "POST",
       body: { userId },
     });
