@@ -64,7 +64,7 @@
 
           <!-- 🟢 Leader Code -->
           <div class="md:col-span-2">
-            <label class="label">Leader Code</label>
+            <label class="label">Leader Code <span style="color: red;"> (notice just past it) </span> </label>
             <div class="flex gap-3 items-center">
               <InputText
                 v-model="profile.leaderCode"
@@ -84,7 +84,7 @@
 
           <!-- Wallet -->
           <div class="md:col-span-2">
-            <label class="label">Wallet Address</label>
+            <label class="label">Wallet Address <span style="color: red;"> (notice just past it) </span>  </label>
             <InputText
               v-model="profile.wallet"
               :placeholder="placeholders.wallet"
