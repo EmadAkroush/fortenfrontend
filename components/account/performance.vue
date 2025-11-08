@@ -98,8 +98,8 @@
           <i class="mdi mdi-timer-sand kpi-icon bg-gradient-yellow"></i>
         </div>
         <div>
-          <div class="kpi-label">Next Auto-Compound</div>
-          <div class="kpi-value">{{ nextCompoundCountdown }}</div>
+          <div class="kpi-label"> Auto-Compound</div>
+          <div class="kpi-value">Your profit is calculated every 24 hours. </div>
           <div class="kpi-sub text-xs text-gray-400">
             Profit will be auto-added to principal
           </div>
@@ -182,37 +182,8 @@ const donutOptions = {
   plugins: { legend: { position: "bottom", labels: { color: "#cbd5e1" } } },
 };
 
-// ✅ Timer for auto-compound (تا ساعت ۱۲ شب)
-const nextCompoundAt = ref(0);
-const nextCompoundCountdown = ref("");
-let countdownTimer = null;
 
-// 🕒 محاسبه زمان تا ساعت 12 شب
-function setNextMidnight() {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  nextCompoundAt.value = midnight.getTime();
-}
 
-// 🎯 بروزرسانی شمارش معکوس
-function updateCountdown() {
-  const diff = Math.max(0, nextCompoundAt.value - Date.now());
-  const h = Math.floor(diff / (1000 * 60 * 60));
-  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const s = Math.floor((diff % (1000 * 60)) / 1000);
-  nextCompoundCountdown.value = `${h.toString().padStart(2, "0")}:${m
-    .toString()
-    .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-}
-
-onMounted(() => {
-  fetchBalances();
-  setNextMidnight(); // 🟢 تنظیم زمان تا ساعت 12 شب
-  updateCountdown();
-  countdownTimer = setInterval(updateCountdown, 1000);
-});
-onBeforeUnmount(() => clearInterval(countdownTimer));
 
 /* ======================
    ✅ API Calls (Backend)
