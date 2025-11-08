@@ -133,7 +133,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed, watch } from "vue";
 import Chart from "primevue/chart";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
@@ -185,18 +185,22 @@ const donutOptions = {
 
 
 
+
 /* ======================
    ✅ API Calls (Backend)
    ====================== */
 
 async function fetchBalances() {
   try {
-    const userId = authUser.value.user.id;
+    const userId = authUser.value?.user?.id;
+    if (!userId) return;
     const res = await $fetch("/api/balances", {
       method: "POST",
       body: { userId },
     });
     balances.value = res;
+   
+    
   } catch (error) {
     toast.add({
       severity: "error",
@@ -255,6 +259,24 @@ function formatNumber(v) {
 function goToAddFunds() {
   navigateTo("/addfunds");
 }
+
+/* ======================
+   ✅ Ensure balances are fetched
+   - Try fetch on mount if authUser is ready
+   - Watch authUser and fetch once user becomes available
+   ====================== */
+onMounted(() => {
+  if (authUser?.value?.user?.id) {
+    fetchBalances();
+  }
+});
+
+watch(
+  () => authUser.value,
+  (newVal) => {
+    if (newVal?.user?.id) fetchBalances();
+  }
+);
 </script>
 
 
