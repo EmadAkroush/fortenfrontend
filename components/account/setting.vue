@@ -68,6 +68,7 @@
             <div class="flex gap-3 items-center">
               <InputText
                 v-model="profile.leaderCode"
+                :readonly="isLeaderCodeReadOnly"
                 placeholder="Enter Leader Code (e.g. FO12345)"
                 class="input flex-1"
               />
@@ -87,6 +88,7 @@
             <InputText
               v-model="profile.wallet"
               :placeholder="placeholders.wallet"
+              :readonly="isWalletReadOnly"
               class="input w-full"
             />
             <span style="color: red;">The wallet address you entered must be USDT (BSC), otherwise your funds will be lost.</span>
@@ -108,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted , computed } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
@@ -116,6 +118,12 @@ import { useAuth } from "@/composables/useAuth";
 
 const toast = useToast();
 const { authUser } = useAuth();
+
+// Computed properties to check if fields should be read-only
+const isLeaderCodeReadOnly = computed(() => !!profile.value.leaderCode);
+const isWalletReadOnly = computed(() => !!profile.value.wallet);
+
+
 
 const loadingLeader = ref(false);
 const loadingSave = ref(false);
