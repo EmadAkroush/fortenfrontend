@@ -86,7 +86,7 @@
         <i class="mdi mdi-wallet-outline kpi-icon"></i>
         <div>
           <div class="kpi-title">Total Volume</div>
-          <div class="kpi-value">${{ formatNumber(totalInvested) }}</div>
+          <div class="kpi-value">${{ referralInvestments.level1 + referralInvestments.level2 + referralInvestments.level3 }}</div>
           <div class="kpi-sub">All team deposits</div>
         </div>
       </div>
@@ -94,8 +94,8 @@
       <div class="kpi-card">
         <i class="mdi mdi-account-group-outline kpi-icon"></i>
         <div>
-          <div class="kpi-title">Active Members</div>
-          <div class="kpi-value">{{ totalReferrals }}</div>
+          <div class="kpi-title">All Members</div>
+          <div class="kpi-value">{{ referrals.level1 + referrals.level2 + referrals.level3}}</div>
           <div class="kpi-sub">Across all levels</div>
         </div>
       </div>
