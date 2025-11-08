@@ -466,11 +466,7 @@ async function loadReferralData() {
       level3: earnings.level3Investment || 0,
     };
 
-    referralEarnings.value = {
-      level1: earnings.level1Bonus || 0,
-      level2: earnings.level2Bonus || 0,
-      level3: earnings.level3Bonus || 0,
-    };
+
   } catch (err) {
     console.error("Referral load error:", err);
     toast.add({
