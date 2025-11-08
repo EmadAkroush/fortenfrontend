@@ -92,12 +92,14 @@
           class="p-button-warning compact-btn"
           icon="mdi mdi-arrow-up-bold"
           label="Upgrade"
+          :disabled="activePack.status === 'canceled'"
           @click="openUpgradeDialog"
         />
         <Button
           class="p-button-danger compact-btn"
           icon="mdi mdi-cancel"
           label="Cancel"
+          :disabled="activePack.status === 'canceled'"
           @click="openCancelDialog"
         />
       </div>
@@ -290,6 +292,7 @@ async function confirmCancel() {
       life: 3000,
     });
     showCancelDialog.value = false;
+     location.reload(); // Reload the page
   } catch (error) {
     toast.add({
       severity: "error",
