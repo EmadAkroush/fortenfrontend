@@ -7,7 +7,9 @@
 <style>
 html {
   direction: ltr;
-  font-family: 'Roboto' !important;
+  font-family: "Roboto", sans-serif !important;
+  font-feature-settings: "lnum";
+  font-variant-numeric: lining-nums;
   background: radial-gradient(circle at top right, #0a1a1a 0%, #050b14 100%);
   color-scheme: dark;
   scroll-behavior: smooth;
@@ -37,7 +39,9 @@ html {
 
 /* ---------- BODY STYLE ---------- */
 body {
-  font-family: 'Roboto' !important;
+  font-family: "Roboto", sans-serif !important;
+  font-feature-settings: "lnum";
+  font-variant-numeric: lining-nums;
   font-weight: 400;
   color: #e4f8ee;
   background: linear-gradient(180deg, #051014 0%, #071a1a 100%);
@@ -53,8 +57,8 @@ body {
 
 /* ---------- FONT FACE CUSTOM ---------- */
 @font-face {
-  font-family: 'Roboto';
-  src: url('./public/font/static/Roboto-Black.ttf') format('truetype');
+  font-family: "Roboto";
+  src: url("./public/font/static/Roboto-Black.ttf") format("truetype");
   font-display: swap;
 }
 
@@ -73,8 +77,6 @@ a:hover {
   background: rgba(16, 185, 129, 0.4);
   color: #fff;
 }
-
-
 
 /* ---------- SMOOTH HOVER FX FOR LAYOUTS ---------- */
 .page-enter-active,
