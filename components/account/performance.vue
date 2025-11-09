@@ -159,12 +159,39 @@ const totalBalance = computed(() =>
 // ✅ Chart states
 const profitGrowthChartData = ref({ labels: [], datasets: [] });
 const profitGrowthChartOptions = {
-  plugins: { legend: { display: false } },
-  scales: {
-    x: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(255,255,255,0.05)" } },
-    y: { ticks: { color: "#cbd5e1" }, grid: { color: "rgba(255,255,255,0.05)" } },
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          const value = context.parsed.y;
+          return toEnglishDigits(value.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        }
+      }
+    }
   },
+  scales: {
+    x: {
+      ticks: {
+        color: "#cbd5e1",
+        callback: function (val) {
+          return toEnglishDigits(this.getLabelForValue(val));
+        }
+      },
+      grid: { color: "rgba(255,255,255,0.05)" }
+    },
+    y: {
+      ticks: {
+        color: "#cbd5e1",
+        callback: function (val) {
+          return toEnglishDigits(val.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        }
+      },
+      grid: { color: "rgba(255,255,255,0.05)" }
+    }
+  }
 };
+
 const balanceDistributionData = computed(() => ({
   labels: ["Profit", "Referral", "Bonus"],
   datasets: [
@@ -253,7 +280,9 @@ async function transferToMain(type) {
 /* ======================
    ✅ Utils
    ====================== */
-
+function toEnglishDigits(str) {
+  return str.toString().replace(/[۰-۹]/g, d => String.fromCharCode(d.charCodeAt(0) - 1728));
+}
 
 function formatNumber(v) {
   const english = Number(v)
