@@ -7,15 +7,14 @@ export default defineNuxtConfig({
     "@/assets/styles/tailwind.css",
     "@/assets/styles/base.css",
     "@mdi/font/css/materialdesignicons.min.css",
-    'primevue/resources/primevue.min.css',
-    'primevue/resources/themes/saga-blue/theme.css'
+    "primevue/resources/primevue.min.css",
+    "primevue/resources/themes/saga-blue/theme.css",
   ],
 
   build: {
-  transpile: ['primevue'],
-},
+    transpile: ["primevue"],
+  },
 
-  
   primevue: {
     options: { theme: "none" },
   },
@@ -29,6 +28,7 @@ export default defineNuxtConfig({
       title: "finalxcard", // default fallback title
       htmlAttrs: {
         lang: "en",
+        dir: "ltr",
       },
       link: [
         {

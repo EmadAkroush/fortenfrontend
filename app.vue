@@ -17,6 +17,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ---------- SOLUTION FOR PERSIAN NUMBERS ISSUE ---------- */
+/* Force Latin numbers for all elements */
+* {
+  font-variant-numeric: lining-nums !important;
+  font-feature-settings: "lnum" !important;
+  -moz-font-feature-settings: "lnum" !important;
+  -webkit-font-feature-settings: "lnum" !important;
+}
+
 /* ---------- SCROLLBAR (finalxcard Neon Style) ---------- */
 ::-webkit-scrollbar {
   width: 8px;
@@ -42,14 +51,18 @@ html {
 /* ---------- BODY STYLE ---------- */
 body {
   font-family: "Roboto", sans-serif !important;
-  font-feature-settings: "lnum";
-  font-variant-numeric: lining-nums;
+    /* Force Latin numbers */
+  font-variant-numeric: lining-nums !important;
+  font-feature-settings: "lnum" !important;
+  -moz-font-feature-settings: "lnum" !important;
+  -webkit-font-feature-settings: "lnum" !important;
   font-weight: 400;
   color: #e4f8ee;
   background: linear-gradient(180deg, #051014 0%, #071a1a 100%);
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
+
 }
 
 /* ---------- ANIMATIONS ---------- */
@@ -57,10 +70,32 @@ body {
   transition: all 0.2s ease-in-out;
 }
 
+
+/* Specific targeting for numbers */
+body,
+div,
+span,
+p,
+h1, h2, h3, h4, h5, h6,
+a,
+button,
+input,
+textarea,
+select,
+label,
+li,
+td,
+th {
+  font-variant-numeric: lining-nums !important;
+  font-feature-settings: "lnum" !important;
+  -moz-font-feature-settings: "lnum" !important;
+  -webkit-font-feature-settings: "lnum" !important;
+}
+
 /* ---------- FONT FACE CUSTOM ---------- */
 @font-face {
   font-family: "Roboto";
-  src: url("/font/static/Roboto-Black.ttf") format("truetype");
+  src: url("./public/font/static/Roboto-Black.ttf") format("truetype");
   unicode-range: U+0030-0039; /* فقط اعداد لاتین 0–9 */
   font-display: swap;
 }
