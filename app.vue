@@ -7,7 +7,7 @@
 <style>
 html {
   direction: ltr;
-  font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+  font-family: 'Roboto' !important;
   background: radial-gradient(circle at top right, #0a1a1a 0%, #050b14 100%);
   color-scheme: dark;
   scroll-behavior: smooth;
@@ -37,7 +37,7 @@ html {
 
 /* ---------- BODY STYLE ---------- */
 body {
-  font-family: 'Inter', 'Roboto', system-ui, sans-serif;
+  font-family: 'Roboto' !important;
   font-weight: 400;
   color: #e4f8ee;
   background: linear-gradient(180deg, #051014 0%, #071a1a 100%);
@@ -53,8 +53,8 @@ body {
 
 /* ---------- FONT FACE CUSTOM ---------- */
 @font-face {
-  font-family: 'numregular';
-  src: url('/font/static/Roboto-Medium.ttf') format('truetype');
+  font-family: 'Roboto';
+  src: url('./public/font/static/Roboto-Black.ttf') format('truetype');
   font-display: swap;
 }
 

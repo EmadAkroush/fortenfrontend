@@ -309,7 +309,7 @@ const saveProfile = async () => {
   color: #dfffee;
   background: linear-gradient(180deg, #071218, #061414);
   padding: 2rem 1rem;
-  font-family: "Inter", sans-serif;
+
 }
 
 .text-neon {

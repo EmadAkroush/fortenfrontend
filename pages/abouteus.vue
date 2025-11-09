@@ -140,7 +140,6 @@ const values = [
 
 <style scoped lang="scss">
 .finalxcard-about {
-  font-family: "Inter", sans-serif;
 
   .timeline::before {
     content: "";

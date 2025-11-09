@@ -282,7 +282,7 @@ watch(
 
 <style scoped lang="scss">
 .finalxcard-performance {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+
   color: #e6eef0;
   .bg-gradient-pink {
     background: linear-gradient(135deg, #ec4899, #a855f7);

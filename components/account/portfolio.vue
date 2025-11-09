@@ -352,7 +352,7 @@ function openUpgradeDialog() {
 <style scoped lang="scss">
 .finalxcard-portfolio {
   color: #e6eef0;
-  font-family: "Inter", sans-serif;
+
   .summary-card {
     display: flex;
     align-items: center;

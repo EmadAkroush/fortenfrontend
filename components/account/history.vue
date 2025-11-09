@@ -272,7 +272,7 @@ const showDetails = (tx) => {
 <style scoped lang="scss">
 .finalxcard-history {
   background: radial-gradient(circle at top left, #021312, #01060a);
-  font-family: "Inter", sans-serif;
+
   color: #e6fef5;
 }
 

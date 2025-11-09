@@ -307,8 +307,7 @@ function goToAddFunds() {
 
 <style scoped lang="scss">
 .finalxcard-performance {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial;
+
   color: #e6eef0;
 
   .bg-gradient-pink {

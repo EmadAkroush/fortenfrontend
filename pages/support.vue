@@ -169,7 +169,7 @@ function toggleFAQ(index) {
 <style scoped lang="scss">
 .finalxcard-support {
   background: linear-gradient(180deg, #03121c 0%, #0a1829 100%);
-  font-family: "Inter", sans-serif;
+
 
   .glass-card {
     box-shadow: 0 0 40px rgba(0, 209, 178, 0.1);

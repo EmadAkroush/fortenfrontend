@@ -71,7 +71,7 @@ const currentYear = new Date().getFullYear()
 .finalxcard-footer {
   position: relative;
   color: #e5e7eb;
-  font-family: "Inter", sans-serif;
+
 
   .footer-heading {
     font-weight: 600;

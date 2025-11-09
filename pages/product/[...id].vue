@@ -441,7 +441,7 @@
     height: 600px;
     font-size: 4rem;
     font-weight: bold;
-    font-family: "Roboto", sans-serif;
+
     border-radius: 16px;
   }
 }
@@ -456,7 +456,7 @@
       height: 200px;
       font-size: 4rem;
       font-weight: bold;
-      font-family: "Roboto", sans-serif;
+   
       border-radius: 16px;
     }
   }

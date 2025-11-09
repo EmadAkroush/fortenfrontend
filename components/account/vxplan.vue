@@ -507,8 +507,6 @@ onMounted(() => {
   background: linear-gradient(180deg, #071218 0%, #071a1a 100%);
   color: #dbeee6;
   min-height: 80vh;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial;
 }
 
 /* header */

@@ -288,7 +288,7 @@ const resetSteps = () => {
 .finalxcard-cashout {
   background: radial-gradient(circle at top left, #0c1d17, #07130f);
   color: #e6eef0;
-  font-family: "Inter", sans-serif;
+
 
   .glass-card {
     background: rgba(255, 255, 255, 0.02);
