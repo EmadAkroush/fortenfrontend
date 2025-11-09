@@ -5,6 +5,8 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 html {
   direction: ltr;
   font-family: "Roboto", sans-serif !important;
@@ -58,7 +60,7 @@ body {
 /* ---------- FONT FACE CUSTOM ---------- */
 @font-face {
   font-family: "Roboto";
-  src: url("./public/font/static/Roboto-Black.ttf") format("truetype");
+  src: url("/font/static/Roboto-Black.ttf") format("truetype");
   unicode-range: U+0030-0039; /* فقط اعداد لاتین 0–9 */
   font-display: swap;
 }
