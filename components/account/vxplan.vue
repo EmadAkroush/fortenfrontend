@@ -324,8 +324,12 @@ function copyReferralLink() {
 
 // 📎 Helpers
 function formatNumber(v) {
-  return Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const english = Number(v)
+    .toLocaleString("en-US", { maximumFractionDigits: 2 })
+    .replace(/[۰-۹]/g, d => String.fromCharCode(d.charCodeAt(0) - 1728));
+  return english;
 }
+
 
 function copyReferral() {
   navigator.clipboard.writeText(vxCode.value);
