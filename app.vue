@@ -7,6 +7,39 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+
+/* STRONGER SOLUTION - Add this to your style section */
+
+/* Reset font family for entire app */
+* {
+  font-family: "Roboto", sans-serif !important;
+}
+
+/* Force Latin numerals globally */
+html[lang="fa"] *,
+html[lang="fa-IR"] *,
+body * {
+  font-variant-numeric: lining-nums !important;
+  font-feature-settings: "lnum" !important;
+  -moz-font-feature-settings: "lnum" !important;
+  -webkit-font-feature-settings: "lnum" !important;
+}
+
+/* Specific fix for Persian locale */
+:lang(fa) *,
+:lang(fa-IR) * {
+  font-variant-numeric: lining-nums !important;
+  font-feature-settings: "lnum" !important;
+}
+
+/* Number-specific classes */
+.number-latin,
+.latin-numeral {
+  font-feature-settings: "lnum" !important;
+  font-variant-numeric: lining-nums !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
 html {
   direction: ltr;
   font-family: "Roboto", sans-serif !important;
