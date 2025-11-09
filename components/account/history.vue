@@ -66,7 +66,18 @@
           class="text-sm"
           :loading="loading"
         >
-          <Column header="Date" field="date" sortable></Column>
+          <Column header="Date" field="date" sortable>
+            <template #body="slotProps">
+              <span>
+                {{
+                  (slotProps.data.createdAt || slotProps.data.date)
+                    ? new Date(slotProps.data.createdAt || slotProps.data.date)
+                        .toLocaleDateString('en-US-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                    : '—'
+                }}
+              </span>
+            </template>
+          </Column>
 
           <Column header="Type" field="type" sortable>
             <template #body="slotProps">
@@ -125,7 +136,7 @@
       class="w-full sm:w-1/2"
     >
       <div v-if="selectedTx" class="space-y-3 text-gray-300">
-        <p><strong>Date:</strong> {{ selectedTx.date }}</p>
+        <p><strong>Date:</strong> {{ new Date(selectedTx.createdAt || selectedTx.date).toLocaleDateString('en-US-u-ca-gregory', { year: 'numeric', month: '2-digit', day: '2-digit' }) }}</p>
         <p><strong>Type:</strong> {{ selectedTx.type }}</p>
         <p><strong>Amount:</strong> ${{ selectedTx.amount }}</p>
         <p><strong>Status:</strong> {{ selectedTx.status }}</p>
