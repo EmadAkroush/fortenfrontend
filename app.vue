@@ -15,6 +15,7 @@ html {
   background: radial-gradient(circle at top right, #0a1a1a 0%, #050b14 100%);
   color-scheme: dark;
   scroll-behavior: smooth;
+    unicode-bidi: plaintext;
 }
 
 /* ---------- SOLUTION FOR PERSIAN NUMBERS ISSUE ---------- */
@@ -62,6 +63,7 @@ body {
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
+    unicode-bidi: plaintext;
 
 }
 
