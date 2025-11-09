@@ -59,6 +59,7 @@ body {
 @font-face {
   font-family: "Roboto";
   src: url("./public/font/static/Roboto-Black.ttf") format("truetype");
+  unicode-range: U+0030-0039; /* فقط اعداد لاتین 0–9 */
   font-display: swap;
 }
 
