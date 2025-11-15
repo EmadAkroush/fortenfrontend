@@ -114,8 +114,6 @@
           class="auth-input"
         />
 
-        <!-- reCAPTCHA v2 visible widget (I'm not a robot) -->
-        <div id="recaptcha-register" class="flex justify-center mt-2"></div>
 
         <Button
           label="Create Account"
@@ -209,40 +207,7 @@ onMounted(() => {
   // If you want to change the key, replace the string below.
   const SITE_KEY = "6LdPcQssAAAAACXco4yhGz3xBHCMxqrk2qSxrPrY";
 
-  // try to render widget if grecaptcha already loaded
-  const tryRender = () => {
-    if (typeof window !== "undefined" && window.grecaptcha) {
-      // avoid double render
-      if (recaptchaWidgetId.value !== null) return;
 
-      try {
-        // render the visible checkbox widget into the container
-        recaptchaWidgetId.value = window.grecaptcha.render(
-          "recaptcha-register",
-          {
-            sitekey: SITE_KEY,
-            callback: (token) => {
-              recaptchaToken.value = token;
-            },
-            "expired-callback": () => {
-              recaptchaToken.value = "";
-            },
-            "error-callback": () => {
-              recaptchaToken.value = "";
-            },
-          }
-        );
-      } catch (e) {
-        // render might fail if container not in DOM yet
-        console.warn("reCAPTCHA render error:", e);
-      }
-    } else {
-      // grecaptcha not ready yet — try again shortly
-      setTimeout(tryRender, 500);
-    }
-  };
-
-  tryRender();
 
 
   const tryRender1 = () => {
@@ -326,40 +291,7 @@ watch(activeTab, (v) => {
 
 
 
-// if user switches to register tab after mounted, ensure widget is rendered
-watch(activeTab, (v) => {
-  if (v === "register") {
-    // attempt to render (if not already)
-    setTimeout(() => {
-      if (
-        recaptchaWidgetId.value === null &&
-        typeof window !== "undefined" &&
-        window.grecaptcha
-      ) {
-        try {
-          // use same SITE_KEY as above
-          recaptchaWidgetId.value = window.grecaptcha.render(
-            "recaptcha-login",
-            {
-              sitekey: "6LdPcQssAAAAACXco4yhGz3xBHCMxqrk2qSxrPrY",
-              callback: (token) => {
-                recaptchaToken.value = token;
-              },
-              "expired-callback": () => {
-                recaptchaToken.value = "";
-              },
-              "error-callback": () => {
-                recaptchaToken.value = "";
-              },
-            }
-          );
-        } catch (e) {
-          // ignore
-        }
-      }
-    }, 300);
-  }
-});
+
 
 // === Validators ===
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -414,11 +346,6 @@ async function handleRegister() {
   if (registerData.password !== registerData.confirmPassword)
     errors.value.push("Passwords do not match.");
 
-  // ensure reCAPTCHA token present (v2 visible)
-  if (!recaptchaToken.value) {
-    errors.value.push("Please complete the reCAPTCHA to continue.");
-  }
-
   if (errors.value.length) return;
 
   try {
@@ -426,7 +353,7 @@ async function handleRegister() {
 
     await $fetch("/api/auth/register", {
       method: "POST",
-      body: { ...registerData, recaptchaToken: recaptchaToken.value },
+      body: { ...registerData },
     });
     toast.add({
       severity: "info",
