@@ -1,8 +1,8 @@
 import * as path from "path";
-// Wrong
 
 export default defineNuxtConfig({
   modules: ["@primevue/nuxt-module"],
+
   css: [
     "@/assets/styles/global.css",
     "@/assets/styles/tailwind.css",
@@ -19,6 +19,7 @@ export default defineNuxtConfig({
   primevue: {
     options: { theme: "none" },
   },
+
   site: {
     url: "https://finalxcard.com",
     name: "finalxcard",
@@ -26,7 +27,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: "finalxcard", // default fallback title
+      title: "finalxcard",
       htmlAttrs: {
         lang: "en",
         dir: "ltr",
@@ -36,6 +37,14 @@ export default defineNuxtConfig({
           rel: "icon",
           type: "image/x-icon",
           href: "./newlogo.png",
+        },
+      ],
+      // ✅ اضافه شد: اسکریپت Google reCAPTCHA
+      script: [
+        {
+          src: "https://www.google.com/recaptcha/api.js",
+          async: true,
+          defer: true,
         },
       ],
     },

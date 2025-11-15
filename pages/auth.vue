@@ -31,7 +31,10 @@
       </div>
 
       <!-- Error Messages -->
-      <div v-if="errors.length" class="alert mb-4 text-red-400 text-sm text-left">
+      <div
+        v-if="errors.length"
+        class="alert mb-4 text-red-400 text-sm text-left"
+      >
         <ul>
           <li v-for="(err, i) in errors" :key="i">• {{ err }}</li>
         </ul>
@@ -50,6 +53,10 @@
           placeholder="Password"
           class="auth-input"
         />
+
+        <!-- در section LOGIN FORM، قبل از Button اضافه کنید: -->
+        <div id="recaptcha-login" class="flex justify-center mt-2"></div>
+
         <Button
           label="Sign In"
           icon="pi pi-sign-in"
@@ -107,6 +114,9 @@
           class="auth-input"
         />
 
+        <!-- reCAPTCHA v2 visible widget (I'm not a robot) -->
+        <div id="recaptcha-register" class="flex justify-center mt-2"></div>
+
         <Button
           label="Create Account"
           icon="pi pi-user-plus"
@@ -134,7 +144,7 @@
         v-model="verifyToken"
         placeholder="Enter verification token"
         class="auth-input mt-3"
-        style="color: black;"
+        style="color: black"
       />
       <Button
         label="Verify Email"
@@ -156,157 +166,352 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useToast } from 'primevue/usetoast'
+import { ref, reactive, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
-const route = useRoute()
-const activeTab = ref('login')
-const loading = ref(false)
-const errors = ref([])
-const toast = useToast()
-const verifyModal = ref(false)
-const verifyToken = ref('')
-const loadingVerify = ref(false)
-const { authUser } = useAuth()
+const route = useRoute();
+const activeTab = ref("login");
+const loading = ref(false);
+const errors = ref([]);
+const toast = useToast();
+const verifyModal = ref(false);
+const verifyToken = ref("");
+const loadingVerify = ref(false);
+const { authUser } = useAuth();
 
-definePageMeta({ middleware: 'guest' })
+definePageMeta({ middleware: "guest" });
 
 // === Data ===
-const loginData = reactive({ email: '', password: '' })
+const loginData = reactive({ email: "", password: "" });
 const registerData = reactive({
-  username: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  referrerCode: '', // 🟢 added optional leader code
-})
+  username: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  referrerCode: "", // 🟢 added optional leader code
+});
+
+// reCAPTCHA state
+const recaptchaWidgetId = ref(null);
+const recaptchaToken = ref("");
 
 // 🟢 Read ref query param (like ?ref=FO-991189)
 onMounted(() => {
   if (route.query.ref) {
-    registerData.referrerCode = route.query.ref
+    registerData.referrerCode = route.query.ref;
   }
-})
+
+  // render reCAPTCHA widget when mounted (if grecaptcha is available)
+  // Using site key that was previously present in your code.
+  // If you want to change the key, replace the string below.
+  const SITE_KEY = "6LdPcQssAAAAACXco4yhGz3xBHCMxqrk2qSxrPrY";
+
+  // try to render widget if grecaptcha already loaded
+  const tryRender = () => {
+    if (typeof window !== "undefined" && window.grecaptcha) {
+      // avoid double render
+      if (recaptchaWidgetId.value !== null) return;
+
+      try {
+        // render the visible checkbox widget into the container
+        recaptchaWidgetId.value = window.grecaptcha.render(
+          "recaptcha-register",
+          {
+            sitekey: SITE_KEY,
+            callback: (token) => {
+              recaptchaToken.value = token;
+            },
+            "expired-callback": () => {
+              recaptchaToken.value = "";
+            },
+            "error-callback": () => {
+              recaptchaToken.value = "";
+            },
+          }
+        );
+      } catch (e) {
+        // render might fail if container not in DOM yet
+        console.warn("reCAPTCHA render error:", e);
+      }
+    } else {
+      // grecaptcha not ready yet — try again shortly
+      setTimeout(tryRender, 500);
+    }
+  };
+
+  tryRender();
+
+
+  const tryRender1 = () => {
+    if (typeof window !== "undefined" && window.grecaptcha) {
+      // avoid double render
+      if (recaptchaWidgetId.value !== null) return;
+
+      try {
+        // render the visible checkbox widget into the container
+        recaptchaWidgetId.value = window.grecaptcha.render(
+          "recaptcha-login",
+          {
+            sitekey: SITE_KEY,
+            callback: (token) => {
+              recaptchaToken.value = token;
+            },
+            "expired-callback": () => {
+              recaptchaToken.value = "";
+            },
+            "error-callback": () => {
+              recaptchaToken.value = "";
+            },
+          }
+        );
+      } catch (e) {
+        // render might fail if container not in DOM yet
+        console.warn("reCAPTCHA render error:", e);
+      }
+    } else {
+      // grecaptcha not ready yet — try again shortly
+      setTimeout(tryRender, 500);
+    }
+  };
+
+  tryRender1();
+
+
+
+
+
+
+
+});
+
+// if user switches to register tab after mounted, ensure widget is rendered
+watch(activeTab, (v) => {
+  if (v === "register") {
+    // attempt to render (if not already)
+    setTimeout(() => {
+      if (
+        recaptchaWidgetId.value === null &&
+        typeof window !== "undefined" &&
+        window.grecaptcha
+      ) {
+        try {
+          // use same SITE_KEY as above
+          recaptchaWidgetId.value = window.grecaptcha.render(
+            "recaptcha-register",
+            {
+              sitekey: "6LdPcQssAAAAACXco4yhGz3xBHCMxqrk2qSxrPrY",
+              callback: (token) => {
+                recaptchaToken.value = token;
+              },
+              "expired-callback": () => {
+                recaptchaToken.value = "";
+              },
+              "error-callback": () => {
+                recaptchaToken.value = "";
+              },
+            }
+          );
+        } catch (e) {
+          // ignore
+        }
+      }
+    }, 300);
+  }
+});
+
+
+
+
+
+// if user switches to register tab after mounted, ensure widget is rendered
+watch(activeTab, (v) => {
+  if (v === "register") {
+    // attempt to render (if not already)
+    setTimeout(() => {
+      if (
+        recaptchaWidgetId.value === null &&
+        typeof window !== "undefined" &&
+        window.grecaptcha
+      ) {
+        try {
+          // use same SITE_KEY as above
+          recaptchaWidgetId.value = window.grecaptcha.render(
+            "recaptcha-login",
+            {
+              sitekey: "6LdPcQssAAAAACXco4yhGz3xBHCMxqrk2qSxrPrY",
+              callback: (token) => {
+                recaptchaToken.value = token;
+              },
+              "expired-callback": () => {
+                recaptchaToken.value = "";
+              },
+              "error-callback": () => {
+                recaptchaToken.value = "";
+              },
+            }
+          );
+        } catch (e) {
+          // ignore
+        }
+      }
+    }, 300);
+  }
+});
 
 // === Validators ===
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 // === LOGIN ===
 async function handleLogin() {
-  errors.value = []
-  if (!isValidEmail(loginData.email)) errors.value.push('Enter a valid email.')
+  errors.value = [];
+  if (!isValidEmail(loginData.email)) errors.value.push("Enter a valid email.");
   if (loginData.password.length < 6)
-    errors.value.push('Password must be at least 6 characters.')
-  if (errors.value.length) return
+    errors.value.push("Password must be at least 6 characters.");
+  if (errors.value.length) return;
+  if (!recaptchaToken.value) {
+    errors.value.push("Please complete the reCAPTCHA to continue.");
+  }
+  
 
   try {
-    loading.value = true
-    const res = await $fetch('/api/auth/login', { method: 'POST', body: loginData })
-    authUser.value = res.user
+    loading.value = true;
+    // NOTE: using visible v2 reCAPTCHA only for register in this file.
+    const res = await $fetch("/api/auth/login", {
+      method: "POST",
+      body:  { ...loginData, recaptchaToken: recaptchaToken.value },
+    });
+    authUser.value = res.user;
     toast.add({
-      severity: 'success',
-      summary: 'Welcome back!',
-      detail: 'You have signed in successfully.',
+      severity: "success",
+      summary: "Welcome back!",
+      detail: "You have signed in successfully.",
       life: 3000,
-    })
-    navigateTo('/')
+    });
+    navigateTo("/");
     setTimeout(() => {
-      window.location.reload()
-    }, 500)
+      window.location.reload();
+    }, 500);
   } catch (err) {
-    errors.value = [err?.data?.message || 'Login failed.']
+    errors.value = [err?.data?.message || "Login failed."];
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 // === REGISTER ===
 async function handleRegister() {
-  errors.value = []
-  if (!registerData.username)
-    errors.value.push('Username is required.')
+  errors.value = [];
+  if (!registerData.username) errors.value.push("Username is required.");
   if (!registerData.firstName || !registerData.lastName)
-    errors.value.push('First and last name are required.')
+    errors.value.push("First and last name are required.");
   if (!isValidEmail(registerData.email))
-    errors.value.push('Enter a valid email address.')
+    errors.value.push("Enter a valid email address.");
   if (registerData.password.length < 6)
-    errors.value.push('Password must be at least 6 characters.')
+    errors.value.push("Password must be at least 6 characters.");
   if (registerData.password !== registerData.confirmPassword)
-    errors.value.push('Passwords do not match.')
-  if (errors.value.length) return
+    errors.value.push("Passwords do not match.");
+
+  // ensure reCAPTCHA token present (v2 visible)
+  if (!recaptchaToken.value) {
+    errors.value.push("Please complete the reCAPTCHA to continue.");
+  }
+
+  if (errors.value.length) return;
 
   try {
-    loading.value = true
-    await $fetch('/api/auth/register', { method: 'POST', body: registerData })
+    loading.value = true;
+
+    await $fetch("/api/auth/register", {
+      method: "POST",
+      body: { ...registerData, recaptchaToken: recaptchaToken.value },
+    });
     toast.add({
-      severity: 'info',
-      summary: 'Registration successful',
-      detail: 'Check your email for a verification link or code.',
+      severity: "info",
+      summary: "Registration successful",
+      detail: "Check your email for a verification link or code.",
       life: 5000,
-    })
-    verifyModal.value = true
+    });
+    verifyModal.value = true;
+
+    // after successful register, reset the widget & token
+    if (
+      typeof window !== "undefined" &&
+      window.grecaptcha &&
+      recaptchaWidgetId.value !== null
+    ) {
+      try {
+        windowy.grecaptcha.reset(recaptchaWidgetId.value);
+        recaptchaToken.value = "";
+      } catch (e) {
+        // ignore reset errors
+      }
+    }
   } catch (err) {
-    errors.value = [err?.data?.message || 'Registration failed.']
+    errors.value = [err?.data?.message || "Registration failed."];
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 // === VERIFY EMAIL ===
 async function handleVerifyEmail() {
   if (!verifyToken.value) {
-    toast.add({ severity: 'warn', summary: 'Enter Token', detail: 'Verification code is required.' })
-    return
+    toast.add({
+      severity: "warn",
+      summary: "Enter Token",
+      detail: "Verification code is required.",
+    });
+    return;
   }
   try {
-    loadingVerify.value = true
-    const res = await $fetch('/api/auth/verifyemail', {
-      method: 'POST',
+    loadingVerify.value = true;
+    const res = await $fetch("/api/auth/verifyemail", {
+      method: "POST",
       body: { token: verifyToken.value },
-    })
+    });
     toast.add({
-      severity: 'success',
-      summary: 'Email Verified',
-      detail: res.message || 'Your email has been verified.',
+      severity: "success",
+      summary: "Email Verified",
+      detail: res.message || "Your email has been verified.",
       life: 4000,
-    })
-    verifyModal.value = false
-    activeTab.value = 'login'
+    });
+    verifyModal.value = false;
+    activeTab.value = "login";
   } catch (err) {
     toast.add({
-      severity: 'error',
-      summary: 'Verification Failed',
-      detail: err?.data?.message || 'Invalid token or expired link.',
+      severity: "error",
+      summary: "Verification Failed",
+      detail: err?.data?.message || "Invalid token or expired link.",
       life: 4000,
-    })
+    });
   } finally {
-    loadingVerify.value = false
+    loadingVerify.value = false;
   }
 }
 
 // === RESEND EMAIL ===
 async function resendEmail() {
   try {
-    await $fetch('/api/auth/resend-verification', {
-      method: 'POST',
+    await $fetch("/api/auth/resend-verification", {
+      method: "POST",
       body: { email: registerData.email },
-    })
+    });
     toast.add({
-      severity: 'info',
-      summary: 'Verification Resent',
-      detail: 'A new verification email has been sent.',
+      severity: "info",
+      summary: "Verification Resent",
+      detail: "A new verification email has been sent.",
       life: 4000,
-    })
+    });
   } catch (err) {
     toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Unable to resend verification email.',
+      severity: "error",
+      summary: "Error",
+      detail: "Unable to resend verification email.",
       life: 4000,
-    })
+    });
   }
 }
 </script>
